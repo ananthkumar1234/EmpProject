@@ -438,7 +438,7 @@ a {
             top: -200px; /* Move completely out of view */
             left: 50%;
             transform: translateX(-50%);
-            background-color: rgba(220, 53, 69, 0.8); /* More transparency */
+            background-color: rgba(144, 238, 144, 0.8);  /* More transparency */
             color: white;
             padding: 15px 30px;
             border-radius: 12px;
@@ -530,40 +530,99 @@ margin-left:50%;
 }
 
 
+/*========================================pop css starts=================================*/
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 9;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #888;
+    border-radius: 8px;
+    background-color: #fefefe;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    text-align: center;
+}
 
+.close-bttn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-bttn:hover, .close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.popup h2 {
+    color: #333;
+    margin: 10px;
+}
+
+.popup textarea {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.popup input.sub {
+    width: 50%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.popup input.sub:hover {
+    background-color: #0056b3;
+}
+
+.leave-table button {
+    padding: 10px 20px;
+    background-color: #FF0000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width: 75%;
+}
+
+button:hover {
+    background-color: #8B0000;
+}
+
+.app {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width:75%;
+}
+
+/*========================================popup css ends===========================================*/
 
 </style>
 
 <script >
-
-function showSuccessMessage() {
-	const warningMessage = document.getElementById('success-message');
-	warningMessage.classList.add('show');
-
-	setTimeout(() => {
-	    warningMessage.classList.remove('show');
-	}, 4000);
-	}
-	
-	
-function showDeleteMessage() {
-	const warningMessage = document.getElementById('delete-message');
-	warningMessage.classList.add('show');
-
-	setTimeout(() => {
-	    warningMessage.classList.remove('show');
-	}, 4000);
-	}
-
-// Check for login error
-window.onload = function() {
-<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %>
-    showWarningMessage();
-<% } 
-else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Success")){%> showSuccessMessage();
-
-<%}%>}
-
 
 //to enable month input field after selecting year
 function toggleMonthDropdown() {
@@ -576,18 +635,55 @@ window.onload = function() {
 }
 
 
+function openPopup(leaveid) {
+    document.getElementById("popupLeaveId").value = leaveid;
+    document.getElementById("myPopup").style.display = "block";
+}
+
+function closePopup() {
+    document.getElementById("myPopup").style.display = "none";
+}
+
+
+function showErrorMessage() {
+	const warningMessage = document.getElementById('warning-message');
+	warningMessage.classList.add('show');
+
+	setTimeout(() => {
+	    warningMessage.classList.remove('show');
+	}, 4000);
+	}
+
+	function showSuccessMessage() {
+		const warningMessage = document.getElementById('success-message');
+		warningMessage.classList.add('show');
+
+		setTimeout(() => {
+		    warningMessage.classList.remove('show');
+		}, 4000);
+		}
+
+
+window.onload = function() {
+	<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> showWarningMessage();
+	<% } 
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Success")){%> showSuccessMessage();
+	<%}%>
+}
+
+
 </script>
 
 <body>
 
 <div id="warning-message" class="warning-message">
         <span><i class="fas fa-exclamation-triangle"></i></span>
-        <p>Something Went Wrong!</p>
+        <p>Something Went Wrong.!!</p>
 </div>
 
  <div id="success-message" class="success-message">
-        <span><i class="fas fa-times-circle"></i></span>
-        <p>Applied leave has been Cancelled..!!!</p>
+        <span><i class="fas fa-check-circle"></i></span>
+        <p>Leave updated..!</p>
 </div>
 
 
@@ -595,12 +691,20 @@ window.onload = function() {
         Connection con = DBConnect.getConnection();
         EmpDao empDao = new EmpDao(con);
         
-        
         HttpSession sess = request.getSession();
         Employees emp = (Employees)sess.getAttribute("employee");
         String role = (String)sess.getAttribute("role");
-        List<Leaves> leaves = (List<Leaves>)request.getAttribute("filteredLeaves");
 
+        
+        List<Leaves> list=null;
+        if(sess.getAttribute("role").equals("HR"))
+        {
+         list = empDao.getPendingLeaves();
+        }else if(sess.getAttribute("role").equals("Manager"))
+        {
+        list = empDao.getMgrPendingLeaves(emp.getEmpId());
+        }
+        
     %>
 
 
@@ -660,13 +764,14 @@ window.onload = function() {
         
         <div class="table-container">
  <h2>Leave Requests</h2>
- 
+
  <hr>
  
  
   <table class="leave-table">
     <thead>
         <tr>
+        	<th>Full Name</th>
             <th>From Date</th>
             <th>To Date</th>
             <th>Total Days</th>
@@ -677,26 +782,40 @@ window.onload = function() {
     </thead>
     <tbody>
         <% 
-        if (leaves == null) {
-            leaves = empDao.getEmployeeLeaves(emp.getEmpId());
-        }
         
-        for (Leaves lev : leaves) { %>
+        for (Leaves lev : list) { %>
             <tr>
+            	<td><%= lev.getFname()+" "+lev.getLname() %></td>
                 <td><%= lev.getFromDate() %></td>
                 <td><%= lev.getToDate() %></td>
                 <td><%= lev.getTotalDays() %></td>
                 <td><%= lev.getLeaveType() %></td>
                 <td><%= lev.getLeaveStatus() %></td>
                 <td>
-                    <% if ("Pending".equals(lev.getLeaveStatus())) { %>
-                        <a href="cancel?id=<%= lev.getLeaveId() %>" class="cancel-btn">Cancel</a>
-                    <% } %>
+                    <form action="updaterejectreason" method="post">
+                            <input type="hidden" name="eid" value="<%= emp.getEmpId() %>">
+                            <input type="hidden" name="leaveid" id="leaveid" value="<%= lev.getLeaveId() %>">
+                            <input type="submit" value="Approve" class="app">
+                        </form><br>
+                        <button onclick="openPopup(<%= lev.getLeaveId() %>)">Reject</button>
                 </td>
             </tr>
         <% } %>
     </tbody>
 </table>
+
+<div id="myPopup" class="popup">
+            <span class="close-bttn" onclick="closePopup()">&times;</span>
+            <h2>Reject Reason</h2>
+            <form action="updaterejectreason" method="post">
+                <textarea rows="5" name="rejectreason" required></textarea>
+                <input type="hidden" name="eid" value="<%= emp.getEmpId() %>">
+                <input type="hidden" name="leaveid" id="popupLeaveId">
+                <input type="submit" value="Save" class="sub">
+            </form>
+        </div>
+
+
 
 </div>
     </div>

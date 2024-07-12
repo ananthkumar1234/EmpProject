@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -622,6 +624,96 @@ public class EmpDao {
 	        return true;
 	    }
 	    return false;
+	}
+	
+	
+	// Method to get all employees pending leaves
+	public List<Leaves> getPendingLeaves() throws SQLException
+	{
+		List<Leaves> list = new ArrayList<>();
+		String qry="SELECT l.leaveid,l.startdate, l.enddate, l.totaldays, l.leavetype, l.reason,l.leavestatus, e.firstname, e.lastname FROM leaves l JOIN employees e ON l.employeeid = e.EmployeeID WHERE l.leaveStatus = 'pending'";
+		Statement st = con.createStatement();
+		ResultSet rs = st.executeQuery(qry);
+		while(rs.next())
+		{
+			Leaves l = new Leaves();
+			l.setLeaveId(rs.getInt("leaveid"));
+			l.setFromDate(rs.getString("startdate"));
+			l.setToDate(rs.getString("enddate"));
+			l.setTotalDays(rs.getInt("totaldays"));
+			l.setLeaveType(rs.getString("leavetype"));
+			l.setLeaveStatus(rs.getString("leavestatus"));
+			l.setAppliedReason(rs.getString("reason"));
+			l.setFname(rs.getString("firstname"));
+			l.setLname(rs.getString("lastname"));
+			list.add(l);
+		}
+		return list;
+	}
+	
+	
+	// Method to get all employee leaves reporting to their manager
+	public List<Leaves> getMgrPendingLeaves(int mid) throws SQLException
+	{
+		List<Leaves> list = new ArrayList<>();
+		String qry="SELECT l.leaveid,l.startdate,l.enddate,l.totaldays,l.leavetype,l.reason,l.leavestatus, e.firstname, e.lastname FROM Leaves l JOIN Manager m ON l.employeeid = m.employee JOIN Employees e ON l.employeeid = e.employeeid WHERE m.manager = ? AND l.leaveStatus = 'pending'";
+		PreparedStatement ps = con.prepareStatement(qry);
+		 ps.setInt(1, mid);
+		 ResultSet rs = ps.executeQuery();
+		while(rs.next())
+		{
+			Leaves l = new Leaves();
+			l.setLeaveId(rs.getInt("leaveid"));
+			l.setFromDate(rs.getString("startdate"));
+			l.setToDate(rs.getString("enddate"));
+			l.setTotalDays(rs.getInt("totaldays"));
+			l.setLeaveType(rs.getString("leavetype"));
+			l.setLeaveStatus(rs.getString("leavestatus"));
+			l.setAppliedReason(rs.getString("reason"));
+			l.setFname(rs.getString("firstname"));
+			l.setLname(rs.getString("lastname"));
+			list.add(l);
+		}
+		return list;
+	}
+	
+	
+	// Method to get current date and time
+	public String getCurrDateTime() {
+		// Get current date and time in IST
+		ZoneId istZone = ZoneId.of("Asia/Kolkata"); // Replace with "Asia/Calcutta" if needed
+		ZonedDateTime nowIST = ZonedDateTime.now(istZone);
+
+		// Format date and time with desired pattern
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss") ;
+
+
+		String dateTime = nowIST.format(formatter);
+
+//		System.out.println("Current date" + dateTime);
+		return dateTime;
+	}
+	
+	
+	// Method to update reject reason
+	public boolean updaterejectreason(String rs,int eid,int leaveid,String status) throws SQLException
+	{
+		String[] str = getCurrDateTime().split(" ");
+		String qry="update leaves set rejectreason =?,leavestatus=?,approveddate=?,approvedby=? where leaveid=?";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setString(1,rs);
+		ps.setString(2, status);
+		ps.setString(3, str[0]);
+		ps.setInt(4, eid);
+		ps.setInt(5, leaveid);
+		int i = ps.executeUpdate();
+		if(i>0)
+		{
+			return true;
+		}else
+		{
+			return false;
+		}
 	}
 
 }

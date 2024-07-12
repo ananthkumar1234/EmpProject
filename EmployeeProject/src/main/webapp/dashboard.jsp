@@ -428,6 +428,15 @@ margin:30px;
         Employees emp = (Employees)sess.getAttribute("employee");
         String role = (String)sess.getAttribute("role");
         
+        List<Leaves> list2=null;
+        if(sess.getAttribute("role").equals("HR"))
+        {
+         list2 = empDao.getPendingLeaves();
+        }else if(sess.getAttribute("role").equals("Manager"))
+        {
+        list2 = empDao.getMgrPendingLeaves(emp.getEmpId());
+        }
+        
     %>
 
 	<div class="sidebar" id="sidebar">
@@ -525,6 +534,7 @@ margin:30px;
 					</div>
 				</div>
 			</div>
+			
 			<div class="dashboard-item">
 				<h3>
 					<i class="fas fa-calendar-alt"></i> My Leaves
@@ -548,8 +558,8 @@ margin:30px;
 					</div>
 				</div>
 				<%} %>
-
 			</div>
+			
 			<div class="dashboard-item">
     <h3>Quick Launch</h3>
     <hr>
@@ -617,6 +627,28 @@ margin:30px;
     </div><%}%>
     
 </div>
+
+		<% if("HR".equals(role) || "Manager".equals(role)) {%>
+
+			<div class="dashboard-item">
+				<h3>
+					<i class="fas fa-calendar-alt"></i> Notifications
+				</h3>
+				<hr>
+				<%
+				for(Leaves lev:list2){
+				%>
+				<div class="leave-entry">
+					<div class="leave-row">
+						<a href="leaveRequests.jsp"><span class="leave-value"><%= lev.getFname()+" "+lev.getLname()%></span> : has applied leave.</a> 
+					</div>
+				</div>
+				<%} %>
+
+			</div>
+			<%} %>
+			
+			
 		</div>
 	</div>
 	<script type="text/javascript">
