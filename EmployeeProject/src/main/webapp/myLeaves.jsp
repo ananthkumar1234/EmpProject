@@ -25,10 +25,11 @@
 body {
 	font-family: Arial, sans-serif;
 	margin: 0;
-	padding: 0;
+    padding: 0;
 	display: flex;
 	transition: padding-left 0.3s ease;
 	background-color: #f5f5f5;
+	box-sizing: border-box;
 }
 
 .sidebar {
@@ -40,23 +41,13 @@ body {
 	top: 0;
 	transition: all 0.3s ease;
 	overflow-x: hidden;
-	z-index: 1000;
+	z-index: 1001;
 	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 	border-radius: 0 20px 20px 0;
 }
 
 .sidebar.collapsed {
 	width: 60px;
-}
-
-.logo {
-	padding: 20px;
-	border-bottom: 1px solid #e0e0e0;
-}
-
-.logo img {
-	max-width: 100%;
-	height: auto;
 }
 
 .sidebar-menu {
@@ -76,8 +67,15 @@ body {
 }
 
 .sidebar-menu li.active {
-	background-color: #ff8c00;
-	color: white;
+    background: linear-gradient(to left,#FF9671 ,#FFC75F );
+    border-radius:0 50px 50px 0;
+    width:70%;
+}
+.sidebar-menu li.active a {
+    color: white;
+}
+.sidebar-menu li.active i {
+    color: white;
 }
 
 .sidebar-menu i {
@@ -97,7 +95,8 @@ body {
 	left: 230px;
 	top: 10px;
 	background: linear-gradient(to left,#FF9671 ,#FFC75F );
-	border: none;
+	
+	border:none;
 	border-radius: 30px;
 	padding: 10px;
 	cursor: pointer;
@@ -121,44 +120,67 @@ body {
 .main-content {
 	flex: 1;
 	padding: 20px;
-	margin-left: 250px;
+	margin-left: 230px;
 	transition: margin-left 0.3s ease;
+	
+	
 }
 
 .header {
+	
 	background: linear-gradient(to left,#FF9671 ,#FFC75F );
 	color: white;
 	padding: 10px 20px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	position: fixed;
+    top: 0;
+    right: 0;
+    left: 230px;
+    height: 60px;
+    transition: left 0.3s ease;
+    z-index: 1000;
 
 }
 
-.dashboard-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-	gap: 20px;
-	margin-top: 20px;
+body.sidebar-collapsed {
+	padding-left: 60px;
 }
 
-.dashboard-item {
-	background-color: #fff;
-	border-radius: 30px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	padding: 15px;
+body.sidebar-collapsed .main-content {
+    margin-left: 60px;
+}
+
+body.sidebar-collapsed .header {
+    left: 40px;
+}
+
+body.sidebar-collapsed .leaveLinks {
+    left: 60px;
+}
+
+body.sidebar-collapsed .leave-form-container {
+    left: 60px;
 }
 
 .user-profile {
 	position: relative;
 }
 
+.user-profile:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+
 .user-dropdown {
 	display: inline-block;
 }
 
+
 .dropbtn {
-	background: linear-gradient(to left,#FFC75F ,#FF9671 );
+	background:linear-gradient(to left,#FFC75F ,#FF9671 );
 	color: white;
 	padding: 10px 15px;
 	font-size: 16px;
@@ -195,58 +217,7 @@ body {
 	background-color: #f1f1f1;
 }
 
-.show {
-	display: block !important;
-}
 
-.time-at-work {
-	padding: 20px;
-}
-
-.punch-status {
-	display: flex;
-	align-items: center;
-	margin-bottom: 15px;
-}
-
-.time-today {
-	background-color: #f0f0f0;
-	padding: 10px;
-	border-radius: 5px;
-	margin-bottom: 15px;
-}
-
-.time-today .hours {
-	font-weight: bold;
-}
-
-.weekly-chart h4 {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 10px;
-}
-
-.chart-container {
-	height: 150px;
-	display: flex;
-	align-items: flex-end;
-	justify-content: space-between;
-	margin-bottom: 10px;
-}
-
-.chart-bar {
-	width: 12%;
-	background-color: #ff8c00;
-	transition: height 0.3s ease;
-}
-
-.chart-labels {
-	display: flex;
-	justify-content: space-between;
-	font-size: 0.8em;
-	color: #666;
-}
 
 @media screen and (max-width: 768px) {
 	body {
@@ -262,27 +233,14 @@ body {
 	.toggle-btn {
 		display: none;
 	}
-	
-	.user-dropdown {
+		.user-dropdown {
 		display: block;
 		width: 100%;
 	}
 	.dropdown-content {
 		width: 100%;
 	}
-	.leaveLinks a
-	{
-	flex:1;
-	}
-}
 
-
-body.sidebar-collapsed {
-	padding-left: 60px;
-}
-
-body.sidebar-collapsed .main-content {
-	margin-left: 60px;
 }
 
 a {
@@ -290,43 +248,76 @@ a {
     color:black;
 }
 
+h1
+{
+margin:30px;
+}
+
+.logo {
+	padding: 20px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.logo img {
+	max-width: 100%;
+	height: auto;
+}
+
+.show {
+	display: block !important;
+}
+
+/*  After header leavelinks starts*/
 .leaveLinks {
-    display: flex;
-    background-color: white;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+	display: flex;
+	background-color: white;
+	padding: 10px 20px;
+	margin-bottom: 20px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	margin-top:5.2%;
+	position: fixed;
+    top: 0;
+    right: 0;
+    left: 230px;
+    transition: left 0.3s ease;
+    z-index: 999;
 }
 
 .leaveLinks a {
-    color: #6c757d;
-    text-decoration: none;
-    padding: 10px 15px;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    margin: 0 5px;
-    border-radius: 10px;
-    background-color: #f5f5f5;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+	color: #6c757d;
+	text-decoration: none;
+	padding: 10px 15px;
+	font-size: 14px;
+	transition: all 0.3s ease;
+	margin: 0 5px;
+	margin-left:30px;
+	border-radius: 10px;
+	background-color: #f5f5f5;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.leaveLinks a:hover,
-.leaveLinks a:focus {
-    color: #ff8c00;
-    background-color: #fff9f0;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transform: translateY(2px);
+.leaveLinks a:hover, .leaveLinks a:focus {
+	color: #ff8c00;
+	background-color: #fff9f0;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transform: translateY(-2px);
 }
+
+/*  After header leavelinks ends*/
 
 /* table css starts*/
 .table-container {
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 100%;
+  
+  margin-top: 12%;
+
+  margin-left:20px;
+  margin-bottom:10px;
+  transition: width 0.3s ease, margin-left 0.3s ease;
 }
 
 
@@ -390,6 +381,7 @@ a {
   .leave-table th,
   .leave-table td {
     padding: 2px 2px;
+    color:red;
   }
   
   .cancel-btn {
@@ -405,11 +397,10 @@ a {
   form{
   font-size:15px;
   }
-  form .form-container {
-   flex:1;
-}
-
-
+  .form-button{
+  padding: 4px 8px;
+    font-size: 12px;
+  }
 }
 /* table css ends*/
 
@@ -483,20 +474,22 @@ a {
  /*warning message ends*/
  
 .filter {
-display:flex;
     align-items: center;
     margin: 10px;
     padding: 10px;
+    
+    
 }
 
 form {
-display:flex;
+    display: flex;
     width: 100%;
     justify-content: start;
     align-items: center;
 }
 
 form .form-container {
+    display: 1;
     align-items: center;
     margin-right:15px;
     gap: 10px;
@@ -538,6 +531,22 @@ margin-left:50%;
 </style>
 
 <script >
+
+document.addEventListener("DOMContentLoaded", function() {
+    var currentPage = window.location.pathname.split("/").pop();
+    
+    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
+    var timePages = ["attendancelist.jsp", "empattendance.jsp", "time.jsp"];
+    
+    if (leavePages.includes(currentPage)) {
+        document.querySelector(".activeLeave").classList.add("active");
+    } else if (timePages.includes(currentPage)) {
+        document.querySelector(".time-group").classList.add("active");
+    }
+    else{
+            document.querySelector(".activeDashboard").classList.add("active");
+    }
+});
 
 function showSuccessMessage() {
 	const warningMessage = document.getElementById('success-message');
@@ -609,18 +618,17 @@ window.onload = function() {
 
     <div class="sidebar" id="sidebar">
         <div class="logo">
-            <img src="logo.png" alt="Logo">
+            
         </div>
         <ul class="sidebar-menu">
-        	<li><a href="dashboard.jsp"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
-            <li><i class="fas fa-user-cog"></i><span class="menu-text"> Admin</span></li>
-            <li><i class="fas fa-users"></i><span class="menu-text"> PIM</span></li>
-            <li><a href="applyLeave.jsp"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
-            <li><i class="fas fa-clock"></i><span class="menu-text"> Time</span></li>
-            <li><i class="fas fa-user-plus"></i><span class="menu-text"> Recruitment</span></li>
-            <li><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></li>
-            
-        </ul>
+        <li class="activeDashboard"><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
+        <li class="act"><a href="admin.jsp" id="admin-link"><i class="fas fa-user-cog"></i><span class="menu-text"> Admin</span></a></li>
+        <li class="act"><a href="pim.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> PIM</span></a></li>
+        <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
+        <li class="activeAttendance"><a href="time.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time</span></a></li>
+        <li class="act"><a href="recruitment.jsp" id="recruitment-link"><i class="fas fa-user-plus"></i><span class="menu-text"> Recruitment</span></a></li>
+        <li class="act"><a href="myinfo.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+    </ul>
     </div>
     
     <button id="toggleSidebar" class="toggle-btn">
@@ -694,7 +702,7 @@ window.onload = function() {
         </select>
         </div>
         
-        <div class="form-container">
+        <div class="form-button">
         <button type="submit" class="apply-btn">Filter</button>
         </div>
     </form>

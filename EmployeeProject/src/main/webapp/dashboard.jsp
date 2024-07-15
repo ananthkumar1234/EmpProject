@@ -14,7 +14,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Employee Management</title>
+<title>Dashboard</title>
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -78,9 +78,17 @@ body {
 }
 
 .sidebar-menu li.active {
-	background-color: #ff8c00;
-	color: white;
+    background: linear-gradient(to left,#FF9671 ,#FFC75F );
+    border-radius:0 50px 50px 0;
+    width:70%;
 }
+.sidebar-menu li.active a {
+    color: white;
+}
+.sidebar-menu li.active i {
+    color: white;
+}
+
 
 .sidebar-menu i {
 	margin-right: 10px;
@@ -154,24 +162,15 @@ body.sidebar-collapsed .header {
     left: 40px;
 }
 
-.dashboard-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-	gap: 20px;
-	margin-top: 80px;
-	padding:20px;
-}
-
-.dashboard-item {
-	background-color: #fff;
-	border-radius: 30px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	padding: 15px;
-}
-
 .user-profile {
 	position: relative;
 }
+
+.user-profile:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
 
 .user-dropdown {
 	display: inline-block;
@@ -216,6 +215,30 @@ body.sidebar-collapsed .header {
 	background-color: #f1f1f1;
 }
 
+.dashboard-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 20px;
+	margin-top: 80px;
+	padding:20px;
+}
+
+.dashboard-item {
+	background-color: #fff;
+	border-radius: 30px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	padding: 15px;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
 .show {
 	display: block !important;
 }
@@ -235,6 +258,7 @@ body.sidebar-collapsed .header {
 	padding: 10px;
 	border-radius: 5px;
 	margin-bottom: 15px;
+	margin-top:15px;
 }
 
 .time-today .hours {
@@ -444,14 +468,15 @@ margin:30px;
         
     </div>
     <ul class="sidebar-menu">
-        <li><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
-        <li><a href="admin.jsp" id="admin-link"><i class="fas fa-user-cog"></i><span class="menu-text"> Admin</span></a></li>
-        <li><a href="pim.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> PIM</span></a></li>
-        <li><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
-        <li><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text">Time Logs</span></a></li>
-        <li><a href="recruitment.jsp" id="recruitment-link"><i class="fas fa-user-plus"></i><span class="menu-text"> Recruitment</span></a></li>
-        <li><a href="myinfo.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <li class="activeDashboard"><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
+        <li class="act"><a href="admin.jsp" id="admin-link"><i class="fas fa-user-cog"></i><span class="menu-text"> Admin</span></a></li>
+        <li class="act"><a href="pim.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> PIM</span></a></li>
+        <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
+        <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
+        <li class="act"><a href="recruitment.jsp" id="recruitment-link"><i class="fas fa-user-plus"></i><span class="menu-text"> Recruitment</span></a></li>
+        <li class="act"><a href="myinfo.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
     </ul>
+
 </div>
 
 
@@ -462,7 +487,7 @@ margin:30px;
 
 	<div class="main-content">
 		<header class="header">
-			<h1>Home</h1>
+			<h1>Dashboard</h1>
 			<div class="user-profile">
 				<div class="user-dropdown">
 					<button class="dropbtn" id="userDropdown">
@@ -483,11 +508,10 @@ margin:30px;
 					<i class="fas fa-clock"></i> Time Logs
 				</h3>
 				<hr>
-				<div class="punch-status">
-					<div class="punch-info"></div>
-				</div>
+				<h4>Today</h4>
+			
 				<div class="time-today">
-					<span class="hours">Today</span> <br><br>
+					
 					<%
                     Attendance att = empDao.getCheckInCheckOutTime(emp.getEmpId()); 
                     if(att.getCheckin()!=null)
@@ -652,6 +676,23 @@ margin:30px;
 		</div>
 	</div>
 	<script type="text/javascript">
+	
+	document.addEventListener("DOMContentLoaded", function() {
+        var currentPage = window.location.pathname.split("/").pop();
+        
+        var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
+        var timePages = ["attendancelist.jsp", "empattendance.jsp", "time.jsp"];
+        
+        if (leavePages.includes(currentPage)) {
+            document.querySelector(".activeLeave").classList.add("active");
+        } else if (timePages.includes(currentPage)) {
+            document.querySelector(".time-group").classList.add("active");
+        }
+        else{
+                document.querySelector(".activeDashboard").classList.add("active");
+        }
+    });
+	
 	// Get the current page name from the URL (assuming filenames match)
 	var currentPage = window.location.pathname.split("/").pop();
 
