@@ -715,5 +715,219 @@ public class EmpDao {
 			return false;
 		}
 	}
+	
+	//Method to get list of attendance records based on session id
+	public List<Attendance> getAttRecordById(int eid) throws SQLException {
+	    List<Attendance> list = new ArrayList<>();
+	    String qry = "SELECT AttendanceId, Date, CheckInTime, CheckOutTime, Remarks, IsButtonClicked FROM attendance "
+	    		+"WHERE employeeID = ? " 
+	    		+"AND MONTH(Date) = MONTH(CURRENT_DATE()) "
+	    		+"AND YEAR(Date) = YEAR(CURRENT_DATE()) "
+	    		+"ORDER by date";
+	    PreparedStatement ps = con.prepareStatement(qry);
+	    ps.setInt(1, eid);
+	    ResultSet rs = ps.executeQuery();
+
+	    while (rs.next()) {
+	        Attendance a = new Attendance();
+	        a.setAttendId(rs.getInt("AttendanceId"));
+	        a.setDate(rs.getString("Date"));
+	        a.setCheckin(rs.getString("CheckInTime"));
+	        a.setCheckout(rs.getString("CheckOutTime"));
+	        a.setRemarks(rs.getString("Remarks"));
+	        a.setButtonClicked(rs.getInt("IsButtonClicked"));
+	        list.add(a);
+	    }
+	    return list;
+	}
+	
+	
+	// Method to get attendance records list based on from and to date
+	public List<Attendance> getAttendanceByDateRange(int eid, String fromDate, String toDate) {
+		List<Attendance> list = new ArrayList<>();
+		try {
+			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
+		               + "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
+		               + "FROM attendance a "
+		               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
+		               + "WHERE a.employeeid = ? AND a.date BETWEEN ? AND ? "
+		               + "ORDER BY a.date";
+			PreparedStatement ps = this.con.prepareStatement(query);
+			ps.setInt(1, eid);
+			ps.setString(2, fromDate);
+			ps.setString(3, toDate);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Attendance att = new Attendance();
+				att.setAttendId(rs.getInt("AttendanceId"));
+				att.setDate(rs.getString("date"));
+				att.setCheckin(rs.getString("checkintime"));
+				att.setCheckout(rs.getString("checkouttime"));
+				att.setRemarks(rs.getString("Remarks"));
+				list.add(att);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	// Method to get attendance records list based on year and month
+	public List<Attendance> getAttendanceByYearMonth(int eid, String year, String month) {
+		List<Attendance> list = new ArrayList<>();
+		try {
+			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
+		               + "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
+		               + "FROM attendance a "
+		               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
+		               + "WHERE a.employeeid = ? AND YEAR(a.date) = ? AND MONTH(a.date) = ? "
+		               + "ORDER BY a.date";
+			PreparedStatement ps = this.con.prepareStatement(query);
+			ps.setInt(1, eid);
+			ps.setString(2, year);
+			ps.setString(3, month);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Attendance att = new Attendance();
+				att.setAttendId(rs.getInt("AttendanceID"));
+				att.setDate(rs.getString("date"));
+				att.setCheckin(rs.getString("checkintime"));
+				att.setCheckout(rs.getString("checkouttime"));
+				att.setRemarks(rs.getString("Remarks"));
+				list.add(att);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	// Method to get attendance records list based on year
+	public List<Attendance> getAttendanceByYear(int eid, String year) {
+		List<Attendance> list = new ArrayList<>();
+		try {
+			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
+		               + "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
+		               + "FROM attendance a "
+		               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
+		               + "WHERE a.employeeid = ? AND YEAR(a.date) = ? "
+		               + "ORDER BY a.date";
+			PreparedStatement ps = this.con.prepareStatement(query);
+			ps.setInt(1, eid);
+			ps.setString(2, year);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Attendance att = new Attendance();
+				att.setAttendId(rs.getInt("AttendanceId"));
+				att.setDate(rs.getString("date"));
+				att.setCheckin(rs.getString("checkintime"));
+				att.setCheckout(rs.getString("checkouttime"));
+				att.setRemarks(rs.getString("Remarks"));
+				list.add(att);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	// Method to update new check-in and check-out time
+	public boolean UpdateAttendanceTable(int AID,String name,String Date, String CITime, String COTime, int eid) throws SQLException
+	{
+		String qry="Insert into AttendanceUpdate (AttendanceId,Name,Date, CheckInTime, CheckOutTime, EmployeeId) values (?,?,?,?,?,?)";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1,AID);
+		ps.setString(2,name);
+		ps.setString(3,Date);
+		ps.setString(4,CITime);
+		ps.setString(5,COTime);
+		ps.setInt(6,eid);
+		int i=ps.executeUpdate();
+		
+		String qry2="Update Attendance set IsButtonClicked=1 where AttendanceId=?";
+		PreparedStatement ps2 = con.prepareStatement(qry2);
+		ps2.setInt(1, AID);
+		ps2.executeUpdate();
+		
+		if(i>0) return true;
+		return false;
+	}
+	
+	
+	// Method to get attendanceRequest from reportees to there manager
+	public List<Attendance> ManagerAttendance(int mid) throws SQLException
+	{
+		List<Attendance> list = new ArrayList<>();
+		String qry="SELECT au.AttendanceId, au.Name, au.Date, au.CheckInTime as NewCheckInTime, au.CheckOutTime as NewCheckOutTime, att.CheckInTime as OldCheckInTime, att.CheckOutTime as OldCheckOutTime FROM AttendanceUpdate au JOIN Attendance att ON att.AttendanceId = au.AttendanceId WHERE au.EmployeeId IN (SELECT employee FROM Manager WHERE manager = ?)";
+		 
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1, mid);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next())
+		{
+			Attendance a = new Attendance();
+			a.setAttendId(rs.getInt("AttendanceId"));
+			a.setName(rs.getString("Name"));
+			a.setDate(rs.getString("Date"));
+			a.setNewcheckin(rs.getString("NewCheckInTime"));
+			a.setNewcheckout(rs.getString("NewCheckOutTime"));
+			a.setCheckin(rs.getString("OldCheckInTime"));
+			a.setCheckout(rs.getString("OldCheckOutTime"));
+			list.add(a);
+		}
+		
+		return list;
+	}
+	
+	
+	// Method to display all attendanceRequests to HR
+	public List<Attendance> HRAttendance() throws SQLException
+	{
+		List<Attendance> list = new ArrayList<>();
+		String qry="SELECT au.AttendanceId, au.Name, au.Date, au.CheckInTime as NewCheckInTime, au.CheckOutTime as NewCheckOutTime, att.CheckInTime as OldCheckInTime, att.CheckOutTime as OldCheckOutTime FROM AttendanceUpdate au JOIN Attendance att ON att.AttendanceId = au.AttendanceId";
+		
+		PreparedStatement ps = con.prepareStatement(qry);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next())
+		{
+			Attendance a = new Attendance();
+			a.setAttendId(rs.getInt("AttendanceId"));
+			a.setName(rs.getString("Name"));
+			a.setDate(rs.getString("Date"));
+			a.setNewcheckin(rs.getString("NewCheckInTime"));
+			a.setNewcheckout(rs.getString("NewCheckOutTime"));
+			a.setCheckin(rs.getString("OldCheckInTime"));
+			a.setCheckout(rs.getString("OldCheckOutTime"));
+			list.add(a);
+		}
+		
+		return list;
+	}
+	
+	
+	// Method to update attendanceRequest
+	public boolean UpdateAttendance(int AID,String Date, String CITime, String COTime) throws SQLException
+	{
+		String qry="Update Attendance SET Date=?,CheckInTime=?, CheckOutTime=?, Remarks='-' where AttendanceId=?";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setString(1,Date);
+		ps.setString(2,CITime);
+		ps.setString(3,COTime);
+		ps.setInt(4,AID);
+		int i=ps.executeUpdate();
+		
+		String qry2="Delete from AttendanceUpdate where AttendanceId=?";
+		PreparedStatement ps2 = con.prepareStatement(qry2);
+		ps2.setInt(1,AID);
+		ps2.executeUpdate();
+		
+		if(i>0) return true;
+		return false;
+		
+		
+	}
 
 }

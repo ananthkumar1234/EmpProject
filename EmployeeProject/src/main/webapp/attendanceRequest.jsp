@@ -7,6 +7,13 @@
 <%@ page import="com.emp.jdbc.DBConnect"%>
 <%@ page import="java.sql.Connection"%>
 <%@ page import="com.emp.dao.EmpDao"%>
+
+<%@ page import="java.time.LocalTime"%>
+<%@ page import="java.time.Duration"%>
+
+<%@ page import="java.time.LocalDate"%>
+<%@ page import="java.time.format.DateTimeFormatter"%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
@@ -417,8 +424,209 @@ margin:30px;
 }
 
 
+/*====================================table starts========================================*/
+
+.leave-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 15px;
+  
+}
+
+
+.leave-table th {
+  text-align: left;
+  padding: 10px 15px;
+  color: black;
+  font-weight: normal;
+  border-bottom: 1px solid #e0e0e0;
+  background-color:#c0c0c0;
+  font-weight:bold;
+
+  
+}
+
+.leave-table td {
+  padding: 15px;
+  background-color: #f5f5f5;
+}
+
+.leave-table tbody tr {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+}
+
+.leave-table tbody tr td:first-child {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.leave-table tbody tr td:last-child {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+
+/*==============================table css ends=================================================*/
+
+/*========================================poup css starts==================================*/
+
+.popup {
+	display: none;
+	position: fixed;
+	z-index: 9;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	border: 1px solid #888;
+	border-radius: 8px;
+	background-color: #fefefe;
+	padding: 20px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	width: 400px;
+	text-align: center;
+}
+
+.close-btn {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close-btn:hover, .close-btn:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.popup h2 {
+	color: #333;
+	margin: 10px;
+}
+
+.popup textarea {
+	width: 95%;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+.popup input.sub {
+	width: 50%;
+	padding: 10px;
+	margin-top: 20px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+	transition: background-color 0.3s ease;
+}
+
+.popup input.sub:hover {
+	background-color: #0056b3;
+}
+
+.warning {
+	margin: 10px;
+}
+
+.msg {
+	margin: 15px;
+}
+
+/* Styling for form container */
+.PopupForm {
+	max-width: 400px;
+	margin: 0 auto;
+	padding: 20px;
+	background-color: #ffffff;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for form labels */
+.PopupForm label {
+	display: block;
+	margin-bottom: 5px;
+	color: #333333;
+	font-weight: bold;
+}
+
+/* Styling for form inputs */
+.PopupForm input[type="text"] {
+	width: calc(100% - 20px);
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+/* Styling for submit button */
+.PopupForm input[type="submit"] {
+	width: 100%;
+	padding: 10px;
+	background-color: #007bff;
+	color: #ffffff;
+	border: none;
+	border-radius: 4px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.PopupForm input[type="submit"]:hover {
+	background-color: #0056b3;
+}
+
+/* =============================================popup css ends======================================*/
+
+/*=================attendance links starts================================================*/
+
+.attendanceLinks {
+	display: flex;
+	background-color: white;
+	padding: 15px;
+	margin-top:5%;
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	
+}
+.attendanceLinks a {
+	color: #6c757d;
+	text-decoration: none;
+	padding: 10px 15px;
+	font-size: 14px;
+	transition: all 0.3s ease;
+	margin: 0 5px;
+	border-radius: 10px;
+	background-color: #f5f5f5;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.attendanceLinks a:hover, .attendanceLinks a:focus {
+	color: #ff8c00;
+	background-color: #fff9f0;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transform: translateY(-2px);
+}
+
+/* attendance links ends========================================================================*/
+
 
 </style>
+
+<script >
+
+
+
+
+</script>
+
 <body>
 	<%
         Connection con = DBConnect.getConnection();
@@ -428,14 +636,17 @@ margin:30px;
         Employees emp = (Employees)sess.getAttribute("employee");
         String role = (String)sess.getAttribute("role");
         
-        List<Leaves> list2=null;
-        if(sess.getAttribute("role").equals("HR"))
-        {
-         list2 = empDao.getPendingLeaves();
-        }else if(sess.getAttribute("role").equals("Manager"))
-        {
-        list2 = empDao.getMgrPendingLeaves(emp.getEmpId());
-        }
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    	List<Attendance> attendanceList = (List<Attendance>) request.getAttribute("filteredAttendance");
+    	String empName = emp.getFname() + " " + emp.getLname();
+    	
+       // if(sess.getAttribute("role").equals("HR"))
+       // {
+       //  list2 = empDao.getPendingLeaves();
+       // }else if(sess.getAttribute("role").equals("Manager"))
+       // {
+       // list2 = empDao.getMgrPendingLeaves(emp.getEmpId());
+       // }
         
     %>
 
@@ -462,7 +673,7 @@ margin:30px;
 
 	<div class="main-content">
 		<header class="header">
-			<h1>Home</h1>
+			<h1>Attendace</h1>
 			<div class="user-profile">
 				<div class="user-dropdown">
 					<button class="dropbtn" id="userDropdown">
@@ -476,179 +687,65 @@ margin:30px;
 				</div>
 			</div>
 		</header>
+		
+		<div class="attendanceLinks">
+			<a href="attendance.jsp">Attendance Records List</a> 
+			<a href="attendanceRequest.jsp">Attendance Update Requests</a> 
+		</div>
 
 		<div class="dashboard-grid">
-			<div class="dashboard-item time-at-work">
-				<h3>
-					<i class="fas fa-clock"></i> Time Logs
-				</h3>
-				<hr>
-				<div class="punch-status">
-					<div class="punch-info"></div>
-				</div>
-				<div class="time-today">
-					<span class="hours">Today</span> <br><br>
-					<%
-                    Attendance att = empDao.getCheckInCheckOutTime(emp.getEmpId()); 
-                    if(att.getCheckin()!=null)
-                    { %>
-                    	<div class="leave-row">
-                    	<span class="leave-label">Check In Time: </span>
-                    	<span class="leave-value"><%= att.getCheckin() %></span>
-                    	</div>
-                    	
-                    	<%if(att.getCheckout()!=null){ %>
-                    	<div class="leave-row">
-                    	<span class="leave-label">Check Out Time: </span>
-                    	<span class="leave-value"><%= att.getCheckout() %></span>
-                    	</div>
-                    <%}
-                    }else
-                    {
-                    	%>
-                    	
-                    	Not logged in today!
-                    	<%} %>
-                    
-				</div>
-				<div class="weekly-chart">
-					<h4>This Week</h4>
+		
+		
+		<table class="leave-table">
+						<thead>
+							<tr>
+								<th>Name</th>
+                <th>Date</th>
+                <th>Old CheckIn Time</th>
+                <th>New CheckIn Time</th>
+                <th>Old CheckOut Time</th>
+                <th>New CheckOut Time</th>
+                <th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+							<% 
+            EmpDao er = new EmpDao(DBConnect.getConnection());
+            List<Attendance> list2=null;
+            
+            if(role.equals("Manager"))
+            		list2=er.ManagerAttendance(emp.getEmpId());
+            else
+            	list2=er.HRAttendance();
 
-					<%
-                    List<Attendance> weekLogs = (List<Attendance>)sess.getAttribute("weekLogs");
-                    %>
-					<div class="chart-container" id="weeklyChartContainer">
-						<% for(Attendance hours : weekLogs) {
-                            double hr = Double.parseDouble(hours.getDuration());
-                        %>
-						
-            <div class="chart-bar" style="height: <%= hr * 10 %>%;">
-                <span class="hour-value"><%= String.format("%.1f", hr) %></span>
-            </div>
-        
-						<% } %>
-					</div>
-					<div class="chart-labels">
-						<span>Mon</span> <span>Tue</span> <span>Wed</span> <span>Thu</span>
-						<span>Fri</span> <span>Sat</span> <span>Sun</span>
-					</div>
-				</div>
-			</div>
-			
-			<div class="dashboard-item">
-				<h3>
-					<i class="fas fa-calendar-alt"></i> My Leaves
-				</h3>
-				<hr>
-				<%
-				List<Leaves> list = empDao.getCurrMonthLeaves(emp.getEmpId());
-				for(Leaves leave:list){
-				
-				%>
-				<div class="leave-entry">
-					<div class="leave-row">
-						<span class="leave-label">From</span> <span class="leave-value"><%= leave.getFromDate() %></span>
-					</div>
-					<div class="leave-row">
-						<span class="leave-label">To</span> <span class="leave-value"><%= leave.getToDate()%></span>
-					</div>
-					<div class="leave-row">
-						<span class="leave-label">Status</span> <span
-							class="leave-value status-approved"><%= leave.getLeaveStatus()%></span>
-					</div>
-				</div>
-				<%} %>
-			</div>
-			
-			<div class="dashboard-item">
-    <h3>Quick Launch</h3>
-    <hr>
-    <div class="quick-launch-grid">
-      
-     <a href="applyLeave.jsp"> <div class="quick-launch-button">
-            <div class="quick-launch-icon">
-                <i class="fas fa-paper-plane"></i>
-            </div>
-            <span class="quick-launch-text">Apply Leave</span>
-        </div></a>
-        
-       <a href="myLeaves.jsp"><div class="quick-launch-button">
-            <div class="quick-launch-icon">
-              <i class="fas fa-list"></i>
+            for (Attendance e : list2) {
+            %>
+            <tr>
+                <td><%= e.getName() %></td>
+                <td><%= e.getDate()%></td>
+                <td><%= e.getCheckin()%></td>
+                <td><%= e.getNewcheckin()%></td>
+                <td><%= e.getCheckout()%></td>
+                <td><%= e.getNewcheckout()%></td>
+                <td>
+                <form action="AttendanceUpdate" method="get">
+                       		<input type="hidden" name="id" value="<%=e.getAttendId() %>">	
+                       		<input type="hidden" name="Date" value="<%=e.getDate() %>">
+                       		<input type="hidden" name="CIT" value="<%=e.getNewcheckin() %>">
+                       		<input type="hidden" name="COT" value="<%=e.getNewcheckout() %>">
+                            <input type="submit" value="Approve">
+                </form>
+                </td>
                 
-            </div>
-            <span class="quick-launch-text">My Leave</span>
-        </div></a> 
-        
-        <div class="quick-launch-button">
-            <div class="quick-launch-icon">
-                <i class="fas fa-stopwatch"></i>
-            </div>
-            <span class="quick-launch-text">My Time Logs</span>
-        </div>
-        
-        
-        <a href="holidays.jsp"><div class="quick-launch-button">
-            <div class="quick-launch-icon">
-                <i class="fas fa-calendar-alt"></i>
-            </div>
-            <span class="quick-launch-text">Holidays</span>
-        </div></a>
-        
+            </tr>
+            <% } %>
+							
+						</tbody>
+					</table>
+					
 
-        
-    </div>
-   
-    <% if("HR".equals(role)) {%>
-     <hr>
-    <div class="quick-launch-grid">
-      
-    <a href="assignLeave.jsp"><div class="quick-launch-button">
-            <div class="quick-launch-icon">
-                <i class="fas fa-calendar-check"></i>
-            </div>
-            <span class="quick-launch-text">Assign Leave</span>
-        </div></a>
-        
-        <a href="holidays.jsp"><div class="quick-launch-button">
-            <div class="quick-launch-icon">
-                <i class="fas fa-calendar-plus"></i>
-            </div>
-            <span class="quick-launch-text">Add Holiday</span>
-        </div></a>
-        
-        <div class="quick-launch-button">
-            <div class="quick-launch-icon">
-                <i class="fas fa-user-plus"></i>
-            </div>
-            <span class="quick-launch-text">Add Employee</span>
-        </div>
-        
-    </div><%}%>
-    
-</div>
 
-		<% if("HR".equals(role) || "Manager".equals(role)) {%>
-
-			<div class="dashboard-item">
-				<h3>
-					<i class="fas fa-calendar-alt"></i> Notifications
-				</h3>
-				<hr>
-				<%
-				for(Leaves lev:list2){
-				%>
-				<div class="leave-entry">
-					<div class="leave-row">
-						<a href="leaveRequests.jsp"><span class="leave-value"><%= lev.getFname()+" "+lev.getLname()%></span> : has applied leave.</a> 
-					</div>
-				</div>
-				<%} %>
-
-			</div>
-			<%} %>
-			
-			
 		</div>
 	</div>
 	<script type="text/javascript">

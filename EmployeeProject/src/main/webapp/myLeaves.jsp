@@ -270,6 +270,10 @@ body {
 	.dropdown-content {
 		width: 100%;
 	}
+	.leaveLinks a
+	{
+	flex:1;
+	}
 }
 
 
@@ -297,7 +301,6 @@ a {
 
 .leaveLinks a {
     color: #6c757d;
-    
     text-decoration: none;
     padding: 10px 15px;
     font-size: 14px;
@@ -313,7 +316,7 @@ a {
     color: #ff8c00;
     background-color: #fff9f0;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
+    transform: translateY(2px);
 }
 
 /* table css starts*/
@@ -387,7 +390,6 @@ a {
   .leave-table th,
   .leave-table td {
     padding: 2px 2px;
-    color:red;
   }
   
   .cancel-btn {
@@ -403,10 +405,11 @@ a {
   form{
   font-size:15px;
   }
-  .form-button{
-  padding: 4px 8px;
-    font-size: 12px;
-  }
+  form .form-container {
+   flex:1;
+}
+
+
 }
 /* table css ends*/
 
@@ -480,20 +483,20 @@ a {
  /*warning message ends*/
  
 .filter {
+display:flex;
     align-items: center;
     margin: 10px;
     padding: 10px;
 }
 
 form {
-    display: flex;
+display:flex;
     width: 100%;
     justify-content: start;
     align-items: center;
 }
 
 form .form-container {
-    display: 1;
     align-items: center;
     margin-right:15px;
     gap: 10px;
@@ -691,7 +694,7 @@ window.onload = function() {
         </select>
         </div>
         
-        <div class="form-button">
+        <div class="form-container">
         <button type="submit" class="apply-btn">Filter</button>
         </div>
     </form>
