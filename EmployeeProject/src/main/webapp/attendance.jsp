@@ -22,407 +22,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Employee Management</title>
-
+<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="show.css">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="script.js" defer></script>
 </head>
 <style>
-
-
-body {
-	font-family: Arial, sans-serif;
-	margin: 0;
-    padding: 0;
-	display: flex;
-	transition: padding-left 0.3s ease;
-	background-color: #f5f5f5;
-	box-sizing: border-box;
-}
-
-.sidebar {
-	width: 250px;
-	background-color: white;
-	height: 100vh;
-	position: fixed;
-	left: 0;
-	top: 0;
-	transition: all 0.3s ease;
-	overflow-x: hidden;
-	z-index: 1000;
-	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-	border-radius: 0 20px 20px 0;
-}
-
-.sidebar.collapsed {
-	width: 60px;
-}
-
-.logo {
-	padding: 20px;
-	border-bottom: 1px solid #e0e0e0;
-}
-
-.logo img {
-	max-width: 100%;
-	height: auto;
-}
-
-.sidebar-menu {
-	list-style-type: none;
-	padding: 0;
-	margin: 0;
-}
-
-.sidebar-menu li {
-	padding: 15px 20px;
-	transition: all 0.3s ease;
-	white-space: nowrap;
-}
-
-.sidebar-menu li:hover {
-	background-color: #f0f0f0;
-}
-
-.sidebar-menu li.active {
-	background-color: #ff8c00;
-	color: white;
-}
-
-.sidebar-menu i {
-	margin-right: 10px;
-}
-
-.sidebar.collapsed .menu-text {
-	display: none;
-}
-
-.sidebar.collapsed .sidebar-menu li {
-	text-align: center;
-}
-
-.toggle-btn {
-	position: fixed;
-	left: 230px;
-	top: 10px;
-	background: linear-gradient(to left,#FF9671 ,#FFC75F );
-	
-	border:none;
-	border-radius: 30px;
-	padding: 10px;
-	cursor: pointer;
-	transition: all 0.3s ease;
-	z-index: 1001;
-	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.toggle-btn i {
-	display: none;
-}
-
-.toggle-btn i.show {
-	display: inline;
-}
-
-.sidebar.collapsed+.toggle-btn {
-	left: 40px;
-}
-
-.main-content {
-	flex: 1;
-	padding: 20px;
-	margin-left: 230px;
-	transition: margin-left 0.3s ease;
-}
-
-.header {
-	
-	background: linear-gradient(to left,#FF9671 ,#FFC75F );
-	color: white;
-	padding: 10px 20px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	position: fixed;
-    top: 0;
-    right: 0;
-    left: 230px;
-    height: 60px;
-    transition: left 0.3s ease;
-    z-index: 999;
-
-}
-
-body.sidebar-collapsed .main-content {
-    margin-left: 40px;
-}
-
-body.sidebar-collapsed .header {
-    left: 40px;
-}
-
-.dashboard-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-	gap: 20px;
-	margin-top: 80px;
-	padding:20px;
-}
-
-.dashboard-item {
-	background-color: #fff;
-	border-radius: 30px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	padding: 15px;
-}
-
-.user-profile {
-	position: relative;
-}
-
-.user-dropdown {
-	display: inline-block;
-}
-
-
-.dropbtn {
-	background:linear-gradient(to left,#FFC75F ,#FF9671 );
-	color: white;
-	padding: 10px 15px;
-	font-size: 16px;
-	border: none;
-	cursor: pointer;
-	border-radius: 5px;
-	transition: background-color 0.3s;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.dropbtn:hover, .dropbtn:focus {
-	background-color: #e67e00;
-}
-
-.dropdown-content {
-	display: none;
-	position: absolute;
-	right: 0;
-	background-color: #f9f9f9;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1001;
-	border-radius: 5px;
-}
-
-.dropdown-content a {
-	color: black;
-	padding: 12px 16px;
-	text-decoration: none;
-	display: block;
-}
-
-.dropdown-content a:hover {
-	background-color: #f1f1f1;
-}
-
-.show {
-	display: block !important;
-}
-
-.time-at-work {
-	padding: 20px;
-}
-
-.punch-status {
-	display: flex;
-	align-items: center;
-	margin-bottom: 15px;
-}
-
-.time-today {
-	background-color: #f0f0f0;
-	padding: 10px;
-	border-radius: 5px;
-	margin-bottom: 15px;
-}
-
-.time-today .hours {
-	font-weight: bold;
-}
-
-
-
-.weekly-chart h4 {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 10px;
-}
-
-.chart-container {
-	height: 150px;
-	display: flex;
-	align-items: flex-end;
-	justify-content: space-between;
-	margin-bottom: 10px;
-}
-
-.chart-bar-wrapper {
-    
-    
-}
-
-.chart-bar {
-	width: 12%;
-	background: linear-gradient(to left,#FF9671 ,#FFC75F );
-	transition: height 0.3s ease;
-	border-radius:15px 15px 0 0;
-	position: relative;
-	display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 5px;
-
-}
-
-.hour-value {
-    color: white;
-    font-size: 0.8em;
-    font-weight: bold;
-
-    
-}
-
-.chart-labels {
-	display: flex;
-	justify-content: space-between;
-	font-size: 0.8em;
-	color: #666;
-}
-
-@media screen and (max-width: 768px) {
-	body {
-		flex-direction: column;
-	}
-	.sidebar {
-		width: 100%;
-		height: auto;
-	}
-	.main-content {
-		margin-left: 0;
-	}
-	.toggle-btn {
-		display: none;
-	}
-		.user-dropdown {
-		display: block;
-		width: 100%;
-	}
-	.dropdown-content {
-		width: 100%;
-	}
-}
-
-
-body.sidebar-collapsed {
-	padding-left: 60px;
-}
-
-body.sidebar-collapsed .main-content {
-	margin-left: 0px;
-}
-a {
-    text-decoration: none;
-    color:black;
-}
-
-h1
-{
-margin:30px;
-}
-
-
-
-/* below css for My Leaves card  */
-.leave-entry {
-	background-color: #f0f0f0;
-	border-radius: 6px;
-	padding: 15px;
-	margin-bottom: 10px;
-}
-
-.leave-row {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 5px;
-}
-
-.leave-label {
-	font-weight: bold;
-	color: #333;
-}
-
-.leave-value {
-	text-align: right;
-	color: #666;
-}
-
-.status-approved {
-	color: #4caf50;
-}
-
-.status-rejected {
-	color: #f44336;
-}
-
-
-.sidebar-menu li.active {
-  background-color: red; /* Adjust color as desired */
-}
-
-/*CSS for Quick Launch*/
-
-.quick-launch-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-}
-
-.quick-launch-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    padding: 15px;
-    text-align: center;
-    transition: background-color 0.3s ease;
-}
-
-.quick-launch-button:hover {
-    background-color: #e0e0e0;
-}
-
-.quick-launch-icon {
-    width: 40px;
-    height: 40px;
-    background-color: #ddd;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 8px;
-}
-
-.quick-launch-icon i {
-    color: #666;
-    font-size: 20px;
-}
-
-.quick-launch-text {
-    font-size: 12px;
-    color: #333;
-}
-
 
 /*====================================table starts========================================*/
 @media (max-width: 768px) {
@@ -594,37 +200,7 @@ margin:30px;
 
 /* =============================================popup css ends======================================*/
 
-/*=================attendance links starts================================================*/
 
-.attendanceLinks {
-	display: flex;
-	background-color: white;
-	padding: 15px;
-	margin-top:5%;
-	border-radius: 8px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	
-}
-.attendanceLinks a {
-	color: #6c757d;
-	text-decoration: none;
-	padding: 10px 15px;
-	font-size: 14px;
-	transition: all 0.3s ease;
-	margin: 0 5px;
-	border-radius: 10px;
-	background-color: #f5f5f5;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.attendanceLinks a:hover, .attendanceLinks a:focus {
-	color: #ff8c00;
-	background-color: #fff9f0;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	transform: translateY(-2px);
-}
-
-/* attendance links ends========================================================================*/
 
 </style>
 
@@ -637,6 +213,24 @@ if (f != null && f) {%>
 document.getElementById("myPopup").style.display = "block";
 <%}%>
 }
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    var currentPage = window.location.pathname.split("/").pop();
+    
+    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
+    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
+    
+    if (leavePages.includes(currentPage)) {
+        document.querySelector(".activeLeave").classList.add("active");
+    } else if (timePages.includes(currentPage)) {
+        document.querySelector(".activeAttendance").classList.add("active");
+    }
+    else{
+            document.querySelector(".activeDashboard").classList.add("active");
+    }
+});
+
 
 function openPopup() {
 	document.getElementById("myPopup").style.display = "block";
@@ -684,13 +278,13 @@ function closePopup(popupId) {
         
     </div>
     <ul class="sidebar-menu">
-        <li><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
-        <li><a href="admin.jsp" id="admin-link"><i class="fas fa-user-cog"></i><span class="menu-text"> Admin</span></a></li>
-        <li><a href="pim.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> PIM</span></a></li>
-        <li><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
-        <li><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text">Time Logs</span></a></li>
-        <li><a href="recruitment.jsp" id="recruitment-link"><i class="fas fa-user-plus"></i><span class="menu-text"> Recruitment</span></a></li>
-        <li><a href="myinfo.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <li class="activeDashboard"><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
+        <li class="act"><a href="admin.jsp" id="admin-link"><i class="fas fa-user-cog"></i><span class="menu-text"> Admin</span></a></li>
+        <li class="act"><a href="pim.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> PIM</span></a></li>
+        <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
+        <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
+        <li class="act"><a href="recruitment.jsp" id="recruitment-link"><i class="fas fa-user-plus"></i><span class="menu-text"> Recruitment</span></a></li>
+        <li class="act"><a href="myinfo.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
     </ul>
 </div>
 
@@ -717,7 +311,7 @@ function closePopup(popupId) {
 			</div>
 		</header>
 		Hello guru!
-		<div class="attendanceLinks">
+		<div class="attendLinks">
 		
 			<a href="attendance.jsp">Attendance Records List</a> 
 			<%if("HR".equals(role) || "Manager".equals(role)){ %>
@@ -729,6 +323,7 @@ function closePopup(popupId) {
 		
 		
 		<table class="leave-table">
+		
 						<thead>
 							<tr>
 								<th>Date</th>

@@ -19,207 +19,15 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="script.js" defer></script>
+<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="show.css">
 </head>
 <style>
-
-
-body {
-	font-family: Arial, sans-serif;
-	margin: 0;
-    padding: 0;
-	display: flex;
-	transition: padding-left 0.3s ease;
-	background-color: #f5f5f5;
-	box-sizing: border-box;
-}
-
-.sidebar {
-	width: 250px;
-	background-color: white;
-	height: 100vh;
-	position: fixed;
-	left: 0;
-	top: 0;
-	transition: all 0.3s ease;
-	overflow-x: hidden;
-	z-index: 1000;
-	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-	border-radius: 0 20px 20px 0;
-}
-
-.sidebar.collapsed {
-	width: 60px;
-}
-
-.logo {
-	padding: 20px;
-	border-bottom: 1px solid #e0e0e0;
-}
-
-.logo img {
-	max-width: 100%;
-	height: auto;
-}
-
-.sidebar-menu {
-	list-style-type: none;
-	padding: 0;
-	margin: 0;
-}
-
-.sidebar-menu li {
-	padding: 15px 20px;
-	transition: all 0.3s ease;
-	white-space: nowrap;
-}
-
-.sidebar-menu li:hover {
-	background-color: #f0f0f0;
-}
-
-.sidebar-menu li.active {
-    background: linear-gradient(to left,#FF9671 ,#FFC75F );
-    border-radius:0 50px 50px 0;
-    width:70%;
-}
-.sidebar-menu li.active a {
-    color: white;
-}
-.sidebar-menu li.active i {
-    color: white;
-}
-
-
-.sidebar-menu i {
-	margin-right: 10px;
-}
-
-.sidebar.collapsed .menu-text {
-	display: none;
-}
-
-.sidebar.collapsed .sidebar-menu li {
-	text-align: center;
-}
-
-.toggle-btn {
-	position: fixed;
-	left: 230px;
-	top: 10px;
-	background: linear-gradient(to left,#FF9671 ,#FFC75F );
-	
-	border:none;
-	border-radius: 30px;
-	padding: 10px;
-	cursor: pointer;
-	transition: all 0.3s ease;
-	z-index: 1001;
-	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.toggle-btn i {
-	display: none;
-}
-
-.toggle-btn i.show {
-	display: inline;
-}
-
-.sidebar.collapsed+.toggle-btn {
-	left: 40px;
-}
-
-.main-content {
-	flex: 1;
-	padding: 20px;
-	margin-left: 230px;
-	transition: margin-left 0.3s ease;
-}
-
-.header {
-	
-	background: linear-gradient(to left,#FF9671 ,#FFC75F );
-	color: white;
-	padding: 10px 20px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	position: fixed;
-    top: 0;
-    right: 0;
-    left: 230px;
-    height: 60px;
-    transition: left 0.3s ease;
-    z-index: 999;
-
-}
-
-body.sidebar-collapsed .main-content {
-    margin-left: 40px;
-}
-
-body.sidebar-collapsed .header {
-    left: 40px;
-}
-
-.user-profile {
-	position: relative;
-}
-
-.user-profile:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-
-.user-dropdown {
-	display: inline-block;
-}
-
-
-.dropbtn {
-	background:linear-gradient(to left,#FFC75F ,#FF9671 );
-	color: white;
-	padding: 10px 15px;
-	font-size: 16px;
-	border: none;
-	cursor: pointer;
-	border-radius: 5px;
-	transition: background-color 0.3s;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.dropbtn:hover, .dropbtn:focus {
-	background-color: #e67e00;
-}
-
-.dropdown-content {
-	display: none;
-	position: absolute;
-	right: 0;
-	background-color: #f9f9f9;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-	z-index: 1001;
-	border-radius: 5px;
-}
-
-.dropdown-content a {
-	color: black;
-	padding: 12px 16px;
-	text-decoration: none;
-	display: block;
-}
-
-.dropdown-content a:hover {
-	background-color: #f1f1f1;
-}
-
 .dashboard-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-	gap: 20px;
-	margin-top: 80px;
+	grid-template-columns: repeat(auto-fit, minmax(15%, 1fr));
+	gap: 2%;
+	margin-top: 5%;
 	padding:20px;
 }
 
@@ -236,12 +44,6 @@ body.sidebar-collapsed .header {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-
-
-
-.show {
-	display: block !important;
-}
 
 .time-at-work {
 	padding: 20px;
@@ -315,49 +117,6 @@ body.sidebar-collapsed .header {
 	color: #666;
 }
 
-@media screen and (max-width: 768px) {
-	body {
-		flex-direction: column;
-	}
-	.sidebar {
-		width: 100%;
-		height: auto;
-	}
-	.main-content {
-		margin-left: 0;
-	}
-	.toggle-btn {
-		display: none;
-	}
-		.user-dropdown {
-		display: block;
-		width: 100%;
-	}
-	.dropdown-content {
-		width: 100%;
-	}
-}
-
-
-body.sidebar-collapsed {
-	padding-left: 60px;
-}
-
-body.sidebar-collapsed .main-content {
-	margin-left: 0px;
-}
-a {
-    text-decoration: none;
-    color:black;
-}
-
-h1
-{
-margin:30px;
-}
-
-
-
 /* below css for My Leaves card  */
 .leave-entry {
 	background-color: #f0f0f0;
@@ -389,18 +148,12 @@ margin:30px;
 .status-rejected {
 	color: #f44336;
 }
-
-
-.sidebar-menu li.active {
-  background-color: red; /* Adjust color as desired */
-}
-
 /*CSS for Quick Launch*/
 
 .quick-launch-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2%;
 }
 
 .quick-launch-button {
@@ -432,7 +185,7 @@ margin:30px;
 
 .quick-launch-icon i {
     color: #666;
-    font-size: 20px;
+    font-size: 120%;
 }
 
 .quick-launch-text {
@@ -440,7 +193,30 @@ margin:30px;
     color: #333;
 }
 
+.notification {
+  background-color: #f8f8f8;
+  border-left: 4px solid #4a90e2;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  border-radius: 0 10px 10px 0;
+  transition: background-color 0.2s ease;
+}
 
+.notification:hover {
+  background-color: #f0f0f0;
+}
+
+.notifrow a {
+  text-decoration: none;
+  color: #333;
+  font-size: 0.9rem;
+  display: block;
+}
+
+.notifvalue {
+  font-weight: bold;
+  color: #4a90e2;
+}
 
 </style>
 <body>
@@ -662,9 +438,9 @@ margin:30px;
 				<%
 				for(Leaves lev:list2){
 				%>
-				<div class="leave-entry">
-					<div class="leave-row">
-						<a href="leaveRequests.jsp"><span class="leave-value"><%= lev.getFname()+" "+lev.getLname()%></span> : has applied leave.</a> 
+				<div class="notification">
+					<div class="notifrow">
+						<a href="leaveRequests.jsp"><span class="notifvalue"><%= lev.getFname()+" "+lev.getLname()%></span> : has applied leave.</a> 
 					</div>
 				</div>
 				<%} %>
@@ -681,12 +457,12 @@ margin:30px;
         var currentPage = window.location.pathname.split("/").pop();
         
         var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
-        var timePages = ["attendancelist.jsp", "empattendance.jsp", "time.jsp"];
+        var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
         
         if (leavePages.includes(currentPage)) {
             document.querySelector(".activeLeave").classList.add("active");
         } else if (timePages.includes(currentPage)) {
-            document.querySelector(".time-group").classList.add("active");
+            document.querySelector(".activeAttendance").classList.add("active");
         }
         else{
                 document.querySelector(".activeDashboard").classList.add("active");
