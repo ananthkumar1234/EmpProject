@@ -16,7 +16,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Holiday</title>
+<title>Holidays</title>
 
 <link rel="stylesheet" href="index.css">
 <link rel="stylesheet" href="show.css">
@@ -427,12 +427,14 @@ else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals
 		</div>
 		<ul class="sidebar-menu">
         <li class="activeDashboard"><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
-        <li class="act"><a href="admin.jsp" id="admin-link"><i class="fas fa-user-cog"></i><span class="menu-text"> Admin</span></a></li>
-        <li class="act"><a href="pim.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> PIM</span></a></li>
+        
+		<%if(role.equals("HR") || role.equals("Manager")) { %>
+        <li class="activePeople"><a href="employees.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> People</span></a></li>
+        <%}%>        
+        
         <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
         <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
-        <li class="act"><a href="recruitment.jsp" id="recruitment-link"><i class="fas fa-user-plus"></i><span class="menu-text"> Recruitment</span></a></li>
-        <li class="act"><a href="myinfo.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
     </ul>
 	</div>
 
@@ -443,7 +445,7 @@ else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals
 
 	<div class="main-content">
 		<header class="header">
-			<h1>Leave / Holiday</h1>
+			<h1>Leave / Holidays</h1>
 			<div class="user-profile">
 				<div class="user-dropdown">
 					<button class="dropbtn" id="userDropdown">

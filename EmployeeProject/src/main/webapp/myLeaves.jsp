@@ -210,15 +210,7 @@ window.onload = function() {
 
 <body>
 
-<div id="warning-message" class="warning-message">
-        <span><i class="fas fa-exclamation-triangle"></i></span>
-        <p>Something Went Wrong!</p>
-</div>
 
- <div id="success-message" class="success-message">
-        <span><i class="fas fa-times-circle"></i></span>
-        <p>Applied leave has been Cancelled..!!!</p>
-</div>
 
 
  <%
@@ -240,12 +232,14 @@ window.onload = function() {
         </div>
         <ul class="sidebar-menu">
         <li class="activeDashboard"><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
-        <li class="act"><a href="admin.jsp" id="admin-link"><i class="fas fa-user-cog"></i><span class="menu-text"> Admin</span></a></li>
-        <li class="act"><a href="pim.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> PIM</span></a></li>
+        
+		<%if(role.equals("HR") || role.equals("Manager")) { %>
+        <li class="activePeople"><a href="employees.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> People</span></a></li>
+        <%}%>        
+        
         <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
         <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
-        <li class="act"><a href="recruitment.jsp" id="recruitment-link"><i class="fas fa-user-plus"></i><span class="menu-text"> Recruitment</span></a></li>
-        <li class="act"><a href="myinfo.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
     </ul>
     </div>
     
@@ -361,6 +355,15 @@ window.onload = function() {
     </tbody>
 </table>
 
+</div>
+<div id="warning-message" class="warning-message">
+        <span><i class="fas fa-exclamation-triangle"></i></span>
+        <p>Something Went Wrong!</p>
+</div>
+
+ <div id="success-message" class="success-message">
+        <span><i class="fas fa-times-circle"></i></span>
+        <p>Applied leave has been Cancelled..!!!</p>
 </div>
     </div>
 

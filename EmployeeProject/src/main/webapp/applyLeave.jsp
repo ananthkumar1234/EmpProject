@@ -164,12 +164,14 @@ function showErrorMessage() {
 		</div>
 		<ul class="sidebar-menu">
         <li class="activeDashboard"><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
-        <li class="act"><a href="admin.jsp" id="admin-link"><i class="fas fa-user-cog"></i><span class="menu-text"> Admin</span></a></li>
-        <li class="act"><a href="pim.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> PIM</span></a></li>
+        
+		<%if(role.equals("HR") || role.equals("Manager")) { %>
+        <li class="activePeople"><a href="employees.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> People</span></a></li>
+        <%}%>        
+        
         <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
         <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
-        <li class="act"><a href="recruitment.jsp" id="recruitment-link"><i class="fas fa-user-plus"></i><span class="menu-text"> Recruitment</span></a></li>
-        <li class="act"><a href="myinfo.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
     </ul>
 	</div>
 
@@ -203,9 +205,9 @@ function showErrorMessage() {
 			<a href="leaveRequests.jsp">Leave Requests</a>
 			<%} if("HR".equals(role)) {%>
 			<a href="assignLeave.jsp">Assign Leaves</a>
-			<a href="employeeLeaves.jsp">Employee Leave List</a>
+			<a href="employeeLeaves.jsp">Employees Leaves</a>
 			<%}  if("Manager".equals(role)) {%>
-			<a href="employeeLeaves.jsp">Reportee Leave List</a>
+			<a href="employeeLeaves.jsp">Reportees Leaves</a>
 			<%}%>
 			 
 

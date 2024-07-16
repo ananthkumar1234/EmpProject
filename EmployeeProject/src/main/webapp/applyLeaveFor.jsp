@@ -30,12 +30,17 @@
 
 /*  form container starts  */
 .leave-form-container {
-	background-color: #ffffff;
-	border-radius: 8px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-	padding: 20px;
-	max-width: 100%;
-	margin: 0 auto;
+	  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 100%;
+  
+  margin-top: 12%;
+
+  margin-left:20px;
+  margin-bottom:10px;
+  transition: width 0.3s ease, margin-left 0.3s ease;
 }
 
 h2 {
@@ -132,7 +137,7 @@ textarea {
 .apply-btn:hover {
 	background-color: #7cb342;
 }
-/*form container ends*/
+/form container ends/
 
 
 
@@ -155,11 +160,11 @@ textarea {
 
         function fetchAvailableLeaves(empId) {
             // Assuming you have a servlet or endpoint that returns available leaves
-            fetch(`getAvailableLeaves?empid=${empId}`)
+            fetch(getAvailableLeaves?empid=${empId})
                 .then(response => response.json())
                 .then(data => {
                     // Update the available leaves display
-                    document.getElementById("availableLeaves").innerText = `${data.availableLeaves}`;
+                    document.getElementById("availableLeaves").innerText = ${data.availableLeaves};
                 })
                 .catch(error => console.error('Error fetching available leaves:', error));
         }
@@ -251,25 +256,6 @@ textarea {
 <body>
 
 
-<div id="error-message" class="error-message">
-		<span><i class="fas fa-exclamation-triangle"></i></span>
-		<p>Something Went Wrong...!!!</p>
-	</div>
-
-	<div id="success-message" class="success-message">
-		<span><i class="fas fa-check-circle"></i></span>
-		<p>Leave Applied Successfully...</p>
-	</div>
-
-	<div id="leaveStockError-message" class="leaveStockError-message">
-		<i class="fas fa-exclamation-triangle"></i>
-		<p>Some internal problem...!!!</p>
-	</div>
-
-	<div id="outOfLeaves-message" class="outOfLeaves-message">
-		<i class="fas fa-times-circle"></i>
-		<p>Check Balance Leaves...!!!</p>
-	</div>
 
 
 
@@ -305,13 +291,16 @@ textarea {
 		</div>
 		<ul class="sidebar-menu">
         <li class="activeDashboard"><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
-        <li class="act"><a href="admin.jsp" id="admin-link"><i class="fas fa-user-cog"></i><span class="menu-text"> Admin</span></a></li>
-        <li class="act"><a href="pim.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> PIM</span></a></li>
+        
+		<%if(role.equals("HR") || role.equals("Manager")) { %>
+        <li class="activePeople"><a href="employees.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> People</span></a></li>
+        <%}%>        
+        
         <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
         <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
-        <li class="act"><a href="recruitment.jsp" id="recruitment-link"><i class="fas fa-user-plus"></i><span class="menu-text"> Recruitment</span></a></li>
-        <li class="act"><a href="myinfo.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
     </ul>
+
 	</div>
 
 	<button id="toggleSidebar" class="toggle-btn">
@@ -404,43 +393,46 @@ textarea {
 				</div>
 			</form>
 		</div>
-		
-	</div>
+
 	
+
 	<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Ensure holidays are converted to a proper JavaScript array
-    const holidays = <%= holidays.stream()
-                                   .map(Holidays::getDate)
-                                   .map(date -> "\"" + date.toString() + "\"")
-                                   .collect(java.util.stream.Collectors.toList()) %>;
+	
+	document.addEventListener("DOMContentLoaded", function() {
+	    // Ensure holidays are converted to a proper JavaScript array
+	    const holidays = <%= holidays.stream()
+	                                   .map(Holidays::getDate)
+	                                   .map(date -> "\"" + date.toString() + "\"")
+	                                   .collect(java.util.stream.Collectors.toList()) %>;
 
-    console.log("Holidays: ", holidays); // Debugging line
+	    console.log("Holidays: ", holidays); // Debugging line
 
-    // Convert the holiday strings to Date objects
-    const disableDates = holidays.map(dateStr => new Date(dateStr));
+	    // Convert the holiday strings to Date objects
+	    const disableDates = holidays.map(dateStr => new Date(dateStr));
 
-    console.log("Disable Dates: ", disableDates); // Debugging line
+	    console.log("Disable Dates: ", disableDates); // Debugging line
 
-    const disableWeekendsAndHolidays = function(date) {
-        // Disable weekends
-        if (date.getDay() === 0 || date.getDay() === 6) {
-            return true;
-        }
-        // Disable holidays
-        return disableDates.some(disabledDate => {
-            return date.toDateString() === disabledDate.toDateString();
-        });
-    };
+	    const disableWeekendsAndHolidays = function(date) {
+	        // Disable weekends
+	        if (date.getDay() === 0 || date.getDay() === 6) {
+	            return true;
+	        }
+	        // Disable holidays
+	        return disableDates.some(disabledDate => {
+	            return date.toDateString() === disabledDate.toDateString();
+	        });
+	    };
 
-    const highlightHolidays = function(selectedDates, dateStr, instance) {
-        instance.calendarContainer.querySelectorAll(".flatpickr-day").forEach(dayElem => {
-            const date = new Date(dayElem.dateObj);
-            if (disableDates.some(disabledDate => date.toDateString() === disabledDate.toDateString())) {
-                dayElem.classList.add("holiday");
-            }
-        });
-    };
+	    const highlightHolidays = function(selectedDates, dateStr, instance) {
+	        instance.calendarContainer.querySelectorAll(".flatpickr-day").forEach(dayElem => {
+	            const date = new Date(dayElem.dateObj);
+	            if (disableDates.some(disabledDate => date.toDateString() === disabledDate.toDateString())) {
+	                dayElem.classList.add("holiday");
+	            }
+	        });
+	    };
+
+
 
     flatpickr("#fromDate", {
         disable: [disableWeekendsAndHolidays],

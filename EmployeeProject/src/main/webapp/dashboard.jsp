@@ -21,6 +21,7 @@
 <script src="script.js" defer></script>
 <link rel="stylesheet" href="index.css">
 <link rel="stylesheet" href="show.css">
+<link rel="stylesheet" href="message.css">
 </head>
 <style>
 .dashboard-grid {
@@ -217,9 +218,72 @@
   font-weight: bold;
   color: #4a90e2;
 }
+.logInOut
+{
+display:flex;
+justify-content:space-around;
+}
+.btn
+{
+background-color:#f0f0f0;
+padding:2px;
+border-radius:10px;
+}
+input[type="submit"]
+{
+padding:10px;
+background-color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
+input[type="submit"]:hover
+{
+	color:#ff8c00;
+	background-color: #fff9f0;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transform: translateX-2px);
+	font-weight:bold;
+}
+
+
+
 
 </style>
 <body>
+
+<div id="error-message" class="error-message">
+		<span><i class="fas fa-exclamation-triangle"></i></span>
+		<p>Something Went Wrong!</p>
+	</div>
+
+	<div id="success-message" class="success-message">
+		<span><i class="fas fa-check-circle"></i></span>
+		<p>Logged In...</p>
+	</div>
+
+	<div id="onleave-message" class="onleave-message">
+		<i class="fas fa-times-circle"></i>
+		<p>you are on leave today !!!</p>
+	</div>
+
+	<div id="holiday-message" class="holiday-message">
+		<i class="fas fa-times-circle"></i>
+		<p>It's holiday today !!!</p>
+	</div>
+	
+	<div id="already-message" class="already-message">
+		<i class="fas fa-times-circle"></i>
+		<p>Already logged In !!!</p>
+	</div>
+	
+	<div id="logout-message" class="logout-message">
+		<i class="fas fa-times-circle"></i>
+		<p>logged Out !!!</p>
+	</div>
+
+
+
 	<%
         Connection con = DBConnect.getConnection();
         EmpDao empDao = new EmpDao(con);
@@ -227,6 +291,7 @@
         HttpSession sess = request.getSession();
         Employees emp = (Employees)sess.getAttribute("employee");
         String role = (String)sess.getAttribute("role");
+        //String msg = (String)request.getAttribute("msg");
         
         List<Leaves> list2=null;
         if(sess.getAttribute("role").equals("HR"))
@@ -245,12 +310,14 @@
     </div>
     <ul class="sidebar-menu">
         <li class="activeDashboard"><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
-        <li class="act"><a href="admin.jsp" id="admin-link"><i class="fas fa-user-cog"></i><span class="menu-text"> Admin</span></a></li>
-        <li class="act"><a href="pim.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> PIM</span></a></li>
+        
+		<%if(role.equals("HR") || role.equals("Manager")) { %>
+        <li class="activePeople"><a href="employees.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> People</span></a></li>
+        <%}%>        
+        
         <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
         <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
-        <li class="act"><a href="recruitment.jsp" id="recruitment-link"><i class="fas fa-user-plus"></i><span class="menu-text"> Recruitment</span></a></li>
-        <li class="act"><a href="myinfo.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
     </ul>
 
 </div>
@@ -284,8 +351,26 @@
 					<i class="fas fa-clock"></i> Time Logs
 				</h3>
 				<hr>
-				<h4>Today</h4>
-			
+				<div class="logInOut">
+				
+					<div class="btn">
+						<form action="insertLogin" method="post">
+						<input type="submit" value="Log In" name="login">
+						</form>
+					</div>
+				
+					<div class="btn">
+						<form action="updateLogout" method="post">
+						<input type="submit" value="Log Out" name="logout">
+						</form>
+					</div>
+				
+				</div>
+				
+				
+				<hr>
+				
+			<h4>Today</h4>
 				<div class="time-today">
 					
 					<%
@@ -304,10 +389,8 @@
                     	</div>
                     <%}
                     }else
-                    {
-                    	%>
-                    	
-                    	Not logged in today!
+                    {%>
+                    Not Logged in today !!!
                     	<%} %>
                     
 				</div>
@@ -380,12 +463,12 @@
             <span class="quick-launch-text">My Leave</span>
         </div></a> 
         
-        <div class="quick-launch-button">
+        <a href="attendance.jsp"><div class="quick-launch-button">
             <div class="quick-launch-icon">
                 <i class="fas fa-stopwatch"></i>
             </div>
             <span class="quick-launch-text">My Time Logs</span>
-        </div>
+        </div></a>
         
         
         <a href="holidays.jsp"><div class="quick-launch-button">
@@ -417,12 +500,12 @@
             <span class="quick-launch-text">Add Holiday</span>
         </div></a>
         
-        <div class="quick-launch-button">
+        <a href="addEmployee.jsp"><div class="quick-launch-button">
             <div class="quick-launch-icon">
                 <i class="fas fa-user-plus"></i>
             </div>
             <span class="quick-launch-text">Add Employee</span>
-        </div>
+        </div></a>
         
     </div><%}%>
     
@@ -489,6 +572,78 @@
 	    link.parentNode.classList.remove("active");
 	  }
 	}
+	
+	
+	window.onload = function() {
+		<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> showErrorMessage();
+		<% } 
+		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Success")){%> showSuccessMessage();
+		<%}
+		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("onLeave")){%> showOnLeave();
+		<%}
+		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Holiday")){%> showHoliday();
+		<%}
+		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("alreadyLoggedIn")){%> showAlreadyLogIn();
+		<%}
+		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("logout")){%> showLogout();
+		<%}%>
+	}
+		
+		function showErrorMessage() {
+			const warningMessage = document.getElementById('error-message');
+			warningMessage.classList.add('show');
+
+			setTimeout(() => {
+			    warningMessage.classList.remove('show');
+			}, 4000);
+			}
+
+			function showSuccessMessage() {
+				const warningMessage = document.getElementById('success-message');
+				warningMessage.classList.add('show');
+
+				setTimeout(() => {
+				    warningMessage.classList.remove('show');
+				}, 4000);
+				}
+			
+			function showOnLeave() {
+				const warningMessage = document.getElementById('onleave-message');
+				warningMessage.classList.add('show');
+
+				setTimeout(() => {
+				    warningMessage.classList.remove('show');
+				}, 4000);
+				}
+
+				function showHoliday() {
+					const warningMessage = document.getElementById('holiday-message');
+					warningMessage.classList.add('show');
+
+					setTimeout(() => {
+					    warningMessage.classList.remove('show');
+					}, 4000);
+					}
+				
+				function showAlreadyLogIn() {
+					const warningMessage = document.getElementById('warning-message');
+					warningMessage.classList.add('show');
+
+					setTimeout(() => {
+					    warningMessage.classList.remove('show');
+					}, 4000);
+					}
+				
+				function showLogout() {
+					const warningMessage = document.getElementById('logout-message');
+					warningMessage.classList.add('show');
+
+					setTimeout(() => {
+					    warningMessage.classList.remove('show');
+					}, 4000);
+					}
+		
+		
 	</script>
 </body>
 </html>

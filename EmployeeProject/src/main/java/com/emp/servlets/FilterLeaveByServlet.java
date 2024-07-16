@@ -39,6 +39,7 @@ public class FilterLeaveByServlet extends HttpServlet {
 			 
 			 	req.setAttribute("filteredLeaves", filteredLeaves);
 		        req.getRequestDispatcher("employeeLeaves.jsp").forward(req, resp);
+//		        resp.sendRedirect("employeeLeaves.jsp");
 			 
 			
 		}catch(Exception e)

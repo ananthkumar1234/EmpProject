@@ -1,6 +1,10 @@
 .show {
 	display: block !important;
 }
+body.sidebar-collapsed .attendLinks {
+    left: 3%;
+}
+
 
 .leaveLinks {
 	display: flex;
@@ -15,7 +19,7 @@
     transition: left 0.3s ease;
     z-index: 999;
     flex-direction:row;
-    justify-content:space-around;
+    justify-content:start;
 }
 
 .leaveLinks a {
@@ -74,3 +78,5 @@
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	transform: translateY(-2px);
 }
+
+/* ================================================================================= */

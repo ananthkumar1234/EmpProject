@@ -42,10 +42,10 @@ public class EmpDao {
 		String pswd= rs.getString("password");
 
 		if(BCrypt.checkpw(pwd, pswd)) {
-//			System.out.println("validateLogin returned true");
+			//			System.out.println("validateLogin returned true");
 			return true;
 		}
-//		System.out.println("validateLogin returned false");
+		//		System.out.println("validateLogin returned false");
 		return  false;
 	}
 
@@ -354,7 +354,7 @@ public class EmpDao {
 	}	
 
 
-	/// Getting all employees records except HR
+	/// Getting all employees records 
 	public List<Employees> getEmployees() throws Exception {
 		List<Employees> list = new ArrayList<>();
 		String qry = "SELECT EmployeeID, FirstName, LastName " +
@@ -376,7 +376,7 @@ public class EmpDao {
 	{
 		List<Leaves> list = new ArrayList<>();
 
-		String qry="select * from leaves where employeeid=?";
+		String qry="Select l.*,e.firstname,e.lastname from leaves l left join employees e on l.approvedby=e.employeeid where l.employeeid=?";
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setInt(1, empid);
 		ResultSet rs = ps.executeQuery();
@@ -385,14 +385,22 @@ public class EmpDao {
 			Leaves lev = new Leaves();
 			lev.setLeaveId(rs.getInt("leaveid"));
 			lev.setEmployeeID(rs.getInt("employeeid"));
+			lev.setAppliedDate(rs.getString("AppliedDate"));
 			lev.setFromDate(rs.getString("startdate"));
 			lev.setToDate(rs.getString("enddate"));
 			lev.setTotalDays(rs.getInt("totaldays"));
 			lev.setLeaveType(rs.getString("leavetype"));
+			lev.setAppliedReason(rs.getString("Reason"));
 			lev.setLeaveStatus(rs.getString("leavestatus"));
+			lev.setApprovedByFname(rs.getString("firstname"));
+			lev.setApprovedByLname(rs.getString("lastname"));
+			lev.setApprovedDate(rs.getString("ApprovedDate"));
+			lev.setRejectReason(rs.getString("RejectReason"));
+			
 			list.add(lev);
 		}
 		return list;
+
 	}
 
 
@@ -416,7 +424,7 @@ public class EmpDao {
 		}
 		return list;
 	}
-	
+
 	//Method to insert Holidays
 	public boolean insertHoliday(String date,String name) throws SQLException
 	{
@@ -432,9 +440,9 @@ public class EmpDao {
 		{
 			return false;
 		}
-		
+
 	}
-	
+
 	//Method to delete holiday
 	public boolean deleteHolidayRecord(int lid) throws SQLException
 	{
@@ -450,8 +458,8 @@ public class EmpDao {
 			return false;
 		}
 	}
-	
-	
+
+
 	//Method to add leaves to employees
 	public boolean addLeavesStock(int n) throws SQLException
 	{
@@ -467,26 +475,26 @@ public class EmpDao {
 			return false;
 		}
 	}
-	
+
 	//Method to delete leave record (Cancel Leave)
 	public boolean deleteLeaveRecord(int lid) throws SQLException
 	{
-		
+
 		String qry="UPDATE leavesStock ls "
 				+ "JOIN Leaves l ON ls.employeeid = l.employeeid "
 				+ "SET ls.availableleaves = ls.availableleaves + l.TotalDays, "
 				+ "ls.consumedleaves = ls.consumedleaves - l.TotalDays "
 				+ "WHERE l.leaveid = ?;";
-		
+
 		String qry2="delete from leaves where leaveid=?";
-		
+
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setInt(1, lid);
 		ps.executeUpdate();
-		
+
 		PreparedStatement ps2=con.prepareStatement(qry2);
 		ps2.setInt(1, lid);
-		
+
 		int i =ps2.executeUpdate();
 		if(i>0)
 		{
@@ -496,7 +504,7 @@ public class EmpDao {
 			return false;
 		}
 	}
-	
+
 	//Method to get the current user's role
 	public String getRoleByLogin(String uname,String pwd)throws SQLException
 	{
@@ -523,13 +531,13 @@ public class EmpDao {
 		}
 		return  "error";
 	}
-	
+
 	//Method to get the reportees of a manager
 	public List<Employees> getReportees(int mId) throws SQLException
 	{
 		List<Employees> l1 = new ArrayList<>();
 
-		String qry=" SELECT e.EmployeeId, e.FirstName,e.LastName FROM Employees e JOIN Manager m ON e.EmployeeId = m.employee WHERE m.Manager = ?";
+		String qry=" SELECT e.EmployeeId, e.FirstName,e.LastName,e.email,e.phone,e.gender FROM Employees e JOIN Manager m ON e.EmployeeId = m.employee WHERE m.Manager = ?";
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setInt(1, mId);
 		ResultSet rs = ps.executeQuery();
@@ -539,18 +547,21 @@ public class EmpDao {
 			e1.setEmpId(rs.getInt("EmployeeID"));
 			e1.setFname(rs.getString("FirstName"));
 			e1.setLname(rs.getString("LastName"));
+			e1.setEmail(rs.getString("email"));
+			e1.setPhoneNo(rs.getString("phone"));
+			e1.setGender(rs.getString("gender"));
 
 			l1.add(e1);
 		}
 		return l1;
 	}
-	
-	
+
+
 	//Method to filter leaves based on year and month
 	public List<Leaves> getLeaveByYearMonth(int eid, String year, String month) {
 		List<Leaves> list = new ArrayList<>();
 		try {
-			String query = "SELECT * FROM leaves WHERE EmployeeID= ? AND YEAR(StartDate) = ? AND MONTH(StartDate) = ?";
+			String query = "Select l.*,e.firstname,e.lastname from leaves l left join employees e on l.approvedby=e.employeeid where l.employeeid=? AND YEAR(l.StartDate) = ? AND MONTH(l.StartDate) = ?";
 			PreparedStatement ps = this.con.prepareStatement(query);
 			ps.setInt(1, eid);
 			ps.setString(2, year);
@@ -558,35 +569,52 @@ public class EmpDao {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Leaves lev = new Leaves();
-				lev.setFromDate(rs.getString("startDate"));
-				lev.setToDate(rs.getString("endDate"));
-				lev.setTotalDays(rs.getInt("TotalDays"));
-				lev.setLeaveType(rs.getString("LeaveType"));
-				lev.setLeaveStatus(rs.getString("LeaveStatus"));
-				list.add(lev);
+				lev.setLeaveId(rs.getInt("leaveid"));
+				lev.setEmployeeID(rs.getInt("employeeid"));
+				lev.setAppliedDate(rs.getString("AppliedDate"));
+				lev.setFromDate(rs.getString("startdate"));
+				lev.setToDate(rs.getString("enddate"));
+				lev.setTotalDays(rs.getInt("totaldays"));
+				lev.setLeaveType(rs.getString("leavetype"));
+				lev.setAppliedReason(rs.getString("Reason"));
+				lev.setLeaveStatus(rs.getString("leavestatus"));
+				lev.setApprovedByFname(rs.getString("firstname"));
+				lev.setApprovedByLname(rs.getString("lastname"));
+				lev.setApprovedDate(rs.getString("ApprovedDate"));
+				lev.setRejectReason(rs.getString("RejectReason"));
+			
+			list.add(lev);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
 	}
-	
+
 	//Method to filter leaves based on month
 	public List<Leaves> getLeaveByYear(int eid, String year) {
 		List<Leaves> list = new ArrayList<>();
 		try {
-			String query = "SELECT * FROM leaves WHERE EmployeeID = ? AND YEAR(StartDate) = ?";
+			String query = "SELECT l.*,e.firstname,e.lastname FROM leaves l left join employees e on l.approvedby=e.employeeid WHERE l.EmployeeID = ? AND YEAR(l.StartDate) = ?";
 			PreparedStatement ps = this.con.prepareStatement(query);
 			ps.setInt(1, eid);
 			ps.setString(2, year);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Leaves lev = new Leaves();
-				lev.setFromDate(rs.getString("startDate"));
-				lev.setToDate(rs.getString("endDate"));
-				lev.setTotalDays(rs.getInt("TotalDays"));
-				lev.setLeaveType(rs.getString("LeaveType"));
-				lev.setLeaveStatus(rs.getString("LeaveStatus"));
+				lev.setLeaveId(rs.getInt("leaveid"));
+				lev.setEmployeeID(rs.getInt("employeeid"));
+				lev.setAppliedDate(rs.getString("AppliedDate"));
+				lev.setFromDate(rs.getString("startdate"));
+				lev.setToDate(rs.getString("enddate"));
+				lev.setTotalDays(rs.getInt("totaldays"));
+				lev.setLeaveType(rs.getString("leavetype"));
+				lev.setAppliedReason(rs.getString("Reason"));
+				lev.setLeaveStatus(rs.getString("leavestatus"));
+				lev.setApprovedByFname(rs.getString("firstname"));
+				lev.setApprovedByLname(rs.getString("lastname"));
+				lev.setApprovedDate(rs.getString("ApprovedDate"));
+				lev.setRejectReason(rs.getString("RejectReason"));
 				list.add(lev);
 			}
 		} catch (Exception e) {
@@ -594,8 +622,8 @@ public class EmpDao {
 		}
 		return list;
 	}
-	
-	
+
+
 	//Method to check user name 
 	public boolean validateEmail(String uname,String email) throws SQLException
 	{
@@ -607,26 +635,26 @@ public class EmpDao {
 		if(email.equals(rs.getString("email")))
 		{
 			return true;
-		
+
 		}
 		return false;
 	}
-	
-	
+
+
 	//Method to reset password through login page
 	public boolean changePassword(String pwd, String uname) throws SQLException {
-	    String qry = "update user_credentials set password=? where username=?";
-	    PreparedStatement ps = con.prepareStatement(qry);
-	    ps.setString(1, pwd);
-	    ps.setString(2, uname);
-	    int i = ps.executeUpdate();
-	    if (i > 0) {
-	        return true;
-	    }
-	    return false;
+		String qry = "update user_credentials set password=? where username=?";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setString(1, pwd);
+		ps.setString(2, uname);
+		int i = ps.executeUpdate();
+		if (i > 0) {
+			return true;
+		}
+		return false;
 	}
-	
-	
+
+
 	// Method to get all employees pending leaves
 	public List<Leaves> getPendingLeaves() throws SQLException
 	{
@@ -650,16 +678,16 @@ public class EmpDao {
 		}
 		return list;
 	}
-	
-	
+
+
 	// Method to get all employee leaves reporting to their manager
 	public List<Leaves> getMgrPendingLeaves(int mid) throws SQLException
 	{
 		List<Leaves> list = new ArrayList<>();
 		String qry="SELECT l.leaveid,l.startdate,l.enddate,l.totaldays,l.leavetype,l.reason,l.leavestatus, e.firstname, e.lastname FROM Leaves l JOIN Manager m ON l.employeeid = m.employee JOIN Employees e ON l.employeeid = e.employeeid WHERE m.manager = ? AND l.leaveStatus = 'pending'";
 		PreparedStatement ps = con.prepareStatement(qry);
-		 ps.setInt(1, mid);
-		 ResultSet rs = ps.executeQuery();
+		ps.setInt(1, mid);
+		ResultSet rs = ps.executeQuery();
 		while(rs.next())
 		{
 			Leaves l = new Leaves();
@@ -676,8 +704,8 @@ public class EmpDao {
 		}
 		return list;
 	}
-	
-	
+
+
 	// Method to get current date and time
 	public String getCurrDateTime() {
 		// Get current date and time in IST
@@ -690,11 +718,11 @@ public class EmpDao {
 
 		String dateTime = nowIST.format(formatter);
 
-//		System.out.println("Current date" + dateTime);
+		//		System.out.println("Current date" + dateTime);
 		return dateTime;
 	}
-	
-	
+
+
 	// Method to update reject reason
 	public boolean updaterejectreason(String rs,int eid,int leaveid,String status) throws SQLException
 	{
@@ -715,43 +743,43 @@ public class EmpDao {
 			return false;
 		}
 	}
-	
+
 	//Method to get list of attendance records based on session id
 	public List<Attendance> getAttRecordById(int eid) throws SQLException {
-	    List<Attendance> list = new ArrayList<>();
-	    String qry = "SELECT AttendanceId, Date, CheckInTime, CheckOutTime, Remarks, IsButtonClicked FROM attendance "
-	    		+"WHERE employeeID = ? " 
-	    		+"AND MONTH(Date) = MONTH(CURRENT_DATE()) "
-	    		+"AND YEAR(Date) = YEAR(CURRENT_DATE()) "
-	    		+"ORDER by date";
-	    PreparedStatement ps = con.prepareStatement(qry);
-	    ps.setInt(1, eid);
-	    ResultSet rs = ps.executeQuery();
+		List<Attendance> list = new ArrayList<>();
+		String qry = "SELECT AttendanceId, Date, CheckInTime, CheckOutTime, Remarks, IsButtonClicked FROM attendance "
+				+"WHERE employeeID = ? " 
+				+"AND MONTH(Date) = MONTH(CURRENT_DATE()) "
+				+"AND YEAR(Date) = YEAR(CURRENT_DATE()) "
+				+"ORDER by date";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1, eid);
+		ResultSet rs = ps.executeQuery();
 
-	    while (rs.next()) {
-	        Attendance a = new Attendance();
-	        a.setAttendId(rs.getInt("AttendanceId"));
-	        a.setDate(rs.getString("Date"));
-	        a.setCheckin(rs.getString("CheckInTime"));
-	        a.setCheckout(rs.getString("CheckOutTime"));
-	        a.setRemarks(rs.getString("Remarks"));
-	        a.setButtonClicked(rs.getInt("IsButtonClicked"));
-	        list.add(a);
-	    }
-	    return list;
+		while (rs.next()) {
+			Attendance a = new Attendance();
+			a.setAttendId(rs.getInt("AttendanceId"));
+			a.setDate(rs.getString("Date"));
+			a.setCheckin(rs.getString("CheckInTime"));
+			a.setCheckout(rs.getString("CheckOutTime"));
+			a.setRemarks(rs.getString("Remarks"));
+			a.setButtonClicked(rs.getInt("IsButtonClicked"));
+			list.add(a);
+		}
+		return list;
 	}
-	
-	
+
+
 	// Method to get attendance records list based on from and to date
 	public List<Attendance> getAttendanceByDateRange(int eid, String fromDate, String toDate) {
 		List<Attendance> list = new ArrayList<>();
 		try {
 			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
-		               + "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
-		               + "FROM attendance a "
-		               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
-		               + "WHERE a.employeeid = ? AND a.date BETWEEN ? AND ? "
-		               + "ORDER BY a.date";
+					+ "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
+					+ "FROM attendance a "
+					+ "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
+					+ "WHERE a.employeeid = ? AND a.date BETWEEN ? AND ? "
+					+ "ORDER BY a.date";
 			PreparedStatement ps = this.con.prepareStatement(query);
 			ps.setInt(1, eid);
 			ps.setString(2, fromDate);
@@ -771,18 +799,18 @@ public class EmpDao {
 		}
 		return list;
 	}
-	
-	
+
+
 	// Method to get attendance records list based on year and month
 	public List<Attendance> getAttendanceByYearMonth(int eid, String year, String month) {
 		List<Attendance> list = new ArrayList<>();
 		try {
 			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
-		               + "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
-		               + "FROM attendance a "
-		               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
-		               + "WHERE a.employeeid = ? AND YEAR(a.date) = ? AND MONTH(a.date) = ? "
-		               + "ORDER BY a.date";
+					+ "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
+					+ "FROM attendance a "
+					+ "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
+					+ "WHERE a.employeeid = ? AND YEAR(a.date) = ? AND MONTH(a.date) = ? "
+					+ "ORDER BY a.date";
 			PreparedStatement ps = this.con.prepareStatement(query);
 			ps.setInt(1, eid);
 			ps.setString(2, year);
@@ -802,18 +830,18 @@ public class EmpDao {
 		}
 		return list;
 	}
-	
-	
+
+
 	// Method to get attendance records list based on year
 	public List<Attendance> getAttendanceByYear(int eid, String year) {
 		List<Attendance> list = new ArrayList<>();
 		try {
 			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
-		               + "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
-		               + "FROM attendance a "
-		               + "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
-		               + "WHERE a.employeeid = ? AND YEAR(a.date) = ? "
-		               + "ORDER BY a.date";
+					+ "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
+					+ "FROM attendance a "
+					+ "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
+					+ "WHERE a.employeeid = ? AND YEAR(a.date) = ? "
+					+ "ORDER BY a.date";
 			PreparedStatement ps = this.con.prepareStatement(query);
 			ps.setInt(1, eid);
 			ps.setString(2, year);
@@ -832,8 +860,8 @@ public class EmpDao {
 		}
 		return list;
 	}
-	
-	
+
+
 	// Method to update new check-in and check-out time
 	public boolean UpdateAttendanceTable(int AID,String name,String Date, String CITime, String COTime, int eid) throws SQLException
 	{
@@ -846,23 +874,23 @@ public class EmpDao {
 		ps.setString(5,COTime);
 		ps.setInt(6,eid);
 		int i=ps.executeUpdate();
-		
+
 		String qry2="Update Attendance set IsButtonClicked=1 where AttendanceId=?";
 		PreparedStatement ps2 = con.prepareStatement(qry2);
 		ps2.setInt(1, AID);
 		ps2.executeUpdate();
-		
+
 		if(i>0) return true;
 		return false;
 	}
-	
-	
+
+
 	// Method to get attendanceRequest from reportees to there manager
 	public List<Attendance> ManagerAttendance(int mid) throws SQLException
 	{
 		List<Attendance> list = new ArrayList<>();
 		String qry="SELECT au.AttendanceId, au.Name, au.Date, au.CheckInTime as NewCheckInTime, au.CheckOutTime as NewCheckOutTime, att.CheckInTime as OldCheckInTime, att.CheckOutTime as OldCheckOutTime FROM AttendanceUpdate au JOIN Attendance att ON att.AttendanceId = au.AttendanceId WHERE au.EmployeeId IN (SELECT employee FROM Manager WHERE manager = ?)";
-		 
+
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setInt(1, mid);
 		ResultSet rs = ps.executeQuery();
@@ -878,17 +906,17 @@ public class EmpDao {
 			a.setCheckout(rs.getString("OldCheckOutTime"));
 			list.add(a);
 		}
-		
+
 		return list;
 	}
-	
-	
+
+
 	// Method to display all attendanceRequests to HR
 	public List<Attendance> HRAttendance() throws SQLException
 	{
 		List<Attendance> list = new ArrayList<>();
 		String qry="SELECT au.AttendanceId, au.Name, au.Date, au.CheckInTime as NewCheckInTime, au.CheckOutTime as NewCheckOutTime, att.CheckInTime as OldCheckInTime, att.CheckOutTime as OldCheckOutTime FROM AttendanceUpdate au JOIN Attendance att ON att.AttendanceId = au.AttendanceId";
-		
+
 		PreparedStatement ps = con.prepareStatement(qry);
 		ResultSet rs = ps.executeQuery();
 		while(rs.next())
@@ -903,11 +931,11 @@ public class EmpDao {
 			a.setCheckout(rs.getString("OldCheckOutTime"));
 			list.add(a);
 		}
-		
+
 		return list;
 	}
-	
-	
+
+
 	// Method to update attendanceRequest
 	public boolean UpdateAttendance(int AID,String Date, String CITime, String COTime) throws SQLException
 	{
@@ -918,16 +946,178 @@ public class EmpDao {
 		ps.setString(3,COTime);
 		ps.setInt(4,AID);
 		int i=ps.executeUpdate();
-		
+
 		String qry2="Delete from AttendanceUpdate where AttendanceId=?";
 		PreparedStatement ps2 = con.prepareStatement(qry2);
 		ps2.setInt(1,AID);
 		ps2.executeUpdate();
-		
+
 		if(i>0) return true;
 		return false;
-		
-		
 	}
 
+	// Method to get all employees
+	public List<Employees> getAllEmployees() throws SQLException
+	{
+		List<Employees> list = new ArrayList<>();
+
+		String qry = "select * from employees";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next())
+		{
+			Employees emp = new Employees();
+			emp.setEmpId(rs.getInt("employeeid"));
+			emp.setFname(rs.getString("firstname"));
+			emp.setLname(rs.getString("lastname"));
+			emp.setEmail(rs.getString("email"));
+			emp.setPhoneNo(rs.getString("phone"));
+			emp.setGender(rs.getString("gender"));
+			list.add(emp);
+		}
+		return list;
+	}
+
+
+	// Method to validate current date
+	public boolean getLogin(int id) throws SQLException {
+		String str[] = getCurrDateTime().split(" ");
+		String qry = "select * from attendance where date = ? and employeeid = ?";
+		boolean f=false;
+
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setString(1, str[0]);
+		ps.setInt(2, id);
+
+		try (ResultSet rs = ps.executeQuery()) {
+			if (!rs.next()) {
+				f= true;
+			}
+		}
+		if(f)
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	
+	// Method to check whether the check-in date is on leave or not.
+	public boolean validateAttendance(int eid) throws SQLException
+	{
+		System.out.println("Checking Leave");
+		String[] str = getCurrDateTime().split(" ");
+		String qry="select * from leaves where employeeid=? and leavestatus='approved' and ? between startdate and enddate";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1, eid);
+		ps.setString(2, str[0]);
+		ResultSet rs = ps.executeQuery();
+		if(rs.next())
+		{
+			System.out.println("On Leave");
+			return true;
+		}
+		return false;	
+	}
+	
+	
+	// Method to check whether the date is holiday
+	public boolean validateAttendanceHoliday() throws SQLException
+	{
+		
+		String[] str = getCurrDateTime().split(" ");
+		if(checkHoliday(str[0]))
+		{
+		// Method to check whether the date is weekend
+			return checkWeekend(str[0]);
+		}
+		return false;
+	}
+	
+	
+	public boolean checkWeekend(String date)
+	{
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate date1 = LocalDate.parse(date,formatter);
+		if(date1.getDayOfWeek() != DayOfWeek.SATURDAY && date1.getDayOfWeek() != DayOfWeek.SUNDAY) {
+			System.out.println("Not weekend");
+			return true;
+		}
+		return false;
+	}
+	
+	
+	// Method to insert login details
+	public void insertLogin(int eid) throws SQLException
+	{
+		String str[] = getCurrDateTime().split(" ");
+		String qry="insert into Attendance(EmployeeID,Date,CheckInTime)values(?,?,?)";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1,eid);
+		ps.setString(2, str[0]);
+		ps.setString(3, str[1]);
+
+
+		int i = ps.executeUpdate();
+	}
+	
+	
+	// validating login time and then updating logout time
+	public String getLogout(int id) throws SQLException {
+		String str[] = getCurrDateTime().split(" ");
+		String qry = "select * from attendance where date = ? and employeeid = ?";
+
+		try (PreparedStatement ps = con.prepareStatement(qry)) {
+			ps.setString(1, str[0]);
+			ps.setInt(2, id);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				if(rs.next()) {
+				String time = rs.getString("checkouttime");
+				if (time == null) {
+					updateLogout(id);
+					return "LoggedOut";
+				}
+				}
+				else return "NotLoggedIn";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e; // or handle it as per your application needs
+		}
+
+		return "AlreadyLoggedOut";
+	}
+	
+	
+	public void updateLogout(int eid) throws SQLException
+	{
+		String str[] = getCurrDateTime().split(" ");
+		String qry="update attendance set checkouttime=? where employeeid =? and date = ?";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setString(1,str[1]);
+		ps.setInt(2, eid);
+		ps.setString(3, str[0]);
+
+		int i = ps.executeUpdate();
+	}
+
+	
+	
+	public boolean CancelLeave(int leaveid,String status) throws SQLException
+	{
+		
+		String qry="update leaves set leavestatus=? where leaveid=?";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setString(1, status);
+		ps.setInt(2, leaveid);
+		int i = ps.executeUpdate();
+		if(i>0)
+		{
+			return true;
+		}else
+		{
+			return false;
+		}
+	}
 }
