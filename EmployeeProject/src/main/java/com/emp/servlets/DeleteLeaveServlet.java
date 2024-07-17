@@ -18,17 +18,18 @@ public class DeleteLeaveServlet extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int leaveid = Integer.parseInt(req.getParameter("id"));
-		System.out.println("leave id : "+leaveid);
 		try {
 			Connection con = DBConnect.getConnection();
 			EmpDao empDao = new EmpDao(con);
 			boolean flag = empDao.deleteLeaveRecord(leaveid);
 			if(flag)
 			{
+				System.out.println("leave cancel Success");
 				req.setAttribute("msg","Success");
 				req.getRequestDispatcher("myLeaves.jsp").forward(req, resp);
 			}else
 			{
+				System.out.println("leave cancel Error");
 				req.setAttribute("msg","Error");
 				req.getRequestDispatcher("myLeaves.jsp").forward(req, resp);
 			}

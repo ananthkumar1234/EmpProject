@@ -48,12 +48,12 @@ public class UpdateRejectReasonServlet extends HttpServlet {
 			{
 				eDao.updateLeavestock(leaveid);
 			}
-//			System.out.println("approved");
+			System.out.println("approved");
 			req.setAttribute("msg", "Success");
 			req.getRequestDispatcher("leaveRequests.jsp").forward(req, resp);
 			}else
 			{
-				System.out.println("something went wrong");
+//				System.out.println("something went wrong");
 				req.setAttribute("msg", "Error");
 				req.getRequestDispatcher("leaveRequests.jsp").forward(req, resp);
 			}

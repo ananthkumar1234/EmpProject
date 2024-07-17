@@ -41,6 +41,19 @@
     padding: 2px 2px;
   }
  }
+ 
+ 
+ /* table css starts*/
+.table-container {
+	background-color: #ffffff;
+	border-radius: 8px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+	max-width: 100%;
+	margin-top: 10%;
+	margin-left: 2%;
+	transition: width 0.3s ease, margin-left 0.3s ease;
+}
 .leave-table {
   width: 100%;
   border-collapse: separate;
@@ -81,6 +94,17 @@
   border-bottom-right-radius: 20px;
 }
 
+.leave-table button
+{
+ background-color: #ff8a65;
+    color: white;
+    border: none;
+    padding: 10px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    width:90%;
+}
 
 /*==============================table css ends=================================================*/
 
@@ -89,7 +113,7 @@
 .popup {
 	display: none;
 	position: fixed;
-	z-index: 9;
+	z-index:1002;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
@@ -185,7 +209,7 @@
 .PopupForm input[type="submit"] {
 	width: 100%;
 	padding: 10px;
-	background-color: #007bff;
+	background-color: #ffcc80;
 	color: #ffffff;
 	border: none;
 	border-radius: 4px;
@@ -195,11 +219,63 @@
 }
 
 .PopupForm input[type="submit"]:hover {
-	background-color: #0056b3;
+	background-color: #ff8a65;
 }
 
 /* =============================================popup css ends======================================*/
 
+/* css for success and error messages */
+.message-container {
+	position: fixed;
+	top: -200px; /* Move completely out of view */
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 15px 30px;
+	border-radius: 12px;
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+	text-align: center;
+	transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+	z-index: 1002;
+	max-width: 90%;
+	backdrop-filter: blur(10px); /* Stronger blur effect */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+}
+
+.message-container.show {
+	top: 30px;
+	animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.message-container.success {
+	background-color: rgba(144, 238, 144, 0.8);
+}
+
+.message-container.error {
+	background-color: rgba(220, 53, 69, 0.8);
+}
+
+.message-container p {
+	font-weight: bold;
+	margin: 8px 0;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	/* More modern font */
+}
+
+.message-container p:first-child {
+	font-weight: bold;
+	font-size: 20px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.message-container i {
+	font-size: 24px;
+	margin-right: 10px;
+	vertical-align: middle;
+}
 
 
 </style>
@@ -320,10 +396,10 @@ function closePopup(popupId) {
 			<a href="attendanceRequest.jsp">Attendance Update Requests</a> 
 			<%} %>
 		</div>
-
-		<div class="dashboard-grid">
 		
-		
+		<div class="table-container">
+		<h2>Attendance Records</h2>
+		<hr>
 		<table class="leave-table">
 		
 						<thead>
@@ -400,6 +476,7 @@ function closePopup(popupId) {
 							%>
 						</tbody>
 					</table>
+					</div>
 					
 					
 					<!-- Attendance Update Popup -->
@@ -416,7 +493,7 @@ function closePopup(popupId) {
 							<input type="text" id="cit" name="cit" placeholder="HH:MM:SS (24hr)"> 
 							<label for="cot">Check Out Time:</label> 
 							<input type="text" id="cot" name="cot" placeholder="HH:MM:SS (24hr)"> 
-							<input type="submit" value="Request Update">
+							<input type="submit" value="Request">
 						</form>
 					</div>
 
@@ -436,8 +513,6 @@ function closePopup(popupId) {
 							</div>
 						</form>
 					</div>
-
-		</div>
 	</div>
 	<script type="text/javascript">
 	// Get the current page name from the URL (assuming filenames match)
@@ -460,6 +535,46 @@ function closePopup(popupId) {
 	    link.parentNode.classList.remove("active");
 	  }
 	}
-	</script>
+	
+	
+	//Displaying messages for different scenarios
+
+	window.onload = function() {
+	<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> 
+	showMessage('error', 'Something Went Wrong!');
+	<% } 
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Success")){%> 
+	showMessage('success', 'Request Sent...');
+	<%}%>}
+	
+	
+	// new js function to display messages
+function showMessage(type, message) {
+    const messageContainer = document.getElementById('message-container');
+    const messageText = document.getElementById('message-text');
+    const messageIcon = document.getElementById('message-icon');
+
+    messageContainer.classList.remove('success', 'error', 'show');
+    messageContainer.classList.add(type);
+    messageText.textContent = message;
+    messageIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+
+    messageContainer.classList.add('show');
+    setTimeout(() => {
+        messageContainer.classList.remove('show');
+    }, 4000);
+}
+
+// Usage examples:
+// showMessage('success', 'Leave Applied Successfully...');
+// showMessage('error', 'Something Went Wrong!');
+
+</script>
+
+	<div id="message-container" class="message-container">
+		<span id="message-icon"></span>
+		<p id="message-text"></p>
+	</div>
+	
 </body>
 </html>

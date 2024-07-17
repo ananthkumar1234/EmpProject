@@ -38,21 +38,21 @@ public class AttendanceServlet extends HttpServlet{
 				{
 					if(eDao.validateAttendance(eid))
 					{
-						System.out.println("You are on leave");
+//						System.out.println("You are on leave");
 						req.setAttribute("msg","onLeave");
 						req.getRequestDispatcher("dashboard.jsp").forward(req, resp);
 					}else
 					{
 						if(eDao.validateAttendanceHoliday())
 						{
-							System.out.println("In Holiday Validation true");
+//							System.out.println("In Holiday Validation true");
 							eDao.insertLogin(eid);
-							req.setAttribute("msg","Success");
+							req.setAttribute("msg","Login");
 							req.getRequestDispatcher("dashboard.jsp").forward(req, resp);
 						}
 						else
 						{
-							System.out.println("In Holiday Validation false");
+//							System.out.println("In Holiday Validation false");
 							req.setAttribute("flag", true);
 							req.setAttribute("msg","Holiday");
 							req.getRequestDispatcher("dashboard.jsp").forward(req, resp);
@@ -62,7 +62,7 @@ public class AttendanceServlet extends HttpServlet{
 
 				}else
 				{
-					System.out.println("already log in");
+//					System.out.println("already log in");
 					req.setAttribute("msg","alreadyLoggedIn");
 					req.getRequestDispatcher("dashboard.jsp").forward(req, resp);
 				}
@@ -70,7 +70,7 @@ public class AttendanceServlet extends HttpServlet{
 
 			}
 			catch(Exception e) {
-				System.out.println("something went wrong");
+//				System.out.println("something went wrong");
 				req.setAttribute("msg","Error");
 				req.getRequestDispatcher("dashboard.jsp").forward(req, resp);
 				e.printStackTrace();

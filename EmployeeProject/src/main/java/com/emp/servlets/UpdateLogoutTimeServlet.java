@@ -43,7 +43,7 @@ public class UpdateLogoutTimeServlet extends HttpServlet{
 		    }
 		} else {
 		    // Handle case where employee is not in session
-		    req.setAttribute("msg", "Employee not found in session.");
+		    req.setAttribute("msg", "Error");
 		    req.getRequestDispatcher("dashboard.jsp").forward(req, resp);
 		}
 

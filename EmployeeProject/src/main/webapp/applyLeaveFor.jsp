@@ -137,38 +137,94 @@ textarea {
 .apply-btn:hover {
 	background-color: #7cb342;
 }
-/form container ends/
+/*form container ends*==============================================================*/
 
+/* css for success and error messages */
+.message-container {
+    position: fixed;
+    top: -200px; /* Move completely out of view */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 1002;
+    max-width: 90%;
+    backdrop-filter: blur(10px); /* Stronger blur effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
 
+.message-container.show {
+    top: 30px;
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.message-container.success {
+    background-color: rgba(144, 238, 144, 0.8);
+}
+
+.message-container.error {
+    background-color: rgba(220, 53, 69, 0.8);
+}
+
+.message-container p {
+    font-weight: bold;
+    margin: 8px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* More modern font */
+}
+
+.message-container p:first-child {
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.message-container i {
+    font-size: 24px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
 
 </style>
 
 
 
 <script>
-        function updateEmpIdAndFetchLeaves() {
-            const empId = document.getElementById("employeeid").value;
-
-            if (empId) {
-                // Update the empid variable
-                document.getElementById("empid").value = empId;
-
-                // Fetch available leaves based on the empid
-                fetchAvailableLeaves(empId);
-            }
-        }
-
-        function fetchAvailableLeaves(empId) {
-            // Assuming you have a servlet or endpoint that returns available leaves
-            fetch(getAvailableLeaves?empid=${empId})
-                .then(response => response.json())
-                .then(data => {
-                    // Update the available leaves display
-                    document.getElementById("availableLeaves").innerText = ${data.availableLeaves};
-                })
-                .catch(error => console.error('Error fetching available leaves:', error));
-        }
         
+function updateEmpIdAndFetchLeaves() {
+    const empId = document.getElementById("employeeid").value;
+
+    if (empId) {
+        // Update the empid variable
+        document.getElementById("empid").value = empId;
+
+        // Fetch available leaves based on the empid
+        fetchAvailableLeaves(empId);
+    }
+}
+
+function fetchAvailableLeaves(empId) {
+    // Assuming you have a servlet or endpoint that returns available leaves
+    fetch(`getAvailableLeaves?empid=${empId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Update the available leaves display
+            document.getElementById("availableLeaves").innerText = data.availableLeaves;
+        })
+        .catch(error => console.error('Error fetching available leaves:', error));
+}
         
         
         document.addEventListener("DOMContentLoaded", function() {
@@ -178,56 +234,18 @@ textarea {
             });
         });
         
-        
-     // Displaying messages for different scenarios
-        function showErrorMessage() {
-        	const warningMessage = document.getElementById('error-message');
-        	warningMessage.classList.add('show');
-
-        	setTimeout(() => {
-        	    warningMessage.classList.remove('show');
-        	}, 4000);
-        	}
-
-        	function showSuccessMessage() {
-        		const warningMessage = document.getElementById('success-message');
-        		warningMessage.classList.add('show');
-
-        		setTimeout(() => {
-        		    warningMessage.classList.remove('show');
-        		}, 4000);
-        		}
-        		
-        		
-        	function showLeaveStockErrorMessage() {
-        		const warningMessage = document.getElementById('leaveStockError-message');
-        		warningMessage.classList.add('show');
-
-        		setTimeout(() => {
-        		    warningMessage.classList.remove('show');
-        		}, 4000);
-        		}
-        	
-        	
-        	function showOutOfLeavesMessage() {
-        		const warningMessage = document.getElementById('outOfLeaves-message');
-        		warningMessage.classList.add('show');
-
-        		setTimeout(() => {
-        		    warningMessage.classList.remove('show');
-        		}, 4000);
-        		}
-
-
-        	// Check for servlet error
-        	window.onload = function() {
-        	<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> showErrorMessage();
+        window.onload = function() {
+        	<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> 
+        	showMessage('error', 'Something Went Wrong!');
         	<% } 
-        	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Success")){%> showSuccessMessage();
+        	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Success")){%> 
+        	showMessage('success', 'Leave applied...');
         	<%}
-        	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("LeaveStockError")){%> showLeaveStockErrorMessage();
+        	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("LeaveStockError")){%> 
+        	showMessage('error', 'leaves stock error !!!');
         	<%}
-        	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("OutOfLeaves")){%> showOutOfLeavesMessage();
+        	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("OutOfLeaves")){%> 
+        	showMessage('error', 'check leave balance !!!');
         	<%}%>}
         	
         	
@@ -384,7 +402,7 @@ textarea {
 				<div class="form-right">
                     <div class="leave-balance">
                         <label>Leave Balance</label>
-                        <p id="availableLeaves"> </p>
+                        <p id="availableLeaves"></p>
                     </div>
                 </div>
 				<div class="form-footer">
@@ -392,6 +410,7 @@ textarea {
 					<button type="submit" class="apply-btn">Apply</button>
 				</div>
 			</form>
+		</div>
 		</div>
 
 	
@@ -444,7 +463,34 @@ textarea {
         onDayCreate: highlightHolidays
     });
 });
+	
+	
+	// new js function to display messages
+	function showMessage(type, message) {
+	    const messageContainer = document.getElementById('message-container');
+	    const messageText = document.getElementById('message-text');
+	    const messageIcon = document.getElementById('message-icon');
+
+	    messageContainer.classList.remove('success', 'error', 'show');
+	    messageContainer.classList.add(type);
+	    messageText.textContent = message;
+	    messageIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+
+	    messageContainer.classList.add('show');
+	    setTimeout(() => {
+	        messageContainer.classList.remove('show');
+	    }, 4000);
+	}
+
+	// Usage examples:
+	// showMessage('success', 'Leave Applied Successfully...');
+	// showMessage('error', 'Something Went Wrong!');
+
 </script>
+<div id="message-container" class="message-container">
+    <span id="message-icon"></span>
+    <p id="message-text"></p>
+</div>
 
 </body>
 </html>

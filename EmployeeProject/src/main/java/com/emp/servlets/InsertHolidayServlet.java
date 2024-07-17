@@ -28,7 +28,7 @@ public class InsertHolidayServlet extends HttpServlet {
 			
 			if(empDao.insertHoliday(date, holidayname))
 			{
-				req.setAttribute("msg","Success");
+				req.setAttribute("msg","Inserted");
 				req.getRequestDispatcher("holidays.jsp").forward(req, resp);
 			}else
 			{

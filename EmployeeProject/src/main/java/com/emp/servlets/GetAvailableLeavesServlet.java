@@ -24,10 +24,13 @@ public class GetAvailableLeavesServlet extends HttpServlet{
 			Connection con = DBConnect.getConnection();
 			EmpDao empDao = new EmpDao(con);
 			int availableLeaves = empDao.getAvailableLeaves(empid);
+			System.out.println("availableLeaves : "+availableLeaves);
+//			resp.setContentType("application/json");
+//	        resp.setCharacterEncoding("UTF-8");
+//	        resp.getWriter().write("{\"availableLeaves\":" + availableLeaves + "}");
 			resp.setContentType("application/json");
 	        resp.setCharacterEncoding("UTF-8");
 	        resp.getWriter().write("{\"availableLeaves\":" + availableLeaves + "}");
-//			req.getRequestDispatcher("applyLeaveFor.jsp").forward(req, resp);
 			
 		}catch(Exception e)
 		{

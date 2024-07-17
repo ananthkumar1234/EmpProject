@@ -38,6 +38,171 @@
 	color: red !important;
 	opacity: 0.7;
 }
+
+/*  form container starts =================================================================== */
+.leave-form-container {
+	  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 100%;
+  
+  margin-top: 12%;
+
+  margin-left:20px;
+  margin-bottom:10px;
+  transition: width 0.3s ease, margin-left 0.3s ease;
+}
+
+h2 {
+	color: #333;
+	margin-bottom: 20px;
+}
+
+.leave-form {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.form-left {
+	flex: 1;
+	min-width: 300px;
+	padding-right: 20px;
+}
+
+.form-right {
+	width: 200px;
+	padding-left: 20px;
+	border-left: 1px solid #ddd;
+}
+
+.form-row {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 15px;
+}
+
+.form-group {
+	flex: 1;
+	margin-right: 15px;
+	margin-bottom: 15px;
+}
+
+.form-group:last-child {
+	margin-right: 0;
+}
+
+label {
+	display: block;
+	margin-bottom: 5px;
+	color: #666;
+}
+
+select, input[type="date"], input[type="text"], textarea {
+	width: 100%;
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+.leave-balance {
+	text-align: left;
+}
+
+.leave-balance p {
+	font-weight: bold;
+	color: #333;
+	margin: 0;
+	font-size: 1.2em;
+}
+
+textarea {
+	resize: vertical;
+}
+
+.form-footer {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+}
+
+.required-note {
+	color: #666;
+	font-size: 0.9em;
+	margin: 0;
+}
+
+.apply-btn {
+	background-color: #8bc34a;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 1em;
+}
+
+.apply-btn:hover {
+	background-color: #7cb342;
+}
+/*form container ends=========================================================*/
+
+/* css for success and error messages */
+.message-container {
+    position: fixed;
+    top: -200px; /* Move completely out of view */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 1002;
+    max-width: 90%;
+    backdrop-filter: blur(10px); /* Stronger blur effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.message-container.show {
+    top: 30px;
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.message-container.success {
+    background-color: rgba(144, 238, 144, 0.8);
+}
+
+.message-container.error {
+    background-color: rgba(220, 53, 69, 0.8);
+}
+
+.message-container p {
+    font-weight: bold;
+    margin: 8px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* More modern font */
+}
+
+.message-container p:first-child {
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.message-container i {
+    font-size: 24px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
 </style>
 
 
@@ -52,54 +217,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // Displaying messages for different scenarios
-function showErrorMessage() {
-	const warningMessage = document.getElementById('error-message');
-	warningMessage.classList.add('show');
 
-	setTimeout(() => {
-	    warningMessage.classList.remove('show');
-	}, 4000);
-	}
-
-	function showSuccessMessage() {
-		const warningMessage = document.getElementById('success-message');
-		warningMessage.classList.add('show');
-
-		setTimeout(() => {
-		    warningMessage.classList.remove('show');
-		}, 4000);
-		}
-		
-		
-	function showLeaveStockErrorMessage() {
-		const warningMessage = document.getElementById('leaveStockError-message');
-		warningMessage.classList.add('show');
-
-		setTimeout(() => {
-		    warningMessage.classList.remove('show');
-		}, 4000);
-		}
-	
-	
-	function showOutOfLeavesMessage() {
-		const warningMessage = document.getElementById('outOfLeaves-message');
-		warningMessage.classList.add('show');
-
-		setTimeout(() => {
-		    warningMessage.classList.remove('show');
-		}, 4000);
-		}
-
-
-	// Check for servlet error
 	window.onload = function() {
-	<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> showErrorMessage();
+	<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> 
+	showMessage('error', 'Something Went Wrong!');
 	<% } 
-	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Success")){%> showSuccessMessage();
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Success")){%> 
+	showMessage('success', 'Leave applied...');
 	<%}
-	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("LeaveStockError")){%> showLeaveStockErrorMessage();
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("LeaveStockError")){%> 
+	showMessage('error', 'leaves stock error !!!');
 	<%}
-	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("OutOfLeaves")){%> showOutOfLeavesMessage();
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("OutOfLeaves")){%> 
+	showMessage('error', 'check leave balance !!!');
 	<%}%>}
 	
 	
@@ -124,29 +254,6 @@ function showErrorMessage() {
 
 
 <body>
-
-	<div id="error-message" class="error-message">
-		<span><i class="fas fa-exclamation-triangle"></i></span>
-		<p>Something Went Wrong!</p>
-	</div>
-
-	<div id="success-message" class="success-message">
-		<span><i class="fas fa-check-circle"></i></span>
-		<p>Leave Applied Successfully...</p>
-	</div>
-
-	<div id="leaveStockError-message" class="leaveStockError-message">
-		<i class="fas fa-times-circle"></i>
-		<p>Holiday Deleted Successfully..!!!</p>
-	</div>
-
-	<div id="outOfLeaves-message" class="outOfLeaves-message">
-		<i class="fas fa-times-circle"></i>
-		<p>Check Balance Leaves...!!!</p>
-	</div>
-
-
-
 
 	<%
         Connection con = DBConnect.getConnection();
@@ -214,7 +321,7 @@ function showErrorMessage() {
 		</div>
 
 		<div class="leave-form-container">
-			<h2>Apply Leave</h2>
+			<h2>Apply Leave For</h2>
 			<hr>
 			<form class="leave-form" action="applyLeave" method="post">
 				<div class="form-left">
@@ -243,11 +350,11 @@ function showErrorMessage() {
 					</div>
 				</div>
 				<div class="form-right">
-					<div class="leave-balance">
-						<label>Leave Balance</label>
-						<p><%= empDao.getAvailableLeaves(emp.getEmpId()) %></p>
-					</div>
-				</div>
+                    <div class="leave-balance">
+                        <label>Leave Balance</label>
+                        <p> <%= empDao.getAvailableLeaves(emp.getEmpId()) %> </p>
+                    </div>
+                </div>
 				<div class="form-footer">
 					<p class="required-note">* Required</p>
 					<button type="submit" class="apply-btn">Apply</button>
@@ -256,7 +363,6 @@ function showErrorMessage() {
 		</div>
 
 	</div>
-
 
 	<script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -303,8 +409,37 @@ document.addEventListener("DOMContentLoaded", function() {
         onDayCreate: highlightHolidays
     });
 });
+
+
+
+
+// new js function to display messages
+function showMessage(type, message) {
+    const messageContainer = document.getElementById('message-container');
+    const messageText = document.getElementById('message-text');
+    const messageIcon = document.getElementById('message-icon');
+
+    messageContainer.classList.remove('success', 'error', 'show');
+    messageContainer.classList.add(type);
+    messageText.textContent = message;
+    messageIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+
+    messageContainer.classList.add('show');
+    setTimeout(() => {
+        messageContainer.classList.remove('show');
+    }, 4000);
+}
+
+// Usage examples:
+// showMessage('success', 'Leave Applied Successfully...');
+// showMessage('error', 'Something Went Wrong!');
+
 </script>
 
+<div id="message-container" class="message-container">
+    <span id="message-icon"></span>
+    <p id="message-text"></p>
+</div>
 
 
 </body>

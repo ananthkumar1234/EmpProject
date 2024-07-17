@@ -42,7 +42,7 @@ function changePassword() {
 document.addEventListener("DOMContentLoaded", function() {
 	    var currentPage = window.location.pathname.split("/").pop();
 	    
-	    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
+	    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp","filterLeaveBy"];
 	    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
 		var peoplePages = ["employees.jsp","addEmployee.jsp"];
 		var profilePage = ["profile.jsp"];

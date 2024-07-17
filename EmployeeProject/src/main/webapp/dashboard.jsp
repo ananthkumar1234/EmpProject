@@ -246,43 +246,63 @@ input[type="submit"]:hover
 	font-weight:bold;
 }
 
+/* css for success and error messages */
+.message-container {
+    position: fixed;
+    top: -200px; /* Move completely out of view */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 1002;
+    max-width: 90%;
+    backdrop-filter: blur(10px); /* Stronger blur effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.message-container.show {
+    top: 30px;
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.message-container.success {
+    background-color: rgba(144, 238, 144, 0.8);
+}
+
+.message-container.error {
+    background-color: rgba(220, 53, 69, 0.8);
+}
+
+.message-container p {
+    font-weight: bold;
+    margin: 8px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* More modern font */
+}
+
+.message-container p:first-child {
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.message-container i {
+    font-size: 24px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
 
 
 
 </style>
 <body>
-
-<div id="error-message" class="error-message">
-		<span><i class="fas fa-exclamation-triangle"></i></span>
-		<p>Something Went Wrong!</p>
-	</div>
-
-	<div id="success-message" class="success-message">
-		<span><i class="fas fa-check-circle"></i></span>
-		<p>Logged In...</p>
-	</div>
-
-	<div id="onleave-message" class="onleave-message">
-		<i class="fas fa-times-circle"></i>
-		<p>you are on leave today !!!</p>
-	</div>
-
-	<div id="holiday-message" class="holiday-message">
-		<i class="fas fa-times-circle"></i>
-		<p>It's holiday today !!!</p>
-	</div>
-	
-	<div id="already-message" class="already-message">
-		<i class="fas fa-times-circle"></i>
-		<p>Already logged In !!!</p>
-	</div>
-	
-	<div id="logout-message" class="logout-message">
-		<i class="fas fa-times-circle"></i>
-		<p>logged Out !!!</p>
-	</div>
-
-
 
 	<%
         Connection con = DBConnect.getConnection();
@@ -574,76 +594,63 @@ input[type="submit"]:hover
 	}
 	
 	
+	// Displaying messages for different scenarios
+
+	// this if conditions for login scenarios
 	window.onload = function() {
-		<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> showErrorMessage();
-		<% } 
-		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Success")){%> showSuccessMessage();
-		<%}
-		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("onLeave")){%> showOnLeave();
-		<%}
-		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Holiday")){%> showHoliday();
-		<%}
-		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("alreadyLoggedIn")){%> showAlreadyLogIn();
-		<%}
-		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("logout")){%> showLogout();
-		<%}%>
+	<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> 
+	showMessage('error', 'Something Went Wrong!');
+	<% } 
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Login")){%> 
+	showMessage('success', 'Logged in!!!...');
+	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("onLeave")){%> 
+	showMessage('error', 'You are on leave today !!!');
+	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Holiday")){%> 
+	showMessage('error', 'Today is holiday or weekend !!!');
+	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("alreadyLoggedIn")){%> 
+	showMessage('error', 'Already logged in !!!');
+	<%}
+	// this if conditions for logout scenarios
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("AlreadyLoggedOut")){%> 
+	showMessage('error', 'Already logged out !!!');
+	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("NotLoggedIn")){%> 
+	showMessage('error', 'Not logged in yet !!!');
+	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("logout")){%> 
+	showMessage('success', 'logged out !!!');
+	<%}%>}
+	
+	
+	// new js function to display messages
+	function showMessage(type, message) {
+	    const messageContainer = document.getElementById('message-container');
+	    const messageText = document.getElementById('message-text');
+	    const messageIcon = document.getElementById('message-icon');
+
+	    messageContainer.classList.remove('success', 'error', 'show');
+	    messageContainer.classList.add(type);
+	    messageText.textContent = message;
+	    messageIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+
+	    messageContainer.classList.add('show');
+	    setTimeout(() => {
+	        messageContainer.classList.remove('show');
+	    }, 4000);
 	}
-		
-		function showErrorMessage() {
-			const warningMessage = document.getElementById('error-message');
-			warningMessage.classList.add('show');
 
-			setTimeout(() => {
-			    warningMessage.classList.remove('show');
-			}, 4000);
-			}
-
-			function showSuccessMessage() {
-				const warningMessage = document.getElementById('success-message');
-				warningMessage.classList.add('show');
-
-				setTimeout(() => {
-				    warningMessage.classList.remove('show');
-				}, 4000);
-				}
-			
-			function showOnLeave() {
-				const warningMessage = document.getElementById('onleave-message');
-				warningMessage.classList.add('show');
-
-				setTimeout(() => {
-				    warningMessage.classList.remove('show');
-				}, 4000);
-				}
-
-				function showHoliday() {
-					const warningMessage = document.getElementById('holiday-message');
-					warningMessage.classList.add('show');
-
-					setTimeout(() => {
-					    warningMessage.classList.remove('show');
-					}, 4000);
-					}
-				
-				function showAlreadyLogIn() {
-					const warningMessage = document.getElementById('warning-message');
-					warningMessage.classList.add('show');
-
-					setTimeout(() => {
-					    warningMessage.classList.remove('show');
-					}, 4000);
-					}
-				
-				function showLogout() {
-					const warningMessage = document.getElementById('logout-message');
-					warningMessage.classList.add('show');
-
-					setTimeout(() => {
-					    warningMessage.classList.remove('show');
-					}, 4000);
-					}
-		
+	// Usage examples:
+	// showMessage('success', 'Leave Applied Successfully...');
+	// showMessage('error', 'Something Went Wrong!');
 		
 	</script>
+	
+	<div id="message-container" class="message-container">
+    <span id="message-icon"></span>
+    <p id="message-text"></p>
+</div>
 </body>
 </html>
