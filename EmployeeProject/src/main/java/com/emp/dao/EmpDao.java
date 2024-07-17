@@ -19,6 +19,7 @@ import com.emp.entities.Attendance;
 import com.emp.entities.Employees;
 import com.emp.entities.Holidays;
 import com.emp.entities.Leaves;
+import com.emp.entities.Roles;
 
 public class EmpDao {
 
@@ -1119,5 +1120,158 @@ public class EmpDao {
 		{
 			return false;
 		}
+	}
+	
+	public List<Roles> getRoles() throws SQLException
+	{
+		List<Roles> list = new ArrayList<>();
+		
+		String qry="Select * from Roles";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ResultSet rs=ps.executeQuery();
+		while(rs.next())
+		{
+			Roles r = new Roles();
+			r.setRoleId(rs.getInt("RoleId"));
+			r.setRoleName(rs.getString("RoleName"));
+			
+			list.add(r);
+		}
+		return list;
+	}
+	
+	public List<Employees> getEmployeesByRole(int roleId) {
+		List<Employees> list = new ArrayList<>();
+		try {
+			String query = "SELECT * FROM employees WHERE roleid=?";
+			PreparedStatement pstmt = this.con.prepareStatement(query);
+			pstmt.setInt(1, roleId);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Employees emp = new Employees();
+				emp.setEmpId(rs.getInt("employeeid"));
+				emp.setFname(rs.getString("firstName"));
+				emp.setLname(rs.getString("lastName"));
+				emp.setRoleId(rs.getInt("roleId"));
+				// set other fields
+				list.add(emp);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public List<Employees> getReporteesByRole(int roleId,int mid) {
+		List<Employees> list = new ArrayList<>();
+		try {
+			String query = "SELECT e.* FROM employees e JOIN Manager m on e.EmployeeId=m.employee WHERE e.roleid=? and m.Manager=?";
+			PreparedStatement pstmt = this.con.prepareStatement(query);
+			pstmt.setInt(1, roleId);
+			pstmt.setInt(2, mid);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Employees emp = new Employees();
+				emp.setEmpId(rs.getInt("employeeid"));
+				emp.setFname(rs.getString("firstName"));
+				emp.setLname(rs.getString("lastName"));
+				emp.setRoleId(rs.getInt("roleId"));
+				// set other fields
+				list.add(emp);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public List<Employees> getEmployeesByRoleAndName(int roleId, String name) {
+		List<Employees> list = new ArrayList<>();
+		try {
+			String query = "SELECT * FROM employees WHERE roleid=? AND concat(firstName, ' ',lastName) LIKE ?";
+			PreparedStatement pstmt = this.con.prepareStatement(query);
+			pstmt.setInt(1, roleId);
+			pstmt.setString(2,"%" +name+ "%");
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Employees emp = new Employees();
+				emp.setEmpId(rs.getInt("employeeid"));
+				emp.setFname(rs.getString("firstName"));
+				emp.setLname(rs.getString("lastName"));
+				// set other fields
+				list.add(emp);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public List<Employees> getReporteesByRoleAndName(int roleId, String name,int mid) {
+		List<Employees> list = new ArrayList<>();
+		try {
+			String query = "SELECT e.* FROM employees e JOIN Manager m on e.EmployeeId=m.employee WHERE e.roleid=? AND concat(e.firstName, ' ',e.lastName) LIKE ? and m.Manager=?";
+			PreparedStatement pstmt = this.con.prepareStatement(query);
+			pstmt.setInt(1, roleId);
+			pstmt.setString(2,"%" +name+ "%");
+			pstmt.setInt(3, mid);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Employees emp = new Employees();
+				emp.setEmpId(rs.getInt("employeeid"));
+				emp.setFname(rs.getString("firstName"));
+				emp.setLname(rs.getString("lastName"));
+				// set other fields
+				list.add(emp);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public List<Employees> getEmployeesByName(String name) {
+		List<Employees> list = new ArrayList<>();
+		try {
+			String query = "SELECT * FROM employees WHERE firstName LIKE ? OR lastName LIKE ?";
+			PreparedStatement pstmt = this.con.prepareStatement(query);
+			pstmt.setString(1, "%" + name + "%");
+			pstmt.setString(2, "%" + name + "%");
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Employees emp = new Employees();
+				emp.setEmpId(rs.getInt("employeeid"));
+				emp.setFname(rs.getString("firstName"));
+				emp.setLname(rs.getString("lastName"));
+				// set other fields
+				list.add(emp);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public List<Employees> getReporteesByName(String name,int mid) {
+		List<Employees> list = new ArrayList<>();
+		try {
+			String query = "SELECT e.* FROM employees e JOIN Manager m on e.EmployeeId=m.employee WHERE (firstName LIKE ? OR lastName LIKE ?) and m.Manager=?";
+			PreparedStatement pstmt = this.con.prepareStatement(query);
+			pstmt.setString(1, "%" + name + "%");
+			pstmt.setString(2, "%" + name + "%");
+			pstmt.setInt(3, mid);
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Employees emp = new Employees();
+				emp.setEmpId(rs.getInt("employeeid"));
+				emp.setFname(rs.getString("firstName"));
+				emp.setLname(rs.getString("lastName"));
+				// set other fields
+				list.add(emp);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 }

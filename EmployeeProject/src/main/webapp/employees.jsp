@@ -4,6 +4,7 @@
 <%@ page import="com.emp.entities.Attendance"%>
 <%@ page import="com.emp.entities.Holidays"%>
 <%@ page import="com.emp.entities.Employees"%>
+<%@ page import="com.emp.entities.Roles"%>
 <%@ page import="com.emp.jdbc.DBConnect"%>
 <%@ page import="java.sql.Connection"%>
 <%@ page import="com.emp.dao.EmpDao"%>
@@ -80,14 +81,25 @@ body.sidebar-collapsed .peopleLinks {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
   max-width: 100%;
+  margin-top:2%;
+  margin-left:20px;
+  
+  transition: width 0.3s ease, margin-left 0.3s ease;
+}
+
+.filter-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 100%;
   
   margin-top: 12%;
 
   margin-left:20px;
-  margin-bottom:10px;
+  
   transition: width 0.3s ease, margin-left 0.3s ease;
 }
-
 
 .leave-table {
   width: 100%;
@@ -129,20 +141,55 @@ body.sidebar-collapsed .peopleLinks {
   border-bottom-right-radius: 20px;
 }
 
+form {
+	display: flex;
+	width: 100%;
+	justify-content: start;
+	align-items: center;
+}
+
+form .form-container {
+	display: 1;
+	align-items: center;
+	margin-right: 15px;
+	gap: 10px;
+}
+
+.form-container label {
+	white-space: nowrap;
+}
+
+.form-container input[type="text"],select {
+	width: 40%;
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+.formButton{
+	margin-left: 50%;
+}
+
+.apply-btn {
+	background-color: #8bc34a;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 1em;
+	white-space: nowrap;
+}
+
+.apply-btn:hover {
+	background-color: #7cb342;
+}
+
 
 </style>
 
 <body>
-
-	<div id="error-message" class="error-message">
-		<span><i class="fas fa-exclamation-triangle"></i></span>
-		<p>Something Went Wrong!</p>
-	</div>
-
-	<div id="success-message" class="success-message">
-		<span><i class="fas fa-check-circle"></i></span>
-		<p>Leave Applied Successfully...</p>
-	</div>
 
 	<%
         Connection con = DBConnect.getConnection();
@@ -152,7 +199,8 @@ body.sidebar-collapsed .peopleLinks {
         Employees emp = (Employees)sess.getAttribute("employee");
         String role = (String)sess.getAttribute("role");
         
-        List<Employees> employees = null;
+        List<Employees> employees =(List<Employees>)request.getAttribute("empList");
+        List<Roles> JobTitle=empDao.getRoles();
     %>
 
 	<div class="sidebar" id="sidebar">
@@ -202,30 +250,49 @@ body.sidebar-collapsed .peopleLinks {
 			<%} %>
 		</div>
 		
+		<div class="filter-container">
+		<form action="EmployeeFilter" method="post">
+					<div class="form-container">
+						<label for="JobTitle">Role</label> 
+						 <select id="JobTitle" name="JobTitle">
+                            <option value="">Select Job Title</option>
+                            <% for (Roles r : JobTitle) { %>
+                            <option value="<%= r.getRoleId() %>"><%= r.getRoleName() %></option>
+                            <% } %>
+                        </select>
+                        <input type="text" id="name" name="name" placeholder="Search by name" value="<%= request.getParameter("name") != null ? request.getParameter("name") : "" %>">
+					</div>
+
+
+					<div class="formButton">
+						<button type="submit" class="apply-btn">Filter</button>
+					</div>
+				</form>
+		</div>
+		
 		<div class="table-container">
 		
 		 <table class="leave-table">
     <thead>
         <tr>
             <th>Full Name</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Gender</th>
+
         </tr>
     </thead>
     <tbody>
-        <% if(role.equals("Manager")){
+        <%if(employees==null){ 
+        
+        if(role.equals("Manager")){
         employees = empDao.getReportees(emp.getEmpId());
         }else
         {
         	employees = empDao.getAllEmployees();
         }
+        }
         for (Employees emp2 : employees) { %>
             <tr>
                 <td><%= emp2.getFname() %> <%= emp2.getLname() %></td>
-                <td><%= emp2.getEmail() %></td>
-                <td><%= emp2.getPhoneNo() %></td>
-             	<td><%= emp2.getGender() %></td>
+
             </tr>
         <% } %>
     </tbody>
