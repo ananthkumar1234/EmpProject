@@ -441,7 +441,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		    document.querySelector(".activePeople").classList.add("active");
 		} else if (profilePage.includes(currentPage)) {
 		    document.querySelector(".activeProfile").classList.add("active");
-		}else if (currentPage === "filterLeave" || currentPage === "filterLeaveBy") {
+		}else if (currentPage === "filterLeave" || currentPage === "filterLeaveBy" || currentPage ==="updaterejectreason") {
 		    targetPage = "myLeaves.jsp";
 		    document.querySelector(".activeLeave").classList.add("active");
 		}

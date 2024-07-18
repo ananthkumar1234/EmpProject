@@ -83,6 +83,14 @@
             cursor: pointer;
             color: #666;
         }
+        .toggle-password2 {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
 
         .login-btn {
             background-color: #ff7b1d;
@@ -179,8 +187,12 @@
     </style>
     
     <script>
-        function togglePasswordVisibility() {
-            var passwordInput = document.getElementById('password');
+    
+    // toggle visibility
+    
+    
+    function togglePasswordVisibility() {
+            var passwordInput = document.getElementById('newPassword');
             var togglePassword = document.querySelector('.toggle-password');
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
@@ -193,21 +205,20 @@
             }
         }
         
-        function togglePasswordVisibility2() {
-            var passwordInput = document.getElementById('confirmpassword');
-            var togglePassword = document.querySelector('.toggle-password');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                togglePassword.classList.remove('fa-eye');
-                togglePassword.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                togglePassword.classList.remove('fa-eye-slash');
-                togglePassword.classList.add('fa-eye');
-            }
+    
+    function togglePasswordVisibility2() {
+        var passwordInput = document.getElementById('confirmPassword');
+        var togglePassword = document.querySelector('.toggle-password2');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            togglePassword.classList.remove('fa-eye');
+            togglePassword.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            togglePassword.classList.remove('fa-eye-slash');
+            togglePassword.classList.add('fa-eye');
         }
-        
-        
+    }
         // warning message function
         function showWarningMessage() {
         const warningMessage = document.getElementById('warning-message');
@@ -267,7 +278,7 @@ String uname = (String)sess.getAttribute("username");
             
             <div class="input-group">
                 <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
-                <span><i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility2()"></i></span>
+                <span><i class="fas fa-eye toggle-password2" onclick="togglePasswordVisibility2()"></i></span>
             </div>
             
             <button type="submit" class="login-btn">Reset</button>

@@ -348,7 +348,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		    document.querySelector(".activePeople").classList.add("active");
 		} else if (profilePage.includes(currentPage)) {
 		    document.querySelector(".activeProfile").classList.add("active");
-		}else if (currentPage === "filterAttendance") {
+		}else if (currentPage === "filterAttendance" || currentPage === "requestUpdate") {
 		    targetPage = "attendance.jsp";
 		    document.querySelector(".activeAttendance").classList.add("active");
 		}
