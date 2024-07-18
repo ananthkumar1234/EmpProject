@@ -98,6 +98,9 @@ body.sidebar-collapsed .peopleLinks {
     width: 200px;
     padding: 20px;
     border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    
 }
 
 .formMenu ul {
@@ -181,6 +184,26 @@ body.sidebar-collapsed .peopleLinks {
   cursor: not-allowed;
 }
 
+.button-container {
+    margin-top: 20px;
+}
+
+.apply-btn {
+    width: 100%;
+    background-color: #8bc34a;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.apply-btn:hover {
+    background-color: #7cb342;
+}
+
 </style>
 
 <body>
@@ -243,7 +266,8 @@ body.sidebar-collapsed .peopleLinks {
 			<%} %>
 		</div>
 		
-		<div class="formContainer">
+		
+		<form class="formContainer" action="AddEmployee" method="post">
 		
     <div class="formMenu">
     <h2>Add Employee</h2>
@@ -252,8 +276,14 @@ body.sidebar-collapsed .peopleLinks {
             <li onclick="showDiv('CD')">Contact Details</li>
             <li onclick="showDiv('J')">Employment Details</li>
             <li onclick="showDiv('UC')">User Credentials</li>
-            <li onclick="showDiv('RT')">Report-to</li>
+            
         </ul>
+        <div class="button-container">
+ 
+        <button type="submit" class="apply-btn" id="saveButton" style="display: none;">Save</button>
+
+        </div>
+        
     </div>
     
     <div class="formMain">
@@ -265,11 +295,11 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="FirstName">First Name</label>
-                    <input type="text" id="FirstName" name="FirstName">
+                    <input type="text" id="FirstName" name="FirstName" required>
                 </div>
                 <div class="form-group">
                     <label for="LastName">Last Name</label>
-                    <input type="text" id="LastName" name="LastName">
+                    <input type="text" id="LastName" name="LastName" required>
                 </div>
             </div>
             
@@ -278,11 +308,11 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="DateOfBirth">Date Of Birth</label>
-                    <input type="Date" id="DateOfBirth" name="DateOfBirth">
+                    <input type="Date" id="DateOfBirth" name="DateOfBirth" required>
                 </div>
                 <div class="form-group">
                     <label for="Gender">Gender</label>
-                    <select id="Gender" name="Gender">
+                    <select id="Gender" name="Gender" required>
                     <option value="">Select Gender</option>
                     <option value="Married">Male</option>
                     <option value="Single">Female</option>
@@ -294,12 +324,12 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="Nationality">Nationality</label>
-					<input type="text" id="Nationality" name="Nationality">
+					<input type="text" id="Nationality" name="Nationality" required>
 				
                 </div>
                 <div class="form-group">
                     <label for="MaritalStatus">Marital Status</label>
-                    <select id="MaritalStatus" name="MaritalStatus">
+                    <select id="MaritalStatus" name="MaritalStatus" required>
                     <option value="">Select Marital Status</option>
                     <option value="Married">Married</option>
                     <option value="Single">Single</option>
@@ -307,6 +337,26 @@ body.sidebar-collapsed .peopleLinks {
                 </div>
             </div>
             
+            <div class="form-row">
+                
+                <div class="form-group">
+                    <label for="BloodGroup">Blood Group</label>
+                    <select id="BloodGroup" name="BloodGroup" required>
+                    <option value="">Select Blood Group</option>
+                    <option value="O -ve">O -ve</option>
+                    <option value="O +ve">O +ve</option>
+                    <option value="A -ve">A -ve</option>
+                    <option value="A +ve">A +ve</option>
+                    <option value="B -ve">B -ve</option>
+                    <option value="B +ve">B +ve</option>
+                    <option value="AB -ve">AB -ve</option>
+                    <option value="AB +ve">AB +ve</option>
+                    </select>
+                </div>
+                <div class="form-group">
+
+                </div>
+            </div>
             
             
         </div>
@@ -318,7 +368,7 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="PermanentStreet1">Address Line 1</label>
-                    <input type="text" id="PermanentStreet1" name="PermanentStreet1">
+                    <input type="text" id="PermanentStreet1" name="PermanentStreet1" required>
                 </div>
                 <div class="form-group">
                     <label for="PermanentStreet2">Address Line 2</label>
@@ -326,22 +376,22 @@ body.sidebar-collapsed .peopleLinks {
                 </div>
                 <div class="form-group">
                     <label for="PermanentCity">City</label>
-                    <input type="text" id="PermanentCity" name="PermanentCity">
+                    <input type="text" id="PermanentCity" name="PermanentCity" required>
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
                     <label for="PermanentState">State</label>
-                    <input type="text" id="PermanentState" name="PermanentState">
+                    <input type="text" id="PermanentState" name="PermanentState" required>
                 </div>
                 <div class="form-group">
                     <label for="PermanentPostalCode">Postal Code</label>
-                    <input type="text" id="PermanentPostalCode" name="PermanentPostalCode">
+                    <input type="text" id="PermanentPostalCode" name="PermanentPostalCode" required>
                 </div>
                 <div class="form-group">
                     <label for="PermanentCity">Country</label>
-                    <input type="text" id="PermanentCountry" name="PermanentCountry">
+                    <input type="text" id="PermanentCountry" name="PermanentCountry" required>
                 </div>
             </div>
             
@@ -359,7 +409,7 @@ body.sidebar-collapsed .peopleLinks {
             	
                 <div class="form-group">
                     <label for="TemporaryStreet1">Address Line 1</label>
-                    <input type="text" id="TemporaryStreet1" name="TemporaryStreet1">
+                    <input type="text" id="TemporaryStreet1" name="TemporaryStreet1" required>
                 </div>
                 <div class="form-group">
                     <label for="TemporaryStreet2">Address Line 2</label>
@@ -367,22 +417,22 @@ body.sidebar-collapsed .peopleLinks {
                 </div>
                 <div class="form-group">
                     <label for="TemporaryCity">City</label>
-                    <input type="text" id="TemporaryCity" name="TemporaryCity">
+                    <input type="text" id="TemporaryCity" name="TemporaryCity" required>
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
                     <label for="TemporaryState">State</label>
-                    <input type="text" id="TemporaryState" name="TemporaryState">
+                    <input type="text" id="TemporaryState" name="TemporaryState" required>
                 </div>
                 <div class="form-group">
                     <label for="TemporaryPostalCode">Postal Code</label>
-                    <input type="text" id="TemporaryPostalCode" name="TemporaryPostalCode">
+                    <input type="text" id="TemporaryPostalCode" name="TemporaryPostalCode" required>
                 </div>
                 <div class="form-group">
                     <label for="TemporaryCity">Country</label>
-                    <input type="text" id="TemporaryCountry" name="TemporaryCountry">
+                    <input type="text" id="TemporaryCountry" name="TemporaryCountry" required>
                 </div>
             </div>
             
@@ -392,7 +442,7 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="Mobile">Mobile</label>
-                    <input type="text" id="Mobile" name="Mobile">
+                    <input type="text" id="Mobile" name="Mobile" required>
                 </div>
                 <div class="form-group">
                     <label for="Home">Home</label>
@@ -404,15 +454,15 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="EmergencyName">Emergency Contact Name</label>
-                    <input type="text" id="EmergencyName" name="EmergencyName">
+                    <input type="text" id="EmergencyName" name="EmergencyName" required>
                 </div>
                 <div class="form-group">
                     <label for="Relation">Relation</label>
-                    <input type="text" id="Relation" name="Relation">
+                    <input type="text" id="Relation" name="Relation" required>
                 </div>
                 <div class="form-group">
                     <label for="EmergencyMobile">Mobile</label>
-                    <input type="text" id="emergencyMobile" name="EmergencyMobile">
+                    <input type="text" id="EmergencyMobile" name="EmergencyMobile" required>
                 </div>
             </div>
             
@@ -422,11 +472,11 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="PersonalEmail">Personal Email</label>
-                    <input type="email" id="PersonalEmail" name="PersonalEmail">
+                    <input type="email" id="PersonalEmail" name="PersonalEmail" required>
                 </div>
                 <div class="form-group">
                     <label for="WorkEmail">Work Email</label>
-                    <input type="email" id="WorkEmail" name="WorkEmail">
+                    <input type="email" id="WorkEmail" name="WorkEmail" required>
                 </div>
             </div>
             
@@ -438,7 +488,7 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="JoinedDate">Joined Date</label>
-                    <input type="Date" id="JoinedDate" name="JoinedDate">
+                    <input type="Date" id="JoinedDate" name="JoinedDate" required>
                 </div>
                 <div class="form-group">     
                     <label for="JobTitle">Job Title</label> 
@@ -451,10 +501,16 @@ body.sidebar-collapsed .peopleLinks {
                         
                 </div>
             </div>
+            <div class=form-row>
             <div class="form-group">
             <label for="Location">Location</label>
             <input type="text" id="Location" name="Location">
             </div>
+            <div class="form-group">
+
+            </div>
+            </div>
+            
         </div>
         
         <div class="content UC">
@@ -464,36 +520,58 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="Username">Username</label>
-                    <input type="text" id="Username" name="Username">
+                    <input type="text" id="Username" name="Username" required>
+                </div>
+                <div class="form-group">
+                
                 </div>
             </div>
             <div class="form-row">
             
             <div class="form-group">
                     <label for="Password">Password</label>
-                    <input type="password" id="Password" name="Password">
+                    <input type="password" id="Password" name="Password" required>
                 </div>
                 <div class="form-group">
                     <label for="ConfirmPassword">Confirm Password</label>
-                    <input type="password" id="ConfirmPassword" name="ConfirmPassword">
+                    <input type="password" id="ConfirmPassword" name="ConfirmPassword" required>
                 </div>
             </div>
                             
         </div>
-        
-        <div class="content RT">
-            <!-- Report-to content -->
-            <h2>Report To</h2>
-            <hr>
-        </div>
+
     </div>
+    </form>
 </div>
 
-	</div>
+	
 	
 	
 	
 	<script>
+	
+	document.addEventListener('DOMContentLoaded', function() {
+		  const saveButton = document.getElementById('saveButton');
+		  const requiredInputs = document.querySelectorAll('input[required], select[required]');
+		  
+		  function checkInputs() {
+		    let allFilled = true;
+		    requiredInputs.forEach(input => {
+		      if (!input.value.trim()) {
+		        allFilled = false;
+		      }
+		    });
+		    saveButton.style.display = allFilled ? 'block' : 'none';
+		  }
+
+		  requiredInputs.forEach(input => {
+		    input.addEventListener('input', checkInputs);
+		    input.addEventListener('change', checkInputs);
+		  });
+
+		  // Initial check
+		  checkInputs();
+		});
 	
 	document.addEventListener("DOMContentLoaded", function() {
 	    var currentPage = window.location.pathname.split("/").pop();
@@ -549,6 +627,17 @@ body.sidebar-collapsed .peopleLinks {
 	    	      } else {
 	    	        temporaryField.value = '';
 	    	        temporaryField.disabled = false;
+	    	      }
+	    	    });
+	    	  });
+
+	    	  // Add this part to update temporary fields when permanent fields change
+	    	  permanentFields.forEach(field => {
+	    	    const permanentField = document.getElementById('Permanent' + field);
+	    	    permanentField.addEventListener('input', function() {
+	    	      if (sameAsPermanentCheckbox.checked) {
+	    	        const temporaryField = document.getElementById('Temporary' + field);
+	    	        temporaryField.value = this.value;
 	    	      }
 	    	    });
 	    	  });

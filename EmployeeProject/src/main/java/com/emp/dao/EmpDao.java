@@ -20,6 +20,8 @@ import com.emp.entities.Employees;
 import com.emp.entities.Holidays;
 import com.emp.entities.Leaves;
 import com.emp.entities.Roles;
+import com.emp.entities.UserCredentials;
+import com.emp.entities.Address;
 
 public class EmpDao {
 
@@ -65,11 +67,6 @@ public class EmpDao {
 			e1.setEmpId(rs.getInt("EmployeeID"));
 			e1.setFname(rs.getString("FirstName"));
 			e1.setLname(rs.getString("LastName"));
-			e1.setDOB(rs.getString("DateOfBirth"));
-			e1.setEmail(rs.getString("Email"));
-			e1.setPhoneNo(rs.getString("Phone"));
-			e1.setAddress(rs.getString("Address"));
-			e1.setHiredate(rs.getString("Hiredate"));
 			e1.setRoleId(rs.getInt("RoleID"));
 		}catch(Exception e)
 		{
@@ -548,9 +545,6 @@ public class EmpDao {
 			e1.setEmpId(rs.getInt("EmployeeID"));
 			e1.setFname(rs.getString("FirstName"));
 			e1.setLname(rs.getString("LastName"));
-			e1.setEmail(rs.getString("email"));
-			e1.setPhoneNo(rs.getString("phone"));
-			e1.setGender(rs.getString("gender"));
 
 			l1.add(e1);
 		}
@@ -971,9 +965,7 @@ public class EmpDao {
 			emp.setEmpId(rs.getInt("employeeid"));
 			emp.setFname(rs.getString("firstname"));
 			emp.setLname(rs.getString("lastname"));
-			emp.setEmail(rs.getString("email"));
-			emp.setPhoneNo(rs.getString("phone"));
-			emp.setGender(rs.getString("gender"));
+
 			list.add(emp);
 		}
 		return list;
@@ -1274,4 +1266,101 @@ public class EmpDao {
 		}
 		return list;
 	}
+	
+	public boolean addEmployees(Employees e, UserCredentials uc, Address a) throws SQLException
+	{
+		boolean b=false;
+		
+		String qry="Insert into employees (FirstName,LastName,DateOfBirth,PersonalEmail,PersonalMobile,HireDate,RoleId,MaritalStatus,Gender,EmergencyMobile,EmergencyName,BloodGroup,Nationality,PersonalHome,EmergencyRelation,WorkEmail,JobLocation) "
+				+"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		
+		String qry2="SELECT employeeID FROM employees ORDER BY employeeID DESC LIMIT 1";
+		
+		PreparedStatement ps= con.prepareStatement(qry);
+		ps.setString(1, e.getFname());
+		ps.setString(2, e.getLname());
+		ps.setString(3, e.getDateofBirth());
+		ps.setString(4, e.getPersonalEmail());
+		ps.setString(5, e.getPersonalMobile());
+		ps.setString(6, e.getHireDate());
+		ps.setInt(7,e.getRoleId());
+		ps.setString(8, e.getMaritalStatus());
+		ps.setString(9, e.getGender());
+		ps.setString(10, e.getEmergencyMobile());
+		ps.setString(11, e.getEmergencyName());
+		ps.setString(12, e.getBloodGroup());
+		ps.setString(13, e.getNationality());
+		ps.setString(14, e.getPersonalHome());
+		ps.setString(15, e.getEmergencyRelatoin());
+		ps.setString(16, e.getWorkEmail());
+		ps.setString(17, e.getJobLocation());
+		
+		int i=ps.executeUpdate();
+		if(i>0) {
+		
+		ResultSet rs= con.prepareStatement(qry2).executeQuery();			
+		rs.next();
+		int id=rs.getInt("employeeID");
+		b=addAddress(id,uc,a);
+		
+		}
+		return b;	
+	}
+	public boolean addAddress(int id,UserCredentials uc, Address a) throws SQLException
+	{
+		boolean b=false;
+		String qry="insert into Address (EmployeeId,Line1,Line2,City,State,PostalCode,Country,TLine1,TLine2,TCity,TState,TPostalCode,TCountry) "
+				+"values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		
+		PreparedStatement ps= con.prepareStatement(qry);
+		ps.setInt(1, id);
+		ps.setString(2, a.getLine1());
+		ps.setString(3, a.getLine2());
+		ps.setString(4, a.getCity());
+		ps.setString(5, a.getState());
+		ps.setString(6, a.getPostalCode());
+		ps.setString(7, a.getCountry());
+		ps.setString(8, a.getTempLine1());
+		ps.setString(9, a.getTempLine2());
+		ps.setString(10, a.getTempCity());
+		ps.setString(11, a.getTempState());
+		ps.setString(12, a.getTempPostalCode());
+		ps.setString(13, a.getTempCountry());
+		
+		int i=ps.executeUpdate();
+		if(i>0) {
+
+			b=addUserCredentials(id,uc);
+			
+		}
+				
+		return b;
+	}
+	
+	public boolean addUserCredentials(int id,UserCredentials uc) throws SQLException
+	{
+
+			String qry="insert into user_credentials values (?,?,?)";
+			String qry1="insert into leavesStock(employeeid) values (?)";
+			PreparedStatement ps=con.prepareStatement(qry);
+			ps.setInt(1, id);
+			ps.setString(2,uc.getUsername());
+			ps.setString(3, uc.getPassword());
+
+			ps.executeUpdate();
+			
+			
+			
+			PreparedStatement ps1=con.prepareStatement(qry1);
+			ps1.setInt(1, id);
+			
+			int i=ps1.executeUpdate();
+			if(i>0) {
+				return true;
+			}
+
+		return false;
+
+	}
+	
 }

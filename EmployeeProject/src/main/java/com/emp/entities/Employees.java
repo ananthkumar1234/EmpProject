@@ -5,51 +5,109 @@ public class Employees {
 	private int empId;
 	private String fname;
 	private String lname;
-	private String DOB;
-	private String email;
-	private String phoneNo;
-	private String address;
-	private String hiredate;
 	private int roleId;
-	private String tempAddress;
-	private String maritalStatus;
-	private String gender;
-	private String emergencyContact;
-	private String emergencyContactName;
-	private String bloodgroup;
 	private boolean isActive;
+	private String DateofBirth;
+	private String PersonalMobile;
+	private String PersonalEmail;
+	private String HireDate;
+	private String MaritalStatus;
+	private String Gender;
+	private String EmergencyMobile;
+	private String EmergencyName;
+	private String BloodGroup;
+	private String Nationality;
+	private String PersonalHome;
+	private String EmergencyRelatoin;
+	private String WorkEmail;
+	private String JobLocation;
 
 	
 	
-	public String getTempAddress() {
-		return tempAddress;
+	
+	public String getDateofBirth() {
+		return DateofBirth;
 	}
-	public void setTempAddress(String tempAddress) {
-		this.tempAddress = tempAddress;
+	public void setDateofBirth(String dateofBirth) {
+		DateofBirth = dateofBirth;
+	}
+	public String getPersonalMobile() {
+		return PersonalMobile;
+	}
+	public void setPersonalMobile(String personalMobile) {
+		PersonalMobile = personalMobile;
+	}
+	public String getPersonalEmail() {
+		return PersonalEmail;
+	}
+	public void setPersonalEmail(String personalEmail) {
+		PersonalEmail = personalEmail;
+	}
+	public String getHireDate() {
+		return HireDate;
+	}
+	public void setHireDate(String hireDate) {
+		HireDate = hireDate;
 	}
 	public String getMaritalStatus() {
-		return maritalStatus;
+		return MaritalStatus;
 	}
 	public void setMaritalStatus(String maritalStatus) {
-		this.maritalStatus = maritalStatus;
+		MaritalStatus = maritalStatus;
 	}
 	public String getGender() {
-		return gender;
+		return Gender;
 	}
 	public void setGender(String gender) {
-		this.gender = gender;
+		Gender = gender;
 	}
-	public String getEmergencyContact() {
-		return emergencyContact;
+	public String getEmergencyMobile() {
+		return EmergencyMobile;
 	}
-	public void setEmergencyContact(String emergencyContact) {
-		this.emergencyContact = emergencyContact;
+	public void setEmergencyMobile(String emergencyMobile) {
+		EmergencyMobile = emergencyMobile;
 	}
-	public String getEmergencyContactName() {
-		return emergencyContactName;
+	public String getEmergencyName() {
+		return EmergencyName;
 	}
-	public void setEmergencyContactName(String emergencyContactName) {
-		this.emergencyContactName = emergencyContactName;
+	public void setEmergencyName(String emergencyName) {
+		EmergencyName = emergencyName;
+	}
+	public String getBloodGroup() {
+		return BloodGroup;
+	}
+	public void setBloodGroup(String bloodGroup) {
+		BloodGroup = bloodGroup;
+	}
+	public String getNationality() {
+		return Nationality;
+	}
+	public void setNationality(String nationality) {
+		Nationality = nationality;
+	}
+	public String getPersonalHome() {
+		return PersonalHome;
+	}
+	public void setPersonalHome(String personalHome) {
+		PersonalHome = personalHome;
+	}
+	public String getEmergencyRelatoin() {
+		return EmergencyRelatoin;
+	}
+	public void setEmergencyRelatoin(String emergencyRelatoin) {
+		EmergencyRelatoin = emergencyRelatoin;
+	}
+	public String getWorkEmail() {
+		return WorkEmail;
+	}
+	public void setWorkEmail(String workEmail) {
+		WorkEmail = workEmail;
+	}
+	public String getJobLocation() {
+		return JobLocation;
+	}
+	public void setJobLocation(String jobLocation) {
+		JobLocation = jobLocation;
 	}
 	public int getEmpId() {
 		return empId;
@@ -69,51 +127,14 @@ public class Employees {
 	public void setLname(String lname) {
 		this.lname = lname;
 	}
-	public String getDOB() {
-		return DOB;
-	}
-	public void setDOB(String dOB) {
-		DOB = dOB;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getPhoneNo() {
-		return phoneNo;
-	}
-	public void setPhoneNo(String phoneNo) {
-		this.phoneNo = phoneNo;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	public String getHiredate() {
-		return hiredate;
-	}
-	public void setHiredate(String hiredate) {
-		this.hiredate = hiredate;
-	}
+	
 	public int getRoleId() {
 		return roleId;
 	}
 	public void setRoleId(int roleId) {
 		this.roleId = roleId;
 	}
-	
-	
-	public String getBloodgroup() {
-		return bloodgroup;
-	}
-	public void setBloodgroup(String bloodgroup) {
-		this.bloodgroup = bloodgroup;
-	}
-	
+
 	
 	public boolean isActive() {
 		return isActive;
@@ -121,16 +142,7 @@ public class Employees {
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
-	@Override
-	public String toString() {
-		return "Employees [empId=" + empId + ", fname=" + fname + ", lname=" + lname + ", DOB=" + DOB + ", email="
-				+ email + ", phoneNo=" + phoneNo + ", address=" + address + ", hiredate=" + hiredate + ", roleId="
-				+ roleId + ", tempAddress=" + tempAddress + ", maritalStatus=" + maritalStatus + ", gender=" + gender
-				+ ", emergencyContact=" + emergencyContact + ", emergencyContactName=" + emergencyContactName
-				+ ", bloodgroup=" + bloodgroup + "]";
-	}
-	
-	
+
 	
 	
 
