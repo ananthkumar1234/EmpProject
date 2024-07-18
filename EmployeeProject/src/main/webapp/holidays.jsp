@@ -390,7 +390,7 @@ showMessage('error', 'Holiday Deleted Successfully ...');
 			<a href="leaveRequests.jsp">Leave Requests</a>
 			<%} if("HR".equals(role)) {%>
 			<a href="assignLeave.jsp">Assign Leaves</a>
-			<a href="employeeLeaves.jsp">Employee Leave List</a>
+			<a href="employeeLeaves.jsp">Employees Leaves</a>
 			<%}  if("Manager".equals(role)) {%>
 			<a href="employeeLeaves.jsp">Reportee Leave List</a>
 			<%}%>

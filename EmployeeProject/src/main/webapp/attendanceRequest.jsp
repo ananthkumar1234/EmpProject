@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	<div class="main-content">
 		<header class="header">
-			<h1>Attendace</h1>
+			<h1>Time Logs / Attendance Requests</h1>
 			<div class="user-profile">
 				<div class="user-dropdown">
 					<button class="dropbtn" id="userDropdown">

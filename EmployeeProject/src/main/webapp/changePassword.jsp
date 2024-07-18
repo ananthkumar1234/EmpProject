@@ -17,266 +17,10 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="script.js" defer></script>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="show.css">
 </head>
 <style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    transition: padding-left 0.3s ease;
-    background-color:#f5f5f5;
-}
-
-.sidebar {
-	width: 250px;
-	background-color: white;
-	height: 100vh;
-	position: fixed;
-	left: 0;
-	top: 0;
-	transition: all 0.3s ease;
-	overflow-x: hidden;
-	z-index: 1000;
-	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-	border-radius: 0 20px 20px 0;
-}
-
-.sidebar.collapsed {
-	width: 60px;
-}
-
-.logo {
-	padding: 20px;
-	border-bottom: 1px solid #e0e0e0;
-}
-
-.logo img {
-	max-width: 100%;
-	height: auto;
-}
-
-.sidebar-menu {
-	list-style-type: none;
-	padding: 0;
-	margin: 0;
-}
-
-.sidebar-menu li {
-	padding: 15px 20px;
-	transition: all 0.3s ease;
-	white-space: nowrap;
-}
-
-.sidebar-menu li:hover {
-	background-color: #f0f0f0;
-}
-
-.sidebar-menu li.active {
-	background-color: #ff8c00;
-	color: white;
-}
-
-.sidebar-menu i {
-	margin-right: 10px;
-}
-
-.sidebar.collapsed .menu-text {
-	display: none;
-}
-
-.sidebar.collapsed .sidebar-menu li {
-	text-align: center;
-}
-
-.toggle-btn {
-	position: fixed;
-	left: 230px;
-	top: 10px;
-	background: linear-gradient(to left,#FF9671 ,#FFC75F );
-	border:none;
-	border-radius: 30px;
-	padding: 10px;
-	cursor: pointer;
-	transition: all 0.3s ease;
-	z-index: 1001;
-	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.toggle-btn i {
-	display: none;
-}
-
-.toggle-btn i.show {
-	display: inline;
-}
-
-.sidebar.collapsed+.toggle-btn {
-	left: 40px;
-}
-
-.main-content {
-	flex: 1;
-	padding: 20px;
-	margin-left: 250px;
-	transition: margin-left 0.3s ease;
-}
-
-.header {
-    background: linear-gradient(to left,#FF9671 ,#FFC75F );
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.dashboard-item {
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-}
-
-.user-profile {
-    position: relative;
-}
-
-.user-dropdown {
-    display: inline-block;
-}
-
-.dropbtn {
-    background: linear-gradient(to left,#FFC75F ,#FF9671 );
-    color: white;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.dropbtn:hover, .dropbtn:focus {
-    background-color: #e67e00;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1001;
-    border-radius: 5px;
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
-
-.show {
-    display: block !important;
-}
-
-.time-at-work {
-    padding: 20px;
-}
-
-.punch-status {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.time-today {
-    background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-}
-
-.time-today .hours {
-    font-weight: bold;
-}
-
-.weekly-chart h4 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.chart-container {
-    height: 150px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-.chart-bar {
-    width: 12%;
-    background-color: #ff8c00;
-    transition: height 0.3s ease;
-}
-
-.chart-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8em;
-    color: #666;
-}
-
-@media screen and (max-width: 768px) {
-    body {
-        flex-direction: column;
-    }
-    .sidebar {
-        width: 100%;
-        height: auto;
-    }
-    .main-content {
-        margin-left: 0;
-    }
-    .toggle-btn {
-        display: none;
-    }
-}
-
-@media screen and (max-width: 600px) {
-    .user-dropdown {
-        display: block;
-        width: 100%;
-    }
-    .dropdown-content {
-        width: 100%;
-    }
-}
-
-body.sidebar-collapsed {
-    padding-left: 60px;
-}
-
-body.sidebar-collapsed .main-content {
-    margin-left: 60px;
-}
 
 .form-container {
     background-color: #ffffff;
@@ -285,6 +29,8 @@ body.sidebar-collapsed .main-content {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 94%;
+    margin-top:6%;
+    margin-left:1%;
 }
 
 h2 {
@@ -364,6 +110,59 @@ button {
 a {
     text-decoration: none;
     color:black;
+}
+
+/* css for success and error messages */
+.message-container {
+    position: fixed;
+    top: -200px; /* Move completely out of view */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 1002;
+    max-width: 90%;
+    backdrop-filter: blur(10px); /* Stronger blur effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.message-container.show {
+    top: 30px;
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.message-container.success {
+    background-color: rgba(144, 238, 144, 0.8);
+}
+
+.message-container.error {
+    background-color: rgba(220, 53, 69, 0.8);
+}
+
+.message-container p {
+    font-weight: bold;
+    margin: 8px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* More modern font */
+}
+
+.message-container p:first-child {
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.message-container i {
+    font-size: 24px;
+    margin-right: 10px;
+    vertical-align: middle;
 }
 
 </style>
@@ -451,12 +250,58 @@ a {
         </div>
     </div>
     
-    <script type="text/javascript">
+    <script>
     
     function redirectToDash(){
     	window.location.href = "dashboard.jsp"; 
     }
     
+    
+ // Displaying messages for different scenarios
+
+	window.onload = function() {
+	<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> 
+	showMessage('error', 'Something Went Wrong!');
+	<% } 
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("pwdSaved")){%> 
+	showMessage('success', 'password changed successfully...!');
+	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("pwdMisMatch")){%> 
+	showMessage('error', 'password does not matched !!!');
+	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("oldPwdMisMatch")){%> 
+	showMessage('error', 'current password does not matched !!!');
+	<%}%>}
+    
+
+ // new js function to display messages
+    function showMessage(type, message) {
+        const messageContainer = document.getElementById('message-container');
+        const messageText = document.getElementById('message-text');
+        const messageIcon = document.getElementById('message-icon');
+
+        messageContainer.classList.remove('success', 'error', 'show');
+        messageContainer.classList.add(type);
+        messageText.textContent = message;
+        messageIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+
+        messageContainer.classList.add('show');
+        setTimeout(() => {
+            messageContainer.classList.remove('show');
+        }, 4000);
+    }
+
+    // Usage examples:
+    // showMessage('success', 'Leave Applied Successfully...');
+    // showMessage('error', 'Something Went Wrong!');
+
     </script>
+
+    <div id="message-container" class="message-container">
+        <span id="message-icon"></span>
+        <p id="message-text"></p>
+    </div>
+    
+    
 </body>
 </html>

@@ -35,25 +35,36 @@ public class ChangePasswordServlet extends HttpServlet {
 //            eDao.updatePwd(emp.getEmpId(), hashPwd);
             if(eDao.validateUserPassword(username, currentPassword))
             {
-            	System.out.println("uname and oldpwd validated!!!");
+//            	System.out.println("uname and oldpwd validated!!!");
             if(newPassword.equals(confirmPassword))
     		{
     			String hashPwd = BCrypt.hashpw(confirmPassword, BCrypt.gensalt());
-    			System.out.println("pwd encrypted!!!");
+//    			System.out.println("pwd encrypted!!!");
     			eDao.updatePwd(emp.getEmpId(), hashPwd);
-    			
-            resp.sendRedirect("dashboard.jsp?message=password changed successfully");
+//    			System.out.println("pwd chenged");
+    			req.setAttribute("msg", "pwdSaved");
+    			req.getRequestDispatcher("dashboard.jsp").forward(req, resp);
+//            resp.sendRedirect("dashboard.jsp?message=password changed successfully");
     		}else
     		{
-                resp.sendRedirect("changePassword.jsp?message=password doesn't match!!");
+//    			System.out.println("pwdmis match");
+    			req.setAttribute("msg", "pwdMisMatch");
+    			req.getRequestDispatcher("changePassword.jsp").forward(req, resp);
+//                resp.sendRedirect("changePassword.jsp?message=password doesn't match!!");
 
     		}
             }else
             {
-            	resp.sendRedirect("changePassword.jsp?message=oldPassword doesn't match!!");
+//            	System.out.println("old pwd mis match");
+            	req.setAttribute("msg", "oldPwdMisMatch");
+    			req.getRequestDispatcher("changePassword.jsp").forward(req, resp);
+//            	resp.sendRedirect("changePassword.jsp?message=oldPassword doesn't match!!");
             }
 		}catch(Exception e1)
 		{
+//			System.out.println("error");
+			req.setAttribute("msg", "Error");
+			req.getRequestDispatcher("changePassword.jsp").forward(req, resp);
 			e1.printStackTrace();
 		}
 	

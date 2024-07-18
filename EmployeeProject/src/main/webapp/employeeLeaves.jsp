@@ -33,7 +33,7 @@
 	max-width: 1200px;
 	margin: 0 auto;
 	margin-top: 12%;
-    margin-left:20px;
+	margin-left: 20px;
 }
 
 .leave-table {
@@ -95,8 +95,6 @@
 	}
 }
 /* table css ends*/
-
-
 .filter {
 	align-items: center;
 	margin: 10px;
@@ -161,21 +159,33 @@ form .form-button {
 	
 	
 	
+	//to highlight the active tabs(anchor tag links) 
+
 	document.addEventListener("DOMContentLoaded", function() {
-	    var currentPage = window.location.pathname.split("/").pop();
-	    
-	    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
-	    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
-	    
-	    if (leavePages.includes(currentPage)) {
-	        document.querySelector(".activeLeave").classList.add("active");
-	    } else if (timePages.includes(currentPage)) {
-	        document.querySelector(".activeAttendance").classList.add("active");
-	    }
-	    else{
-	            document.querySelector(".activeDashboard").classList.add("active");
-	    }
-	});
+		    var currentPage = window.location.pathname.split("/").pop();
+		    var targetPage = "myLeaves.jsp";
+		    
+		    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
+		    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
+			var peoplePages = ["employees.jsp","addEmployee.jsp"];
+			var profilePage = ["profile.jsp"];
+		    
+		    if (leavePages.includes(currentPage)) {
+		        document.querySelector(".activeLeave").classList.add("active");
+		    } else if (timePages.includes(currentPage)) {
+		        document.querySelector(".activeAttendance").classList.add("active");
+		    } else if (peoplePages.includes(currentPage)) {
+			    document.querySelector(".activePeople").classList.add("active");
+			} else if (profilePage.includes(currentPage)) {
+			    document.querySelector(".activeProfile").classList.add("active");
+			}else if (currentPage === "filterLeave" || currentPage === "filterLeaveBy") {
+			    targetPage = "myLeaves.jsp";
+			    document.querySelector(".activeLeave").classList.add("active");
+			}
+		    else{
+				document.querySelector(".activeDashboard").classList.add("active");
+		    }
+		});
 </script>
 
 <body>
@@ -209,20 +219,26 @@ form .form-button {
 
 
 	<div class="sidebar" id="sidebar">
-		<div class="logo">
-			
-		</div>
+		<div class="logo"></div>
 		<ul class="sidebar-menu">
-        <li class="activeDashboard"><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
-        
-		<%if(role.equals("HR") || role.equals("Manager")) { %>
-        <li class="activePeople"><a href="employees.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> People</span></a></li>
-        <%}%>        
-        
-        <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
-        <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
-        <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
-    </ul>
+			<li class="activeDashboard"><a href="dashboard.jsp"
+				id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span
+					class="menu-text"> Dashboard</span></a></li>
+
+			<%if(role.equals("HR") || role.equals("Manager")) { %>
+			<li class="activePeople"><a href="employees.jsp" id="pim-link"><i
+					class="fas fa-users"></i><span class="menu-text"> People</span></a></li>
+			<%}%>
+
+			<li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i
+					class="fas fa-calendar-alt"></i><span class="menu-text">
+						Leave</span></a></li>
+			<li class="activeAttendance"><a href="attendance.jsp"
+				id="time-link"><i class="fas fa-clock"></i><span
+					class="menu-text"> Time Logs</span></a></li>
+			<li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i
+					class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+		</ul>
 	</div>
 
 	<button id="toggleSidebar" class="toggle-btn">
@@ -252,8 +268,8 @@ form .form-button {
 			<%
 			if ("HR".equals(role) || "Manager".equals(role)) {
 			%>
-			<a href="applyLeaveFor.jsp">Apply Leave For</a>
-			<a href="leaveRequests.jsp">Leave Requests</a>
+			<a href="applyLeaveFor.jsp">Apply Leave For</a> <a
+				href="leaveRequests.jsp">Leave Requests</a>
 			<%
 			}
 			if ("HR".equals(role)) {
@@ -280,8 +296,8 @@ form .form-button {
 			<div class="filter">
 				<form action="filterLeaveBy" method="post">
 					<div class="form-container">
-						<label for="employeeid">Employee Name*</label> 
-						<select id="empid" name="empid" required>
+						<label for="employeeid">Employee Name*</label> <select id="empid"
+							name="empid" required>
 							<option value="">Select Employee</option>
 							<%
 							for (Employees r : employees) {
@@ -343,6 +359,7 @@ form .form-button {
 
 
 			<table class="leave-table">
+			<%if(leaves!=null) {%>
 				<thead>
 					<tr>
 						<th>From Date</th>
@@ -353,11 +370,9 @@ form .form-button {
 						<th>Actions</th>
 					</tr>
 				</thead>
+				
 				<tbody>
 					<%
-					if (leaves == null) {
-						leaves = empDao.getEmployeeLeaves(emp.getEmpId());
-					}
 
 					for (Leaves lev : leaves) {
 					%>
@@ -370,8 +385,7 @@ form .form-button {
 						<td>
 							<%
 							if ("Pending".equals(lev.getLeaveStatus())) {
-							%> <a
-							href="cancel?id=<%=lev.getLeaveId()%>" class="cancel-btn">Cancel</a>
+							%> <a href="cancel?id=<%=lev.getLeaveId()%>" class="cancel-btn">Cancel</a>
 							<%
 							}
 							%>
@@ -381,6 +395,20 @@ form .form-button {
 					}
 					%>
 				</tbody>
+				<%} else { %>
+				<thead>
+					<tr>
+						<th>Table Actions</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<tr>
+						<td><%="Select employee from dropdown to view Data !!!"%></td>
+					</tr>
+					
+				</tbody>
+				<%} %>
 			</table>
 
 		</div>

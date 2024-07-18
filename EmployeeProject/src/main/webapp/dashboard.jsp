@@ -313,6 +313,8 @@ input[type="submit"]:hover
         String role = (String)sess.getAttribute("role");
         //String msg = (String)request.getAttribute("msg");
         
+        
+        // list of records to display pending leaves to HR and Manager
         List<Leaves> list2=null;
         if(sess.getAttribute("role").equals("HR"))
         {
@@ -320,6 +322,15 @@ input[type="submit"]:hover
         }else if(sess.getAttribute("role").equals("Manager"))
         {
         list2 = empDao.getMgrPendingLeaves(emp.getEmpId());
+        }
+        
+        
+        // list of records to display attendance requests to HR and Manager
+        List<Attendance> list4=null;
+        if(role.equals("Manager")){
+    		list4=empDao.ManagerAttendance(emp.getEmpId());
+        }else{
+    	list4=empDao.HRAttendance();
         }
         
     %>
@@ -464,7 +475,7 @@ input[type="submit"]:hover
 			</div>
 			
 			<div class="dashboard-item">
-    <h3>Quick Launch</h3>
+    <h3><i class="fa fa-bolt" aria-hidden="true"></i> Quick Launch</h3>
     <hr>
     <div class="quick-launch-grid">
       
@@ -535,9 +546,10 @@ input[type="submit"]:hover
 
 			<div class="dashboard-item">
 				<h3>
-					<i class="fas fa-calendar-alt"></i> Notifications
+					<i class="fa fa-bell" aria-hidden="true"></i> Notifications
 				</h3>
 				<hr>
+				<h4>Leaves</h4>
 				<%
 				for(Leaves lev:list2){
 				%>
@@ -547,7 +559,18 @@ input[type="submit"]:hover
 					</div>
 				</div>
 				<%} %>
-
+				<h4>Attendance</h4>
+				
+				<%
+				for(Attendance attend:list4){
+				%>
+				
+				<div class="notification">
+					<div class="notifrow">
+						<a href="attendanceRequest.jsp"><span class="notifvalue"><%= attend.getName()%></span> : has requested attendance update.</a> 
+					</div>
+				</div>
+				<%} %>
 			</div>
 			<%} %>
 			
@@ -622,6 +645,9 @@ input[type="submit"]:hover
 	<%}
 	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("logout")){%> 
 	showMessage('success', 'logged out !!!');
+	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("pwdSaved")){%> 
+	showMessage('success', 'Password changed successfully.... !!!');
 	<%}%>}
 	
 	

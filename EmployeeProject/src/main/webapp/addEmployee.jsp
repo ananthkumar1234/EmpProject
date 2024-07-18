@@ -153,6 +153,7 @@ body.sidebar-collapsed .peopleLinks {
             border: 1px solid #ddd;
             border-radius: 10px;
             box-sizing: border-box;
+            background-color:#f0f0f0;
         }
    
   .form-row.checkbox-row {

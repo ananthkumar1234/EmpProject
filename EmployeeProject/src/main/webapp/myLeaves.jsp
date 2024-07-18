@@ -311,7 +311,7 @@ showMessage('success', 'Applied Leave has been cancelled !!!');
 			<a href="leaveRequests.jsp">Leave Requests</a>
 			<%} if("HR".equals(role)) {%>
 			<a href="assignLeave.jsp">Assign Leaves</a>
-			<a href="employeeLeaves.jsp">Employee Leave List</a>
+			<a href="employeeLeaves.jsp">Employees Leaves</a>
 			<%}  if("Manager".equals(role)) {%>
 			<a href="employeeLeaves.jsp">Reportee Leave List</a>
 			<%}%>
@@ -420,6 +420,35 @@ showMessage('success', 'Applied Leave has been cancelled !!!');
 </div>
 </div>
 <script>
+
+
+//to highlight the active tabs(anchor tag links) 
+
+document.addEventListener("DOMContentLoaded", function() {
+	    var currentPage = window.location.pathname.split("/").pop();
+	    var targetPage = "myLeaves.jsp";
+	    
+	    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
+	    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
+		var peoplePages = ["employees.jsp","addEmployee.jsp"];
+		var profilePage = ["profile.jsp"];
+	    
+	    if (leavePages.includes(currentPage)) {
+	        document.querySelector(".activeLeave").classList.add("active");
+	    } else if (timePages.includes(currentPage)) {
+	        document.querySelector(".activeAttendance").classList.add("active");
+	    } else if (peoplePages.includes(currentPage)) {
+		    document.querySelector(".activePeople").classList.add("active");
+		} else if (profilePage.includes(currentPage)) {
+		    document.querySelector(".activeProfile").classList.add("active");
+		}else if (currentPage === "filterLeave" || currentPage === "filterLeaveBy") {
+		    targetPage = "myLeaves.jsp";
+		    document.querySelector(".activeLeave").classList.add("active");
+		}
+	    else{
+			document.querySelector(".activeDashboard").classList.add("active");
+	    }
+	});
 
 function toggleDetails(leaveId) {
     var detailsRow = document.getElementById('details-' + leaveId);

@@ -186,6 +186,28 @@ form .form-container {
 	background-color: #7cb342;
 }
 
+.edit-btn i {
+  font-size:25px;
+  color: #ffcc80;
+  cursor: pointer;
+  font-weight: bold;
+  border:1px solid white;
+  border-radius:10px;
+  padding:5px;
+}
+.delete-btn i{
+ font-size:27px;
+  color: #ff8a65;
+  cursor: pointer;
+  font-weight: bold;
+  border:1px solid white;
+  border-radius:10px;
+  padding:5px;
+}
+.edit-btn i:hover, .delete-btn i:hover
+{
+background-color:white;
+}
 
 </style>
 
@@ -256,9 +278,14 @@ form .form-container {
 						<label for="JobTitle">Role</label> 
 						 <select id="JobTitle" name="JobTitle">
                             <option value="">Select Job Title</option>
-                            <% for (Roles r : JobTitle) { %>
-                            <option value="<%= r.getRoleId() %>"><%= r.getRoleName() %></option>
-                            <% } %>
+        <% 
+        String selectedRoleId = request.getParameter("JobTitle");
+        for (Roles r : JobTitle) { 
+            String roleId = String.valueOf(r.getRoleId());
+            String selected = roleId.equals(selectedRoleId) ? "selected" : "";
+        %>
+        <option value="<%= roleId %>" <%= selected %>><%= r.getRoleName() %></option>
+        <% } %>
                         </select>
                         <input type="text" id="name" name="name" placeholder="Search by name" value="<%= request.getParameter("name") != null ? request.getParameter("name") : "" %>">
 					</div>
@@ -276,6 +303,7 @@ form .form-container {
     <thead>
         <tr>
             <th>Full Name</th>
+            <th>Actions</th>
 
         </tr>
     </thead>
@@ -292,6 +320,12 @@ form .form-container {
         for (Employees emp2 : employees) { %>
             <tr>
                 <td><%= emp2.getFname() %> <%= emp2.getLname() %></td>
+                <td>
+                
+				<a href="editEmployee?id=<%= emp2.getEmpId() %>" class="edit-btn"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a href="deleteEmployee?id=<%= emp2.getEmpId() %>" class="delete-btn"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                
+                </td>
 
             </tr>
         <% } %>
@@ -305,27 +339,33 @@ form .form-container {
 	
 	<script>
 	
+	//to highlight the active tabs(anchor tag links) 
+
 	document.addEventListener("DOMContentLoaded", function() {
-	    var currentPage = window.location.pathname.split("/").pop();
-	    
-	    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
-	    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
-		var peoplePages = ["employees.jsp","addEmployee.jsp"];
-		var profilePage = ["profile.jsp"];
-	    
-	    if (leavePages.includes(currentPage)) {
-	        document.querySelector(".activeLeave").classList.add("active");
-	    } else if (timePages.includes(currentPage)) {
-	        document.querySelector(".activeAttendance").classList.add("active");
-	    } else if (peoplePages.includes(currentPage)) {
-		    document.querySelector(".activePeople").classList.add("active");
-		} else if (profilePage.includes(currentPage)) {
-		    document.querySelector(".activeProfile").classList.add("active");
-		}
-	    else{
-			document.querySelector(".activeDashboard").classList.add("active");
-	    }
-	});
+		    var currentPage = window.location.pathname.split("/").pop();
+		    var targetPage = "employees.jsp";
+		    
+		    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
+		    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
+			var peoplePages = ["employees.jsp","addEmployee.jsp"];
+			var profilePage = ["profile.jsp"];
+		    
+		    if (leavePages.includes(currentPage)) {
+		        document.querySelector(".activeLeave").classList.add("active");
+		    } else if (timePages.includes(currentPage)) {
+		        document.querySelector(".activeAttendance").classList.add("active");
+		    } else if (peoplePages.includes(currentPage)) {
+			    document.querySelector(".activePeople").classList.add("active");
+			} else if (profilePage.includes(currentPage)) {
+			    document.querySelector(".activeProfile").classList.add("active");
+			}else if (currentPage === "EmployeeFilter") {
+			    targetPage = "employees.jsp";
+			    document.querySelector(".activePeople").classList.add("active");
+			}
+		    else{
+				document.querySelector(".activeDashboard").classList.add("active");
+		    }
+		});
 	
 	</script>
 

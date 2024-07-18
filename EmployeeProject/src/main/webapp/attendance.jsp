@@ -27,23 +27,24 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="script.js" defer></script>
+
+<link rel="stylesheet"
+	href="https://npmcdn.com/flatpickr/dist/flatpickr.min.css">
+<script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
 </head>
 <style>
 
 /*====================================table starts========================================*/
-@media (max-width: 768px) {
-  .leave-table {
-    font-size: 14px;
-  }
-  
-  .leave-table th,
-  .leave-table td {
-    padding: 2px 2px;
-  }
- }
- 
- 
- /* table css starts*/
+@media ( max-width : 768px) {
+	.leave-table {
+		font-size: 14px;
+	}
+	.leave-table th, .leave-table td {
+		padding: 2px 2px;
+	}
+}
+
+/* table css starts*/
 .table-container {
 	background-color: #ffffff;
 	border-radius: 8px;
@@ -54,66 +55,61 @@
 	margin-left: 2%;
 	transition: width 0.3s ease, margin-left 0.3s ease;
 }
+
 .leave-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 15px;
-  
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0 15px;
 }
 
-
 .leave-table th {
-  text-align: left;
-  padding: 10px 15px;
-  color: black;
-  font-weight: normal;
-  border-bottom: 1px solid #e0e0e0;
-  background-color:#c0c0c0;
-  font-weight:bold;
-
-  
+	text-align: left;
+	padding: 10px 15px;
+	color: black;
+	font-weight: normal;
+	border-bottom: 1px solid #e0e0e0;
+	background-color: #c0c0c0;
+	font-weight: bold;
 }
 
 .leave-table td {
-  padding: 15px;
-  background-color: #f5f5f5;
+	padding: 15px;
+	background-color: #f5f5f5;
 }
 
 .leave-table tbody tr {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  border-radius: 20px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+	border-radius: 20px;
 }
 
 .leave-table tbody tr td:first-child {
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
+	border-top-left-radius: 20px;
+	border-bottom-left-radius: 20px;
 }
 
 .leave-table tbody tr td:last-child {
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
 }
 
-.leave-table button
-{
- background-color: #ff8a65;
-    color: white;
-    border: none;
-    padding: 10px 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    width:90%;
+.leave-table button {
+	background-color: #ff8a65;
+	color: white;
+	border: none;
+	padding: 10px 10px;
+	font-size: 16px;
+	border-radius: 5px;
+	cursor: pointer;
+	width: 90%;
 }
 
 /*==============================table css ends=================================================*/
 
 /*========================================poup css starts==================================*/
-
 .popup {
 	display: none;
 	position: fixed;
-	z-index:1002;
+	z-index: 1002;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
@@ -222,6 +218,43 @@
 	background-color: #ff8a65;
 }
 
+.filter-form {
+	display:flex;
+	margin: 10px;
+	padding: 10px;
+}
+.filter-group
+{
+padding:5px;
+margin-right:10px;
+}
+
+.filter-group input[type="text"],
+.filter-group select {
+    width: 120px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.filter-group button
+{
+margin-left:50%;
+}
+.apply-btn{
+    background-color: #8bc34a;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    white-space: nowrap;
+}
+
+.apply-btn:hover {
+    background-color: #7cb342;
+}
 /* =============================================popup css ends======================================*/
 
 /* css for success and error messages */
@@ -276,11 +309,16 @@
 	margin-right: 10px;
 	vertical-align: middle;
 }
-
-
 </style>
 
-<script >
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+    flatpickr("#fromDate", {
+    });
+    flatpickr("#toDate", {
+    });
+});
 
 window.onload = function() {
 	toggleMonthDropdown(); // Initial check
@@ -291,21 +329,33 @@ document.getElementById("myPopup").style.display = "block";
 }
 
 
+//to highlight the active tabs(anchor tag links) 
+
 document.addEventListener("DOMContentLoaded", function() {
-    var currentPage = window.location.pathname.split("/").pop();
-    
-    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
-    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
-    
-    if (leavePages.includes(currentPage)) {
-        document.querySelector(".activeLeave").classList.add("active");
-    } else if (timePages.includes(currentPage)) {
-        document.querySelector(".activeAttendance").classList.add("active");
-    }
-    else{
-            document.querySelector(".activeDashboard").classList.add("active");
-    }
-});
+	    var currentPage = window.location.pathname.split("/").pop();
+	    var targetPage = "attendance.jsp";
+	    
+	    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
+	    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
+		var peoplePages = ["employees.jsp","addEmployee.jsp"];
+		var profilePage = ["profile.jsp"];
+	    
+	    if (leavePages.includes(currentPage)) {
+	        document.querySelector(".activeLeave").classList.add("active");
+	    } else if (timePages.includes(currentPage)) {
+	        document.querySelector(".activeAttendance").classList.add("active");
+	    } else if (peoplePages.includes(currentPage)) {
+		    document.querySelector(".activePeople").classList.add("active");
+		} else if (profilePage.includes(currentPage)) {
+		    document.querySelector(".activeProfile").classList.add("active");
+		}else if (currentPage === "filterAttendance") {
+		    targetPage = "attendance.jsp";
+		    document.querySelector(".activeAttendance").classList.add("active");
+		}
+	    else{
+			document.querySelector(".activeDashboard").classList.add("active");
+	    }
+	});
 
 
 function openPopup() {
@@ -350,21 +400,27 @@ function closePopup(popupId) {
     %>
 
 	<div class="sidebar" id="sidebar">
-    <div class="logo">
-        
-    </div>
-    <ul class="sidebar-menu">
-        <li class="activeDashboard"><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
-        
-		<%if(role.equals("HR") || role.equals("Manager")) { %>
-        <li class="activePeople"><a href="employees.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> People</span></a></li>
-        <%}%>        
-        
-        <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
-        <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
-        <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
-    </ul>
-</div>
+		<div class="logo"></div>
+		<ul class="sidebar-menu">
+			<li class="activeDashboard"><a href="dashboard.jsp"
+				id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span
+					class="menu-text"> Dashboard</span></a></li>
+
+			<%if(role.equals("HR") || role.equals("Manager")) { %>
+			<li class="activePeople"><a href="employees.jsp" id="pim-link"><i
+					class="fas fa-users"></i><span class="menu-text"> People</span></a></li>
+			<%}%>
+
+			<li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i
+					class="fas fa-calendar-alt"></i><span class="menu-text">
+						Leave</span></a></li>
+			<li class="activeAttendance"><a href="attendance.jsp"
+				id="time-link"><i class="fas fa-clock"></i><span
+					class="menu-text"> Time Logs</span></a></li>
+			<li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i
+					class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+		</ul>
+	</div>
 
 
 	<button id="toggleSidebar" class="toggle-btn">
@@ -374,7 +430,7 @@ function closePopup(popupId) {
 
 	<div class="main-content">
 		<header class="header">
-			<h1>Attendace</h1>
+			<h1>Time Logs / Attendance</h1>
 			<div class="user-profile">
 				<div class="user-dropdown">
 					<button class="dropbtn" id="userDropdown">
@@ -390,30 +446,89 @@ function closePopup(popupId) {
 		</header>
 		Hello guru!
 		<div class="attendLinks">
-		
-			<a href="attendance.jsp">Attendance Records List</a> 
+
+			<a href="attendance.jsp">Attendance Records List</a>
 			<%if("HR".equals(role) || "Manager".equals(role)){ %>
-			<a href="attendanceRequest.jsp">Attendance Update Requests</a> 
+			<a href="attendanceRequest.jsp">Attendance Update Requests</a>
 			<%} %>
 		</div>
-		
+
 		<div class="table-container">
-		<h2>Attendance Records</h2>
-		<hr>
-		<table class="leave-table">
-		
-						<thead>
-							<tr>
-								<th>Date</th>
-								<th>Check In Time</th>
-								<th>Check Out Time</th>
-								<th>Total Hours</th>
-								<th>Remarks</th>
-								<th>Request Update</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
+			<h2>Attendance Records</h2>
+			<hr>
+
+			<div class="filter">
+				<form action="filterAttendance" method="post" class="filter-form">
+					<input type="hidden" name="id" value="<%=emp.getEmpId()%>">
+					<input type="hidden" name="origin" value="attendance"> 
+					<div class="filter-group">
+					<label for="year">Year:</label> 
+					<input type="text" id="year" name="year" onkeyup="toggleMonthDropdown()" value="<%=request.getParameter("year") != null ? request.getParameter("year") : ""%>">
+					</div>
+					
+					<div class="filter-group">
+					<label for="month">Month:</label> <select id="month" name="month">
+						<option value=""
+							<%= "".equals(request.getParameter("month")) ? "selected" : "" %>>Select
+							Month</option>
+						<option value="01"
+							<%= "01".equals(request.getParameter("month")) ? "selected" : "" %>>January</option>
+						<option value="02"
+							<%= "02".equals(request.getParameter("month")) ? "selected" : "" %>>February</option>
+						<option value="03"
+							<%= "03".equals(request.getParameter("month")) ? "selected" : "" %>>March</option>
+						<option value="04"
+							<%= "04".equals(request.getParameter("month")) ? "selected" : "" %>>April</option>
+						<option value="05"
+							<%= "05".equals(request.getParameter("month")) ? "selected" : "" %>>May</option>
+						<option value="06"
+							<%= "06".equals(request.getParameter("month")) ? "selected" : "" %>>June</option>
+						<option value="07"
+							<%= "07".equals(request.getParameter("month")) ? "selected" : "" %>>July</option>
+						<option value="08"
+							<%= "08".equals(request.getParameter("month")) ? "selected" : "" %>>August</option>
+						<option value="09"
+							<%= "09".equals(request.getParameter("month")) ? "selected" : "" %>>September</option>
+						<option value="10"
+							<%= "10".equals(request.getParameter("month")) ? "selected" : "" %>>October</option>
+						<option value="11"
+							<%= "11".equals(request.getParameter("month")) ? "selected" : "" %>>November</option>
+						<option value="12"
+							<%= "12".equals(request.getParameter("month")) ? "selected" : "" %>>December</option>
+					</select>
+					</div>
+					
+					<div class="filter-group">
+					<label for="fromDate">FromDate:</label>
+            		<input type="text" id="fromDate" name="fromDate" value="<%= request.getParameter("fromDate") != null ? request.getParameter("fromDate") : "" %>">
+					</div>
+					
+					<div class="filter-group">
+					<label for="toDate">ToDate:</label>
+          		    <input type="text" id="toDate" name="toDate" value="<%= request.getParameter("toDate") != null ? request.getParameter("toDate") : "" %>">
+					</div>
+					
+					<div class="filter-group">
+					<button type="submit" class="apply-btn">Filter</button>
+					</div>
+					
+					
+				</form>
+			</div>
+			<table class="leave-table">
+
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Check In Time</th>
+						<th>Check Out Time</th>
+						<th>Total Hours</th>
+						<th>Remarks</th>
+						<th>Request Update</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%
 							if (attendanceList == null) {
 								attendanceList = empDao.getAttRecordById(emp.getEmpId());
 							}
@@ -421,12 +536,12 @@ function closePopup(popupId) {
 								boolean highlightRow = (attendance.getCheckin() != null && attendance.getCheckout() == null)
 								&& (LocalDate.now().isAfter(LocalDate.parse(attendance.getDate(), formatter)));
 							%>
-							<tr <%=highlightRow ? "style='background-color: #949494;'" : ""%>>
-								<td><%=attendance.getDate()%></td>
-								<td><%=attendance.getCheckin()%></td>
-								<td><%=attendance.getCheckout()%></td>
-								<td>
-									<%
+					<tr <%=highlightRow ? "style='background-color: #949494;'" : ""%>>
+						<td><%=attendance.getDate()%></td>
+						<td><%=attendance.getCheckin()%></td>
+						<td><%=attendance.getCheckout()%></td>
+						<td>
+							<%
 									if (attendance.getCheckin() != null && attendance.getCheckout() != null) {
 										try {
 											LocalTime st = LocalTime.parse(attendance.getCheckin());
@@ -445,74 +560,73 @@ function closePopup(popupId) {
 										out.print("-");
 									}
 									%>
-								</td>
-								<td>
-									<%
+						</td>
+						<td>
+							<%
 									if (attendance.getRemarks() == null)
 										out.print("-");
 									else
 										out.print(attendance.getRemarks());
 									%>
-								</td>
+						</td>
 
-								<td>
-									<%
+						<td>
+							<%
 									if (attendance.isButtonClicked() == 0 && 
 								    !("Weekend".equals(attendance.getRemarks()) || 
 								      "Holiday".equals(attendance.getRemarks()) || 
 								      "Leave".equals(attendance.getRemarks()))) {
 									%>
-									<button
-										onclick="openPopup2('<%=attendance.getAttendId()%>', '<%=attendance.getDate()%>', '<%=attendance.getCheckin()%>', '<%=attendance.getCheckout()%>')">Request Update</button> 
-										<% } else {
+							<button
+								onclick="openPopup2('<%=attendance.getAttendId()%>', '<%=attendance.getDate()%>', '<%=attendance.getCheckin()%>', '<%=attendance.getCheckout()%>')">Request
+								Update</button> <% } else {
 											 out.print("-");
 										 }
 										 %>
 
-								</td>
-							</tr>
-							<%
+						</td>
+					</tr>
+					<%
 							}
 							%>
-						</tbody>
-					</table>
-					</div>
-					
-					
-					<!-- Attendance Update Popup -->
-					<div id="myPopup2" class="popup">
-						<span class="close-btn" onclick="closePopup('myPopup2')">&times;</span>
-						<h2>Update Attendance</h2>
-						<form action="requestUpdate" method="get" class="PopupForm">
-							<label for="attenId"></label> 
-							<input type="hidden" id="attenId" name="attenId"> 
-							<input type="hidden" name="empName" value="<%=empName%>"> 
-							<label for="date">Date:</label> 
-							<input type="text" id="date" name="date" readonly> 
-							<label for="cit">Check In Time:</label> 
-							<input type="text" id="cit" name="cit" placeholder="HH:MM:SS (24hr)"> 
-							<label for="cot">Check Out Time:</label> 
-							<input type="text" id="cot" name="cot" placeholder="HH:MM:SS (24hr)"> 
-							<input type="submit" value="Request">
-						</form>
-					</div>
+				</tbody>
+			</table>
+		</div>
 
-					<!-- General Notification Popup -->
-					<div id="myPopup" class="popup">
-						<span class="close-btn" onclick="closePopup('myPopup')">&times;</span>
-						<h2>Warning!</h2>
-						<form action="insertYES" method="post">
-							<input type="hidden" name="eid" value="<%= emp.getEmpId()%>"> <input
-								type="hidden" name="leaveid" id="leaveid">
-							<div class="warning">
-								<h5>Today it's not a working day (Holiday!)</h5>
-							</div>
-							<div class="msg">Are you sure you want to login?</div>
-							<div>
-								<input type="submit" value="Proceed to login" name="yes">
-							</div>
-						</form>
-					</div>
+
+		<!-- Attendance Update Popup -->
+		<div id="myPopup2" class="popup">
+			<span class="close-btn" onclick="closePopup('myPopup2')">&times;</span>
+			<h2>Update Attendance</h2>
+			<form action="requestUpdate" method="get" class="PopupForm">
+				<label for="attenId"></label> <input type="hidden" id="attenId"
+					name="attenId"> <input type="hidden" name="empName"
+					value="<%=empName%>"> <label for="date">Date:</label> <input
+					type="text" id="date" name="date" readonly> <label
+					for="cit">Check In Time:</label> <input type="text" id="cit"
+					name="cit" placeholder="HH:MM:SS (24hr)"> <label for="cot">Check
+					Out Time:</label> <input type="text" id="cot" name="cot"
+					placeholder="HH:MM:SS (24hr)"> <input type="submit"
+					value="Request">
+			</form>
+		</div>
+
+		<!-- General Notification Popup -->
+		<div id="myPopup" class="popup">
+			<span class="close-btn" onclick="closePopup('myPopup')">&times;</span>
+			<h2>Warning!</h2>
+			<form action="insertYES" method="post">
+				<input type="hidden" name="eid" value="<%= emp.getEmpId()%>">
+				<input type="hidden" name="leaveid" id="leaveid">
+				<div class="warning">
+					<h5>Today it's not a working day (Holiday!)</h5>
+				</div>
+				<div class="msg">Are you sure you want to login?</div>
+				<div>
+					<input type="submit" value="Proceed to login" name="yes">
+				</div>
+			</form>
+		</div>
 	</div>
 	<script type="text/javascript">
 	// Get the current page name from the URL (assuming filenames match)
@@ -575,6 +689,6 @@ function showMessage(type, message) {
 		<span id="message-icon"></span>
 		<p id="message-text"></p>
 	</div>
-	
+
 </body>
 </html>
