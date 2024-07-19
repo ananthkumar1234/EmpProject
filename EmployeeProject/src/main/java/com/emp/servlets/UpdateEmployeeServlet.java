@@ -1,10 +1,7 @@
 package com.emp.servlets;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,27 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 import com.emp.dao.EmpDao;
-import com.emp.entities.Employees;
-import com.emp.entities.UserCredentials;
 import com.emp.entities.Address;
-
+import com.emp.entities.Employees;
 import com.emp.jdbc.DBConnect;
 
-@WebServlet("/AddEmployee")
-public class AddEmployeeServlet extends HttpServlet{
+@WebServlet("/updateEmployee")
+public class UpdateEmployeeServlet extends HttpServlet {
 
-	InputStream ns = null;
-	
+	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	
+		
+		int employeeid = Integer.parseInt(req.getParameter("employeeid"));
+		// Employees object to store one record
 		Employees e=new Employees();
 		e.setFname(req.getParameter("FirstName"));
-		
-//		System.out.println(req.getParameter("FirstName"));
-		
 		e.setLname(req.getParameter("LastName"));
 		e.setDateofBirth(req.getParameter("DateOfBirth"));
 		e.setGender(req.getParameter("Gender"));
@@ -47,17 +38,14 @@ public class AddEmployeeServlet extends HttpServlet{
 		e.setPersonalEmail(req.getParameter("PersonalEmail"));
 		e.setWorkEmail(req.getParameter("WorkEmail"));
 		e.setHireDate(req.getParameter("JoinedDate"));
-		
-			e.setRoleId(Integer.parseInt(req.getParameter("JobTitle")));
-		
+		e.setRoleId(Integer.parseInt(req.getParameter("JobTitle")));
 		e.setJobLocation(req.getParameter("Location"));
 		
+//		UserCredentials uc=new UserCredentials();
+//		uc.setUsername(req.getParameter("Username"));
+//		uc.setPassword(BCrypt.hashpw(req.getParameter("Password"), BCrypt.gensalt()));
 		
-		UserCredentials uc=new UserCredentials();
-		uc.setUsername(req.getParameter("Username"));
-		uc.setPassword(BCrypt.hashpw(req.getParameter("Password"), BCrypt.gensalt()));
-		
-		
+		// Address object to store one record
 		Address a=new Address();
 		a.setLine1(req.getParameter("PermanentStreet1"));
 		a.setLine2(req.getParameter("PermanentStreet2"));
@@ -73,43 +61,27 @@ public class AddEmployeeServlet extends HttpServlet{
 		a.setTempCountry(req.getParameter("TemporaryCountry"));
 		
 		
-		
-		try (Connection con = DBConnect.getConnection()) {
-            EmpDao eDao = new EmpDao(con);
-            String qry="Select username from user_credentials where BINARY username=?";
-            PreparedStatement ps=con.prepareStatement(qry);
-            ps.setString(1,uc.getUsername());
-            ResultSet rs=ps.executeQuery();
-            if(!rs.next())
-            {
-            boolean f=eDao.addEmployees(e,uc,a);
-            
-            	if(f) 
-            	{
-            		req.setAttribute("msg", "empInserted");
-            		req.getRequestDispatcher("employees.jsp").forward(req, resp);
-            	}
-            	else
-            	{
-            		req.setAttribute("msg", "Error2");
-            		req.getRequestDispatcher("addEmployee.jsp").forward(req, resp);
-            	}
-            }
-            else
-            {
-            	req.setAttribute("msg", "Error3");
-            	req.getRequestDispatcher("addEmployee.jsp").forward(req, resp);
-            }
-  
-            
-		}catch(Exception e1)
+		try {
+			Connection con = DBConnect.getConnection();
+			EmpDao empDao = new EmpDao(con);
+			
+			boolean f = empDao.updateEmployeeAndAddress(e, a, employeeid);
+			if(f)
+			{
+				req.setAttribute("msg", "empUpdated");
+				req.getRequestDispatcher("employees.jsp").forward(req, resp);
+			}else
+			{
+				req.setAttribute("msg", "Error");
+				req.getRequestDispatcher("editEmployee.jsp").forward(req, resp);
+			}
+			
+		}catch(Exception exp)
 		{
-			e1.printStackTrace();
+			exp.printStackTrace();
 		}
-
-		
 	}
 
-
-
+	
+	
 }

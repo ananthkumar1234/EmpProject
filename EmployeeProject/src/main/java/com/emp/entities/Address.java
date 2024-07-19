@@ -15,6 +15,14 @@ public class Address {
 	private String TempState;
 	private String TempPostalCode;
 	private String TempCountry;
+	
+	public int getEmployeeId() {
+		return EmployeeId;
+	}
+	public void setEmployeeId(int employeeId) {
+		EmployeeId = employeeId;
+	}
+	
 	public int getAddressId() {
 		return EmployeeId;
 	}

@@ -153,10 +153,9 @@ body.sidebar-collapsed .peopleLinks {
         input[type="text"], input[type="email"],input[type="Date"],input[type="password"], select {
             width: 100%;
             padding: 8px;
-            border: 1px solid #ddd;
+            border: 1.5px solid #ddd;
             border-radius: 10px;
             box-sizing: border-box;
-            background-color:#f0f0f0;
         }
    
   .form-row.checkbox-row {
@@ -203,6 +202,61 @@ body.sidebar-collapsed .peopleLinks {
 .apply-btn:hover {
     background-color: #7cb342;
 }
+
+
+/* css for success and error messages*/
+.message-container {
+    position: fixed;
+    top: -200px; /* Move completely out of view */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 1002;
+    max-width: 90%;
+    backdrop-filter: blur(10px); /* Stronger blur effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.message-container.show {
+    top: 30px;
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.message-container.success {
+    background-color: rgba(144, 238, 144, 0.8);
+}
+
+.message-container.error {
+    background-color: rgba(220, 53, 69, 0.8);
+}
+
+.message-container p {
+    font-weight: bold;
+    margin: 8px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* More modern font */
+}
+
+.message-container p:first-child {
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.message-container i {
+    font-size: 24px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
 
 </style>
 
@@ -294,11 +348,11 @@ body.sidebar-collapsed .peopleLinks {
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="FirstName">First Name</label>
+                    <label for="FirstName">First Name*</label>
                     <input type="text" id="FirstName" name="FirstName" required>
                 </div>
                 <div class="form-group">
-                    <label for="LastName">Last Name</label>
+                    <label for="LastName">Last Name*</label>
                     <input type="text" id="LastName" name="LastName" required>
                 </div>
             </div>
@@ -307,11 +361,11 @@ body.sidebar-collapsed .peopleLinks {
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="DateOfBirth">Date Of Birth</label>
+                    <label for="DateOfBirth">Date Of Birth*</label>
                     <input type="Date" id="DateOfBirth" name="DateOfBirth" required>
                 </div>
                 <div class="form-group">
-                    <label for="Gender">Gender</label>
+                    <label for="Gender">Gender*</label>
                     <select id="Gender" name="Gender" required>
                     <option value="">Select Gender</option>
                     <option value="Married">Male</option>
@@ -323,12 +377,12 @@ body.sidebar-collapsed .peopleLinks {
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="Nationality">Nationality</label>
+                    <label for="Nationality">Nationality*</label>
 					<input type="text" id="Nationality" name="Nationality" required>
 				
                 </div>
                 <div class="form-group">
-                    <label for="MaritalStatus">Marital Status</label>
+                    <label for="MaritalStatus">Marital Status*</label>
                     <select id="MaritalStatus" name="MaritalStatus" required>
                     <option value="">Select Marital Status</option>
                     <option value="Married">Married</option>
@@ -340,7 +394,7 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 
                 <div class="form-group">
-                    <label for="BloodGroup">Blood Group</label>
+                    <label for="BloodGroup">Blood Group*</label>
                     <select id="BloodGroup" name="BloodGroup" required>
                     <option value="">Select Blood Group</option>
                     <option value="O -ve">O -ve</option>
@@ -367,7 +421,7 @@ body.sidebar-collapsed .peopleLinks {
             <h3>Permanent Address</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="PermanentStreet1">Address Line 1</label>
+                    <label for="PermanentStreet1">Address Line 1*</label>
                     <input type="text" id="PermanentStreet1" name="PermanentStreet1" required>
                 </div>
                 <div class="form-group">
@@ -375,22 +429,22 @@ body.sidebar-collapsed .peopleLinks {
                     <input type="text" id="PermanentStreet2" name="PermanentStreet2">
                 </div>
                 <div class="form-group">
-                    <label for="PermanentCity">City</label>
+                    <label for="PermanentCity">City*</label>
                     <input type="text" id="PermanentCity" name="PermanentCity" required>
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="PermanentState">State</label>
+                    <label for="PermanentState">State*</label>
                     <input type="text" id="PermanentState" name="PermanentState" required>
                 </div>
                 <div class="form-group">
-                    <label for="PermanentPostalCode">Postal Code</label>
+                    <label for="PermanentPostalCode">Postal Code*</label>
                     <input type="text" id="PermanentPostalCode" name="PermanentPostalCode" required>
                 </div>
                 <div class="form-group">
-                    <label for="PermanentCity">Country</label>
+                    <label for="PermanentCity">Country*</label>
                     <input type="text" id="PermanentCountry" name="PermanentCountry" required>
                 </div>
             </div>
@@ -409,7 +463,7 @@ body.sidebar-collapsed .peopleLinks {
             	
                 <div class="form-group">
                     <label for="TemporaryStreet1">Address Line 1</label>
-                    <input type="text" id="TemporaryStreet1" name="TemporaryStreet1" required>
+                    <input type="text" id="TemporaryStreet1" name="TemporaryStreet1">
                 </div>
                 <div class="form-group">
                     <label for="TemporaryStreet2">Address Line 2</label>
@@ -417,22 +471,22 @@ body.sidebar-collapsed .peopleLinks {
                 </div>
                 <div class="form-group">
                     <label for="TemporaryCity">City</label>
-                    <input type="text" id="TemporaryCity" name="TemporaryCity" required>
+                    <input type="text" id="TemporaryCity" name="TemporaryCity">
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
                     <label for="TemporaryState">State</label>
-                    <input type="text" id="TemporaryState" name="TemporaryState" required>
+                    <input type="text" id="TemporaryState" name="TemporaryState">
                 </div>
                 <div class="form-group">
                     <label for="TemporaryPostalCode">Postal Code</label>
-                    <input type="text" id="TemporaryPostalCode" name="TemporaryPostalCode" required>
+                    <input type="text" id="TemporaryPostalCode" name="TemporaryPostalCode">
                 </div>
                 <div class="form-group">
                     <label for="TemporaryCity">Country</label>
-                    <input type="text" id="TemporaryCountry" name="TemporaryCountry" required>
+                    <input type="text" id="TemporaryCountry" name="TemporaryCountry">
                 </div>
             </div>
             
@@ -441,7 +495,7 @@ body.sidebar-collapsed .peopleLinks {
             <h3>Contact Number</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="Mobile">Mobile</label>
+                    <label for="Mobile">Mobile*</label>
                     <input type="text" id="Mobile" name="Mobile" required>
                 </div>
                 <div class="form-group">
@@ -453,15 +507,15 @@ body.sidebar-collapsed .peopleLinks {
             <h3>Emergency Contact</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="EmergencyName">Emergency Contact Name</label>
+                    <label for="EmergencyName">Emergency Contact Name*</label>
                     <input type="text" id="EmergencyName" name="EmergencyName" required>
                 </div>
                 <div class="form-group">
-                    <label for="Relation">Relation</label>
+                    <label for="Relation">Relation*</label>
                     <input type="text" id="Relation" name="Relation" required>
                 </div>
                 <div class="form-group">
-                    <label for="EmergencyMobile">Mobile</label>
+                    <label for="EmergencyMobile">Mobile*</label>
                     <input type="text" id="EmergencyMobile" name="EmergencyMobile" required>
                 </div>
             </div>
@@ -471,11 +525,11 @@ body.sidebar-collapsed .peopleLinks {
             <h3>Email</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="PersonalEmail">Personal Email</label>
+                    <label for="PersonalEmail">Personal Email*</label>
                     <input type="email" id="PersonalEmail" name="PersonalEmail" required>
                 </div>
                 <div class="form-group">
-                    <label for="WorkEmail">Work Email</label>
+                    <label for="WorkEmail">Work Email*</label>
                     <input type="email" id="WorkEmail" name="WorkEmail" required>
                 </div>
             </div>
@@ -487,7 +541,7 @@ body.sidebar-collapsed .peopleLinks {
             <hr>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="JoinedDate">Joined Date</label>
+                    <label for="JoinedDate">Joined Date*</label>
                     <input type="Date" id="JoinedDate" name="JoinedDate" required>
                 </div>
                 <div class="form-group">     
@@ -519,7 +573,7 @@ body.sidebar-collapsed .peopleLinks {
             <hr>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="Username">Username</label>
+                    <label for="Username">Username*</label>
                     <input type="text" id="Username" name="Username" required>
                 </div>
                 <div class="form-group">
@@ -529,11 +583,11 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
             
             <div class="form-group">
-                    <label for="Password">Password</label>
+                    <label for="Password">Password*</label>
                     <input type="password" id="Password" name="Password" required>
                 </div>
                 <div class="form-group">
-                    <label for="ConfirmPassword">Confirm Password</label>
+                    <label for="ConfirmPassword">Confirm Password*</label>
                     <input type="password" id="ConfirmPassword" name="ConfirmPassword" required>
                 </div>
             </div>
@@ -573,27 +627,33 @@ body.sidebar-collapsed .peopleLinks {
 		  checkInputs();
 		});
 	
+	//to highlight the active tabs(anchor tag links) 
+
 	document.addEventListener("DOMContentLoaded", function() {
-	    var currentPage = window.location.pathname.split("/").pop();
-	    
-	    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
-	    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
-		var peoplePages = ["employees.jsp","addEmployee.jsp"];
-		var profilePage = ["profile.jsp"];
-	    
-	    if (leavePages.includes(currentPage)) {
-	        document.querySelector(".activeLeave").classList.add("active");
-	    } else if (timePages.includes(currentPage)) {
-	        document.querySelector(".activeAttendance").classList.add("active");
-	    } else if (peoplePages.includes(currentPage)) {
-		    document.querySelector(".activePeople").classList.add("active");
-		} else if (profilePage.includes(currentPage)) {
-		    document.querySelector(".activeProfile").classList.add("active");
-		}
-	    else{
-			document.querySelector(".activeDashboard").classList.add("active");
-	    }
-	});
+		    var currentPage = window.location.pathname.split("/").pop();
+		    var targetPage = "employees.jsp";
+		    
+		    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
+		    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
+			var peoplePages = ["employees.jsp","addEmployee.jsp"];
+			var profilePage = ["profile.jsp"];
+		    
+		    if (leavePages.includes(currentPage)) {
+		        document.querySelector(".activeLeave").classList.add("active");
+		    } else if (timePages.includes(currentPage)) {
+		        document.querySelector(".activeAttendance").classList.add("active");
+		    } else if (peoplePages.includes(currentPage)) {
+			    document.querySelector(".activePeople").classList.add("active");
+			} else if (profilePage.includes(currentPage)) {
+			    document.querySelector(".activeProfile").classList.add("active");
+			}else if (currentPage === "EmployeeFilter" || currentPage === "deleteEmployee" || currentPage === "updateEmployee" || currentPage === "AddEmployee") {
+			    targetPage = "employees.jsp";
+			    document.querySelector(".activePeople").classList.add("active");
+			}
+		    else{
+				document.querySelector(".activeDashboard").classList.add("active");
+		    }
+		});
 	
 	
 	function showDiv(divClass) {
@@ -644,7 +704,55 @@ body.sidebar-collapsed .peopleLinks {
 	    	}); 	
 	    
 	    
-	</script>
+	  //Displaying messages for different scenarios
+
+		window.onload = function() {
+		<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> 
+		showMessage('error', 'Something Went Wrong!');
+		<% }
+		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("empInserted")){%> 
+		showMessage('success', 'New Employee Inserted !!!');
+		<%}
+		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error2")){%> 
+		showMessage('error', 'Employee not added - Ensure the details entered are correct !!!');
+		<%}
+		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error3")){%> 
+		showMessage('error', 'Username Already exists !!!');
+		<%}
+		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("empUpdated")){%> 
+		showMessage('success', 'Employee Updated !!!');
+		<%}
+		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("empDeleted")){%> 
+		showMessage('error', 'Employee Deleted !!!');
+		<%}%>}
+		
+		/*new js function to display messages*/
+		function showMessage(type, message) {
+		    const messageContainer = document.getElementById('message-container');
+		    const messageText = document.getElementById('message-text');
+		    const messageIcon = document.getElementById('message-icon');
+
+		    messageContainer.classList.remove('success', 'error', 'show');
+		    messageContainer.classList.add(type);
+		    messageText.textContent = message;
+		    messageIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+
+		    messageContainer.classList.add('show');
+		    setTimeout(() => {
+		        messageContainer.classList.remove('show');
+		    }, 4000);
+		}
+
+		// Usage examples:
+		// showMessage('success', 'Leave Applied Successfully...');
+		// showMessage('error', 'Something Went Wrong!');
+
+
+		</script>
+		<div id="message-container" class="message-container">
+		    <span id="message-icon"></span>
+		    <p id="message-text"></p>
+		</div>
 
 </body>
 </html>

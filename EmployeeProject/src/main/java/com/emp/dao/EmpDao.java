@@ -15,13 +15,14 @@ import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+import com.emp.entities.Address;
 import com.emp.entities.Attendance;
+import com.emp.entities.EmployeeFullDetails;
 import com.emp.entities.Employees;
 import com.emp.entities.Holidays;
 import com.emp.entities.Leaves;
 import com.emp.entities.Roles;
 import com.emp.entities.UserCredentials;
-import com.emp.entities.Address;
 
 public class EmpDao {
 
@@ -535,7 +536,7 @@ public class EmpDao {
 	{
 		List<Employees> l1 = new ArrayList<>();
 
-		String qry=" SELECT e.EmployeeId, e.FirstName,e.LastName,e.email,e.phone,e.gender FROM Employees e JOIN Manager m ON e.EmployeeId = m.employee WHERE m.Manager = ?";
+		String qry=" SELECT e.EmployeeId, e.FirstName,e.LastName FROM Employees e JOIN Manager m ON e.EmployeeId = m.employee WHERE m.Manager = ?";
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setInt(1, mId);
 		ResultSet rs = ps.executeQuery();
@@ -1361,6 +1362,146 @@ public class EmpDao {
 
 		return false;
 
+	}
+	
+	
+	
+	public EmployeeFullDetails getEmpFullDetails(int empid) throws SQLException
+	{
+		EmployeeFullDetails e1 = new EmployeeFullDetails();
+		
+		Employees emp = new Employees();
+		Address adr = new Address();
+		String qry = "SELECT e.*, a.* "
+				+ "FROM employees e "
+				+ "LEFT JOIN address a ON e.employeeid = a.employeeid "
+				+ "WHERE e.employeeid = ?";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1, empid);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next())
+		{
+			emp.setEmpId(rs.getInt("employeeid"));
+			emp.setFname(rs.getString("firstname"));
+			emp.setLname(rs.getString("lastname"));
+			emp.setDateofBirth(rs.getString("dateofbirth"));
+			emp.setPersonalEmail(rs.getString("personalemail"));
+			emp.setPersonalMobile(rs.getString("personalmobile"));
+			emp.setHireDate(rs.getString("hiredate"));
+			emp.setRoleId(rs.getInt("roleid"));
+			emp.setMaritalStatus(rs.getString("maritalstatus"));
+			emp.setGender(rs.getString("gender"));
+			emp.setEmergencyMobile(rs.getString("emergencymobile"));
+			emp.setEmergencyName(rs.getString("emergencyname"));
+			emp.setBloodGroup(rs.getString("bloodgroup"));
+			emp.setNationality(rs.getString("nationality"));
+			emp.setPersonalHome(rs.getString("personalhome"));
+			emp.setEmergencyRelatoin(rs.getString("emergencyrelation"));
+			emp.setWorkEmail(rs.getString("workemail"));
+			emp.setJobLocation(rs.getString("joblocation"));
+			
+			adr.setLine1(rs.getString("line1"));
+			adr.setLine2(rs.getString("line2"));
+			adr.setCity(rs.getString("city"));
+			adr.setState(rs.getString("state"));
+			adr.setPostalCode(rs.getString("postalcode"));
+			adr.setCountry(rs.getString("country"));
+			adr.setTempLine1(rs.getString("tline1"));
+			adr.setTempLine2(rs.getString("tline2"));
+			adr.setTempCity(rs.getString("tcity"));
+			adr.setTempState(rs.getString("tstate"));
+			adr.setTempPostalCode(rs.getString("tpostalcode"));
+			adr.setTempCountry(rs.getString("tcountry"));
+			e1 = new EmployeeFullDetails(emp,adr);
+			
+		}
+		return e1;
+	}
+	
+	
+	
+	public boolean updateEmployeeAndAddress(Employees emp, Address adr,int empid) throws SQLException {
+        String updateEmployeeQuery = "UPDATE employees SET firstname = ?, lastname = ?, dateofbirth = ?, personalemail = ?, " +
+                "personalmobile = ?, hiredate = ?, roleid = ?, maritalstatus = ?, gender = ?, emergencymobile = ?, " +
+                "emergencyname = ?, bloodgroup = ?, nationality = ?, personalhome = ?, emergencyrelation = ?, " +
+                "workemail = ?, joblocation = ? WHERE employeeid = ?";
+
+        String updateAddressQuery = "UPDATE address SET line1 = ?, line2 = ?, city = ?, state = ?, postalcode = ?, " +
+                "country = ?, tline1 = ?, tline2 = ?, tcity = ?, tstate = ?, tpostalcode = ?, tcountry = ? " +
+                "WHERE employeeid = ?";
+
+        try {
+            con.setAutoCommit(false);
+
+            try (PreparedStatement psEmp = con.prepareStatement(updateEmployeeQuery);
+                 PreparedStatement psAdr = con.prepareStatement(updateAddressQuery)) {
+
+                // Set parameters for employee update
+                psEmp.setString(1, emp.getFname());
+                psEmp.setString(2, emp.getLname());
+                psEmp.setString(3, emp.getDateofBirth());
+                psEmp.setString(4, emp.getPersonalEmail());
+                psEmp.setString(5, emp.getPersonalMobile());
+                psEmp.setString(6, emp.getHireDate());
+                psEmp.setInt(7, emp.getRoleId());
+                psEmp.setString(8, emp.getMaritalStatus());
+                psEmp.setString(9, emp.getGender());
+                psEmp.setString(10, emp.getEmergencyMobile());
+                psEmp.setString(11, emp.getEmergencyName());
+                psEmp.setString(12, emp.getBloodGroup());
+                psEmp.setString(13, emp.getNationality());
+                psEmp.setString(14, emp.getPersonalHome());
+                psEmp.setString(15, emp.getEmergencyRelatoin());
+                psEmp.setString(16, emp.getWorkEmail());
+                psEmp.setString(17, emp.getJobLocation());
+                psEmp.setInt(18, empid);
+
+                // Execute employee update
+                psEmp.executeUpdate();
+
+                // Set parameters for address update
+                psAdr.setString(1, adr.getLine1());
+                psAdr.setString(2, adr.getLine2());
+                psAdr.setString(3, adr.getCity());
+                psAdr.setString(4, adr.getState());
+                psAdr.setString(5, adr.getPostalCode());
+                psAdr.setString(6, adr.getCountry());
+                psAdr.setString(7, adr.getTempLine1());
+                psAdr.setString(8, adr.getTempLine2());
+                psAdr.setString(9, adr.getTempCity());
+                psAdr.setString(10, adr.getTempState());
+                psAdr.setString(11, adr.getTempPostalCode());
+                psAdr.setString(12, adr.getTempCountry());
+                psAdr.setInt(13, empid);
+
+                // Execute address update
+                psAdr.executeUpdate();
+
+                // Commit transaction
+                con.commit();
+                return true;
+            } catch (SQLException e) {
+                con.rollback();
+                throw e;
+            }
+        } finally {
+            con.setAutoCommit(true);
+        }
+    }
+	
+	
+	
+	public boolean deleteEmployee(int eid) throws SQLException
+	{
+		String qry="delete from employees where employeeid=?";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1, eid);
+		int i = ps.executeUpdate();
+		if(i>0)
+		{
+			return true;
+		}
+		return false;
 	}
 	
 }

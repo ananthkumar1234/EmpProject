@@ -145,6 +145,60 @@ form .form-button {
 .apply-btn:hover {
 	background-color: #7cb342;
 }
+
+
+/* css for success and error messages*/
+.message-container {
+    position: fixed;
+    top: -200px; /* Move completely out of view */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 1002;
+    max-width: 90%;
+    backdrop-filter: blur(10px); /* Stronger blur effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.message-container.show {
+    top: 30px;
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.message-container.success {
+    background-color: rgba(144, 238, 144, 0.8);
+}
+
+.message-container.error {
+    background-color: rgba(220, 53, 69, 0.8);
+}
+
+.message-container p {
+    font-weight: bold;
+    margin: 8px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* More modern font */
+}
+
+.message-container p:first-child {
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.message-container i {
+    font-size: 24px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
 </style>
 
 <script>
@@ -248,7 +302,7 @@ form .form-button {
 
 	<div class="main-content">
 		<header class="header">
-			<h1>Leave / My Leaves</h1>
+			<h1>Leave / Employees Leaves</h1>
 			<div class="user-profile">
 				<div class="user-dropdown">
 					<button class="dropbtn" id="userDropdown">
@@ -384,8 +438,8 @@ form .form-button {
 						<td><%=lev.getLeaveStatus()%></td>
 						<td>
 							<%
-							if ("Pending".equals(lev.getLeaveStatus())) {
-							%> <a href="cancel?id=<%=lev.getLeaveId()%>" class="cancel-btn">Cancel</a>
+							if ("approved".equals(lev.getLeaveStatus()) || "Approved".equals(lev.getLeaveStatus())) {
+							%> <a href="cancelLeave?id=<%=lev.getLeaveId()%>" class="cancel-btn">Cancel</a>
 							<%
 							}
 							%>
@@ -412,6 +466,46 @@ form .form-button {
 			</table>
 
 		</div>
+	</div>
+	
+	<script>
+	
+	//Displaying messages for different scenarios
+
+	window.onload = function() {
+	<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> 
+	showMessage('error', 'Something Went Wrong!');
+	<% } 
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Success")){%> 
+	showMessage('success', 'Approved Leave has been cancelled !!!');
+	<%}%>}
+	
+	/*new js function to display messages*/
+	function showMessage(type, message) {
+	    const messageContainer = document.getElementById('message-container');
+	    const messageText = document.getElementById('message-text');
+	    const messageIcon = document.getElementById('message-icon');
+
+	    messageContainer.classList.remove('success', 'error', 'show');
+	    messageContainer.classList.add(type);
+	    messageText.textContent = message;
+	    messageIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+
+	    messageContainer.classList.add('show');
+	    setTimeout(() => {
+	        messageContainer.classList.remove('show');
+	    }, 4000);
+	}
+
+	// Usage examples:
+	// showMessage('success', 'Leave Applied Successfully...');
+	// showMessage('error', 'Something Went Wrong!');
+
+
+	</script>
+	<div id="message-container" class="message-container">
+	    <span id="message-icon"></span>
+	    <p id="message-text"></p>
 	</div>
 
 </body>

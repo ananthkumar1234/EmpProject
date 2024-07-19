@@ -36,7 +36,8 @@ public class FilterLeaveByServlet extends HttpServlet {
 	            	filteredLeaves = empDao.getLeaveByYear(empid, year);
 	            }
 			 
-			 
+			 	System.out.println("something is setting : "+filteredLeaves);
+
 			 	req.setAttribute("filteredLeaves", filteredLeaves);
 		        req.getRequestDispatcher("employeeLeaves.jsp").forward(req, resp);
 //		        resp.sendRedirect("employeeLeaves.jsp");

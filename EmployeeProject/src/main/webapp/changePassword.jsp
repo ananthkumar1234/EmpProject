@@ -174,6 +174,8 @@ a {
         HttpSession sess = request.getSession();
         Employees emp = (Employees)sess.getAttribute("employee");
         String uname = (String)sess.getAttribute("username");
+        String role = (String)sess.getAttribute("role");
+        
     %>
 
     <div class="sidebar" id="sidebar">
@@ -181,14 +183,16 @@ a {
             <img src="logo.png" alt="Logo">
         </div>
         <ul class="sidebar-menu">
-            <li><a href="dashboard.jsp"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
-            <li><i class="fas fa-user-cog"></i><span class="menu-text"> Admin</span></li>
-            <li><i class="fas fa-users"></i><span class="menu-text"> PIM</span></li>
-            <li><a href="applyLeave.jsp"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
-            <li><i class="fas fa-clock"></i><span class="menu-text"> Time</span></li>
-            <li><i class="fas fa-user-plus"></i><span class="menu-text"> Recruitment</span></li>
-            <li><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></li>
-        </ul>
+        <li class="activeDashboard"><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>
+		
+		<%if(role.equals("HR") || role.equals("Manager")) { %>
+        <li class="activePeople"><a href="employees.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> People</span></a></li>
+        <%}%>       
+        
+        <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
+        <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
+        <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+    </ul>
     </div>
     
     <button id="toggleSidebar" class="toggle-btn">

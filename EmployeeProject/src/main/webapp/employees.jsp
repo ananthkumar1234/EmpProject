@@ -194,6 +194,7 @@ form .form-container {
   border:1px solid white;
   border-radius:10px;
   padding:5px;
+  left:50%;
 }
 .delete-btn i{
  font-size:27px;
@@ -204,10 +205,79 @@ form .form-container {
   border-radius:10px;
   padding:5px;
 }
-.edit-btn i:hover, .delete-btn i:hover
+
+.view-btn i{
+ font-size:27px;
+  color: #ff8a65;
+  cursor: pointer;
+  font-weight: bold;
+  border:1px solid white;
+  border-radius:10px;
+  padding:5px;
+}
+
+.edit-btn i:hover, .delete-btn i:hover, .view-btn i:hover
 {
 background-color:white;
 }
+th .actions 
+{
+left:50%:
+}
+
+/* css for success and error messages*/
+.message-container {
+    position: fixed;
+    top: -200px; /* Move completely out of view */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 1002;
+    max-width: 90%;
+    backdrop-filter: blur(10px); /* Stronger blur effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.message-container.show {
+    top: 30px;
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.message-container.success {
+    background-color: rgba(144, 238, 144, 0.8);
+}
+
+.message-container.error {
+    background-color: rgba(220, 53, 69, 0.8);
+}
+
+.message-container p {
+    font-weight: bold;
+    margin: 8px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* More modern font */
+}
+
+.message-container p:first-child {
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.message-container i {
+    font-size: 24px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
 
 </style>
 
@@ -303,7 +373,7 @@ background-color:white;
     <thead>
         <tr>
             <th>Full Name</th>
-            <th>Actions</th>
+            <th class="actions">Actions</th>
 
         </tr>
     </thead>
@@ -320,12 +390,15 @@ background-color:white;
         for (Employees emp2 : employees) { %>
             <tr>
                 <td><%= emp2.getFname() %> <%= emp2.getLname() %></td>
-                <td>
                 
+                <%if(role.equals("HR")) {%>
+                <td colspan="1">
 				<a href="editEmployee?id=<%= emp2.getEmpId() %>" class="edit-btn"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 <a href="deleteEmployee?id=<%= emp2.getEmpId() %>" class="delete-btn"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                
                 </td>
+                <%}else { %>
+                 <td><a href="viewEmployee?id=<%= emp2.getEmpId() %>" class="view-btn"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
+                <%} %>
 
             </tr>
         <% } %>
@@ -358,7 +431,7 @@ background-color:white;
 			    document.querySelector(".activePeople").classList.add("active");
 			} else if (profilePage.includes(currentPage)) {
 			    document.querySelector(".activeProfile").classList.add("active");
-			}else if (currentPage === "EmployeeFilter") {
+			}else if (currentPage === "EmployeeFilter" || currentPage === "deleteEmployee" || currentPage === "updateEmployee" || currentPage === "AddEmployee") {
 			    targetPage = "employees.jsp";
 			    document.querySelector(".activePeople").classList.add("active");
 			}
@@ -367,7 +440,56 @@ background-color:white;
 		    }
 		});
 	
+	
+	//Displaying messages for different scenarios
+
+	window.onload = function() {
+	<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> 
+	showMessage('error', 'Something Went Wrong!');
+	<% }
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("empInserted")){%> 
+	showMessage('success', 'New Employee Inserted !!!');
+	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error2")){%> 
+	showMessage('error', 'Employee not added - Ensure the details entered are correct !!!');
+	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error3")){%> 
+	showMessage('error', 'Username Already exists !!!');
+	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("empUpdated")){%> 
+	showMessage('success', 'Employee Updated !!!');
+	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("empDeleted")){%> 
+	showMessage('error', 'Employee Deleted !!!');
+	<%}%>}
+	
+	/*new js function to display messages*/
+	function showMessage(type, message) {
+	    const messageContainer = document.getElementById('message-container');
+	    const messageText = document.getElementById('message-text');
+	    const messageIcon = document.getElementById('message-icon');
+
+	    messageContainer.classList.remove('success', 'error', 'show');
+	    messageContainer.classList.add(type);
+	    messageText.textContent = message;
+	    messageIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+
+	    messageContainer.classList.add('show');
+	    setTimeout(() => {
+	        messageContainer.classList.remove('show');
+	    }, 4000);
+	}
+
+	// Usage examples:
+	// showMessage('success', 'Leave Applied Successfully...');
+	// showMessage('error', 'Something Went Wrong!');
+
+
 	</script>
+	<div id="message-container" class="message-container">
+	    <span id="message-icon"></span>
+	    <p id="message-text"></p>
+	</div>
 
 </body>
 </html>
