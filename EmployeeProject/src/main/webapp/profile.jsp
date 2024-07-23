@@ -333,11 +333,11 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="FirstName">First Name*</label>
-                    <input type="text" id="FirstName" name="FirstName" value="<%= ea.getEmployee().getFname()%>" readonly>
+                    <input type="text" id="FirstName" name="FirstName" value="<%= ea.getEmployee().getFname()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="LastName">Last Name*</label>
-                    <input type="text" id="LastName" name="LastName" value="<%= ea.getEmployee().getLname()%>" readonly>
+                    <input type="text" id="LastName" name="LastName" value="<%= ea.getEmployee().getLname()%>" disabled>
                 </div>
             </div>
             
@@ -346,11 +346,11 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="DateOfBirth">Date Of Birth*</label>
-                    <input type="Date" id="DateOfBirth" name="DateOfBirth" value="<%= ea.getEmployee().getDateofBirth()%>" readonly>
+                    <input type="Date" id="DateOfBirth" name="DateOfBirth" value="<%= ea.getEmployee().getDateofBirth()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="Gender">Gender*</label>
-                    <select id="Gender" name="Gender" readonly>
+                    <select id="Gender" name="Gender" disabled>
                     <option value="">Select Gender</option>
         <option value="Male" <%= "Male".equals(ea.getEmployee().getGender()) ? "selected" : "" %>>Male</option>
         <option value="Female" <%= "Female".equals(ea.getEmployee().getGender()) ? "selected" : "" %>>Female</option>
@@ -362,12 +362,12 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="Nationality">Nationality*</label>
-					<input type="text" id="Nationality" name="Nationality" value="<%= ea.getEmployee().getNationality()%>" readonly>
+					<input type="text" id="Nationality" name="Nationality" value="<%= ea.getEmployee().getNationality()%>" disabled>
 				
                 </div>
                 <div class="form-group">
                     <label for="MaritalStatus">Marital Status*</label>
-                    <select id="MaritalStatus" name="MaritalStatus" required>
+                    <select id="MaritalStatus" name="MaritalStatus" required disabled>
                     <option value="">Select Marital Status</option>
         <option value="Married" <%= "Married".equals(ea.getEmployee().getMaritalStatus()) ? "selected" : "" %>>Married</option>
         <option value="Single" <%= "Single".equals(ea.getEmployee().getMaritalStatus()) ? "selected" : "" %>>Single</option>
@@ -379,7 +379,7 @@ body.sidebar-collapsed .peopleLinks {
                 
                 <div class="form-group">
                     <label for="BloodGroup">Blood Group*</label>
-                    <select id="BloodGroup" name="BloodGroup" required>
+                    <select id="BloodGroup" name="BloodGroup" required disabled>
                      <option value="">Select Blood Group</option>
     <option value="O -ve" <%= "O -ve".equals(ea.getEmployee().getBloodGroup()) ? "selected" : "" %>>O -ve</option>
     <option value="O +ve" <%= "O +ve".equals(ea.getEmployee().getBloodGroup()) ? "selected" : "" %>>O +ve</option>
@@ -406,30 +406,30 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="PermanentStreet1">Address Line 1*</label>
-                    <input type="text" id="PermanentStreet1" name="PermanentStreet1" value="<%= ea.getAddress().getLine1()%>" readonly>
+                    <input type="text" id="PermanentStreet1" name="PermanentStreet1" value="<%= ea.getAddress().getLine1()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="PermanentStreet2">Address Line 2</label>
-                    <input type="text" id="PermanentStreet2" name="PermanentStreet2" value="<%= ea.getAddress().getLine2()%>" readonly>
+                    <input type="text" id="PermanentStreet2" name="PermanentStreet2" value="<%= ea.getAddress().getLine2()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="PermanentCity">City*</label>
-                    <input type="text" id="PermanentCity" name="PermanentCity" value="<%= ea.getAddress().getCity()%>" readonly>
+                    <input type="text" id="PermanentCity" name="PermanentCity" value="<%= ea.getAddress().getCity()%>" disabled>
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
                     <label for="PermanentState">State*</label>
-                    <input type="text" id="PermanentState" name="PermanentState" value="<%= ea.getAddress().getState()%>" readonly>
+                    <input type="text" id="PermanentState" name="PermanentState" value="<%= ea.getAddress().getState()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="PermanentPostalCode">Postal Code*</label>
-                    <input type="text" id="PermanentPostalCode" name="PermanentPostalCode" value="<%= ea.getAddress().getPostalCode()%>" readonly>
+                    <input type="text" id="PermanentPostalCode" name="PermanentPostalCode" value="<%= ea.getAddress().getPostalCode()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="PermanentCity">Country*</label>
-                    <input type="text" id="PermanentCountry" name="PermanentCountry" value="<%= ea.getAddress().getCountry()%>" readonly>
+                    <input type="text" id="PermanentCountry" name="PermanentCountry" value="<%= ea.getAddress().getCountry()%>" disabled>
                 </div>
             </div>
             
@@ -447,30 +447,30 @@ body.sidebar-collapsed .peopleLinks {
             	
                 <div class="form-group">
                     <label for="TemporaryStreet1">Address Line 1</label>
-                    <input type="text" id="TemporaryStreet1" name="TemporaryStreet1" value="<%= ea.getAddress().getTempLine1()%>" readonly>
+                    <input type="text" id="TemporaryStreet1" name="TemporaryStreet1" value="<%= ea.getAddress().getTempLine1()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="TemporaryStreet2">Address Line 2</label>
-                    <input type="text" id="TemporaryStreet2" name="TemporaryStreet2" value="<%= ea.getAddress().getTempLine2()%>" readonly>
+                    <input type="text" id="TemporaryStreet2" name="TemporaryStreet2" value="<%= ea.getAddress().getTempLine2()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="TemporaryCity">City</label>
-                    <input type="text" id="TemporaryCity" name="TemporaryCity" value="<%= ea.getAddress().getTempCity()%>" readonly>
+                    <input type="text" id="TemporaryCity" name="TemporaryCity" value="<%= ea.getAddress().getTempCity()%>" disabled>
                 </div>
             </div>
             
             <div class="form-row">
                 <div class="form-group">
                     <label for="TemporaryState">State</label>
-                    <input type="text" id="TemporaryState" name="TemporaryState" value="<%= ea.getAddress().getTempState()%>" readonly>
+                    <input type="text" id="TemporaryState" name="TemporaryState" value="<%= ea.getAddress().getTempState()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="TemporaryPostalCode">Postal Code</label>
-                    <input type="text" id="TemporaryPostalCode" name="TemporaryPostalCode" value="<%= ea.getAddress().getTempPostalCode()%>" readonly>
+                    <input type="text" id="TemporaryPostalCode" name="TemporaryPostalCode" value="<%= ea.getAddress().getTempPostalCode()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="TemporaryCity">Country</label>
-                    <input type="text" id="TemporaryCountry" name="TemporaryCountry" value="<%= ea.getAddress().getTempCountry()%>" readonly>
+                    <input type="text" id="TemporaryCountry" name="TemporaryCountry" value="<%= ea.getAddress().getTempCountry()%>" disabled>
                 </div>
             </div>
             
@@ -480,11 +480,11 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="Mobile">Mobile*</label>
-                    <input type="text" id="Mobile" name="Mobile" value="<%= ea.getEmployee().getPersonalMobile()%>" readonly>
+                    <input type="text" id="Mobile" name="Mobile" value="<%= ea.getEmployee().getPersonalMobile()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="Home">Home*</label>
-                    <input type="text" id="Home" name="Home" value="<%= ea.getEmployee().getPersonalHome()%>" readonly>
+                    <input type="text" id="Home" name="Home" value="<%= ea.getEmployee().getPersonalHome()%>" disabled>
                 </div>
             </div>
             
@@ -492,15 +492,15 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="EmergencyName">Emergency Contact Name*</label>
-                    <input type="text" id="EmergencyName" name="EmergencyName" value="<%= ea.getEmployee().getEmergencyName()%>" readonly>
+                    <input type="text" id="EmergencyName" name="EmergencyName" value="<%= ea.getEmployee().getEmergencyName()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="Relation">Relation*</label>
-                    <input type="text" id="Relation" name="Relation" value="<%= ea.getEmployee().getEmergencyRelatoin()%>" readonly>
+                    <input type="text" id="Relation" name="Relation" value="<%= ea.getEmployee().getEmergencyRelatoin()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="EmergencyMobile">Mobile*</label>
-                    <input type="text" id="EmergencyMobile" name="EmergencyMobile" value="<%= ea.getEmployee().getEmergencyMobile()%>" readonly>
+                    <input type="text" id="EmergencyMobile" name="EmergencyMobile" value="<%= ea.getEmployee().getEmergencyMobile()%>" disabled>
                 </div>
             </div>
             
@@ -510,11 +510,11 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="PersonalEmail">Personal Email*</label>
-                    <input type="email" id="PersonalEmail" name="PersonalEmail" value="<%= ea.getEmployee().getPersonalEmail()%>" readonly>
+                    <input type="email" id="PersonalEmail" name="PersonalEmail" value="<%= ea.getEmployee().getPersonalEmail()%>" disabled>
                 </div>
                 <div class="form-group">
                     <label for="WorkEmail">Work Email*</label>
-                    <input type="email" id="WorkEmail" name="WorkEmail" value="<%= ea.getEmployee().getWorkEmail()%>" readonly>
+                    <input type="email" id="WorkEmail" name="WorkEmail" value="<%= ea.getEmployee().getWorkEmail()%>" disabled>
                 </div>
             </div>
             
@@ -526,11 +526,11 @@ body.sidebar-collapsed .peopleLinks {
             <div class="form-row">
                 <div class="form-group">
                     <label for="JoinedDate">Joined Date*</label>
-                    <input type="Date" id="JoinedDate" name="JoinedDate" value="<%= ea.getEmployee().getHireDate()%>" readonly>
+                    <input type="Date" id="JoinedDate" name="JoinedDate" value="<%= ea.getEmployee().getHireDate()%>" disabled>
                 </div>
                 <div class="form-group">     
                     <label for="JobTitle">Job Title*</label> 
-                    <select id="JobTitle" name="JobTitle">
+                    <select id="JobTitle" name="JobTitle" disabled>
                              <option value="">Select Job Title</option>
             <% 
                 int currentRoleId = ea.getEmployee().getRoleId(); 
@@ -547,7 +547,7 @@ body.sidebar-collapsed .peopleLinks {
             <div class=form-row>
             <div class="form-group">
             <label for="Location">Location</label>
-            <input type="text" id="Location" name="Location" value="<%= ea.getEmployee().getJobLocation()%>" readonly>
+            <input type="text" id="Location" name="Location" value="<%= ea.getEmployee().getJobLocation()%>" disabled>
             </div>
             <div class="form-group">
 				

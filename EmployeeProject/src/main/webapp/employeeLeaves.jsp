@@ -199,6 +199,26 @@ form .form-button {
     margin-right: 10px;
     vertical-align: middle;
 }
+
+.quick-launch-icon:hover {
+    background-color: #e0e0e0;
+}
+
+.quick-launch-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #ddd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.quick-launch-icon i {
+    color: #666;
+    font-size: 120%;
+}
 </style>
 
 <script>
@@ -422,6 +442,7 @@ form .form-button {
 						<th>Leave Type</th>
 						<th>Status</th>
 						<th>Actions</th>
+						<th></th>
 					</tr>
 				</thead>
 				
@@ -438,13 +459,35 @@ form .form-button {
 						<td><%=lev.getLeaveStatus()%></td>
 						<td>
 							<%
-							if ("approved".equals(lev.getLeaveStatus()) || "Approved".equals(lev.getLeaveStatus())) {
+							if ("Approved".equals(lev.getLeaveStatus())) {
 							%> <a href="cancelLeave?id=<%=lev.getLeaveId()%>" class="cancel-btn">Cancel</a>
 							<%
 							}
 							%>
 						</td>
-					</tr>
+					<td>    
+                    <div class="quick-launch-button" onclick="toggleDetails(<%= lev.getLeaveId() %>)">
+                        <div class="quick-launch-icon">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </div>
+                    </div>
+                </td>
+                
+            </tr>
+            <tr class="leave-details-row" id="details-<%= lev.getLeaveId() %>" style="display: none;">
+                <td colspan="7">
+                    <!-- Additional details go here -->
+                    
+                    <p><b>Applied on:</b> <%= lev.getAppliedDate() %></p>
+                    <%if(lev.getLeaveStatus().equals("Approved")) { %>
+                   	<p><b>Approved by:</b> <%= lev.getApprovedByFname() +" "+ lev.getApprovedByLname()  %></p>
+                   	<%} else if (lev.getLeaveStatus().equals("Rejected")) { %>
+                   	<p><b>Rejected by:</b> <%= lev.getApprovedByFname() +" "+ lev.getApprovedByLname()  %></p>
+                   	<p><b>Reject Reason:</b> <%= lev.getRejectReason() %></p>
+                   	<%} %>
+
+                </td>
+            </tr>
 					<%
 					}
 					%>
@@ -495,6 +538,15 @@ form .form-button {
 	    setTimeout(() => {
 	        messageContainer.classList.remove('show');
 	    }, 4000);
+	}
+
+	function toggleDetails(leaveId) {
+	    var detailsRow = document.getElementById('details-' + leaveId);
+	    if (detailsRow.style.display === 'none' || detailsRow.style.display === '') {
+	        detailsRow.style.display = 'table-row';
+	    } else {
+	        detailsRow.style.display = 'none';
+	    }
 	}
 
 	// Usage examples:

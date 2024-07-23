@@ -220,10 +220,6 @@ form .form-container {
 {
 background-color:white;
 }
-th .actions 
-{
-left:50%:
-}
 
 /* css for success and error messages*/
 .message-container {
@@ -276,6 +272,19 @@ left:50%:
     font-size: 24px;
     margin-right: 10px;
     vertical-align: middle;
+}
+
+.actions-column {
+    text-align: right;
+}
+
+.actions-cell {
+    text-align: right;
+}
+
+.actions-cell a {
+    display: inline-block;
+    margin-left: 10px; /* Adjust spacing between icons */
 }
 
 
@@ -373,7 +382,7 @@ left:50%:
     <thead>
         <tr>
             <th>Full Name</th>
-            <th class="actions">Actions</th>
+            <th class="actions-column"></th>
 
         </tr>
     </thead>
@@ -392,7 +401,7 @@ left:50%:
                 <td><%= emp2.getFname() %> <%= emp2.getLname() %></td>
                 
                 <%if(role.equals("HR")) {%>
-                <td colspan="1">
+                <td class="actions-cell">
 				<a href="editEmployee?id=<%= emp2.getEmpId() %>" class="edit-btn"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                 <a href="deleteEmployee?id=<%= emp2.getEmpId() %>" class="delete-btn"><i class="fa fa-trash" aria-hidden="true"></i></a>
                 </td>

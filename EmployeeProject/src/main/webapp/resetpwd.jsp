@@ -269,7 +269,7 @@ String uname = (String)sess.getAttribute("username");
         <h2>Reset Password</h2>
         <form action="ResetPasswordServlet" method="post">
             <div class="input-group">
-                <input type="text" id="username" name="username" value="<%= uname %>" readonly>
+                <input type="text" id="username" name="username" value="<%= uname %>" disabled>
             </div>
             <div class="input-group">
                 <input type="password" id="newPassword" name="newPassword" placeholder="New Password" required>

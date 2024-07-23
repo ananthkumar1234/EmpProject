@@ -192,6 +192,23 @@ textarea {
     vertical-align: middle;
 }
 
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 8px;
+    width: 18px;
+    height: 18px;
+}
+
+.checkbox-label span {
+    font-size: 16px;
+    line-height: 18px;
+}
+
 </style>
 
 
@@ -398,6 +415,31 @@ function fetchAvailableLeaves(empId) {
 						<label for="comments">Reason</label>
 						<textarea id="comments" name="reason" rows="4"></textarea>
 					</div>
+					
+					<% if("HR".equals(role)) { %>
+					<div class="form-row">
+					
+					<div class="form-group">
+						
+					<label for="ApplyNegLeave" class="checkbox-label">
+					<input type="radio" id="ApplyNegLeave" name="Options" value="option1">
+    				<span>Apply for Negative Balance</span>
+    			</label>
+    				
+					</div>
+					
+					<div class="form-group">
+					  	
+					<label for="LOP" class="checkbox-label">
+					<input type="radio" id="LOP" name="Options" value="option2">
+    				<span>Apply for Loss of Pay</span>
+    			</label>
+					</div>
+
+								
+					</div>
+					<% } %>
+    
 				</div>
 				<div class="form-right">
                     <div class="leave-balance">
@@ -417,39 +459,7 @@ function fetchAvailableLeaves(empId) {
 
 	<script>
 	
-	document.addEventListener("DOMContentLoaded", function() {
-	    // Ensure holidays are converted to a proper JavaScript array
-	    const holidays = <%= holidays.stream()
-	                                   .map(Holidays::getDate)
-	                                   .map(date -> "\"" + date.toString() + "\"")
-	                                   .collect(java.util.stream.Collectors.toList()) %>;
-
-	    console.log("Holidays: ", holidays); // Debugging line
-
-	    // Convert the holiday strings to Date objects
-	    const disableDates = holidays.map(dateStr => new Date(dateStr));
-
-	    console.log("Disable Dates: ", disableDates); // Debugging line
-
-	    const disableWeekendsAndHolidays = function(date) {
-	        // Disable weekends
-	        if (date.getDay() === 0 || date.getDay() === 6) {
-	            return true;
-	        }
-	        // Disable holidays
-	        return disableDates.some(disabledDate => {
-	            return date.toDateString() === disabledDate.toDateString();
-	        });
-	    };
-
-	    const highlightHolidays = function(selectedDates, dateStr, instance) {
-	        instance.calendarContainer.querySelectorAll(".flatpickr-day").forEach(dayElem => {
-	            const date = new Date(dayElem.dateObj);
-	            if (disableDates.some(disabledDate => date.toDateString() === disabledDate.toDateString())) {
-	                dayElem.classList.add("holiday");
-	            }
-	        });
-	    };
+	
 
 
 

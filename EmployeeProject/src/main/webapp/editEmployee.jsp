@@ -626,35 +626,35 @@ body.sidebar-collapsed .peopleLinks {
 
 	    
 	    document.addEventListener('DOMContentLoaded', function() {
-	    	  const sameAsPermanentCheckbox = document.getElementById('sameAsPermanent');
-	    	  const permanentFields = ['Street1', 'Street2', 'City', 'State', 'PostalCode', 'Country'];
+	        const sameAsPermanentCheckbox = document.getElementById('sameAsPermanent');
+	        const permanentFields = ['Street1', 'Street2', 'City', 'State', 'PostalCode', 'Country'];
 
-	    	  sameAsPermanentCheckbox.addEventListener('change', function() {
-	    	    permanentFields.forEach(field => {
-	    	      const permanentField = document.getElementById('Permanent' + field);
-	    	      const temporaryField = document.getElementById('Temporary' + field);
-	    	      
-	    	      if (this.checked) {
-	    	        temporaryField.value = permanentField.value;
-	    	        temporaryField.disabled = true;
-	    	      } else {
-	    	        temporaryField.value = '';
-	    	        temporaryField.disabled = false;
-	    	      }
-	    	    });
-	    	  });
+	        sameAsPermanentCheckbox.addEventListener('change', function() {
+	            permanentFields.forEach(field => {
+	                const permanentField = document.getElementById('Permanent' + field);
+	                const temporaryField = document.getElementById('Temporary' + field);
+	                
+	                if (this.checked) {
+	                    temporaryField.value = permanentField.value;
+	                    temporaryField.readOnly = true; // Change this from disabled to readOnly
+	                } else {
+	                    temporaryField.value = '';
+	                    temporaryField.readOnly = false; // Change this from disabled to readOnly
+	                }
+	            });
+	        });
 
-	    	  // Add this part to update temporary fields when permanent fields change
-	    	  permanentFields.forEach(field => {
-	    	    const permanentField = document.getElementById('Permanent' + field);
-	    	    permanentField.addEventListener('input', function() {
-	    	      if (sameAsPermanentCheckbox.checked) {
-	    	        const temporaryField = document.getElementById('Temporary' + field);
-	    	        temporaryField.value = this.value;
-	    	      }
-	    	    });
-	    	  });
-	    	}); 
+	        // Add this part to update temporary fields when permanent fields change
+	        permanentFields.forEach(field => {
+	            const permanentField = document.getElementById('Permanent' + field);
+	            permanentField.addEventListener('input', function() {
+	                if (sameAsPermanentCheckbox.checked) {
+	                    const temporaryField = document.getElementById('Temporary' + field);
+	                    temporaryField.value = this.value;
+	                }
+	            });
+	        });
+	    });
 	    
 	    
 	  //Displaying messages for different scenarios

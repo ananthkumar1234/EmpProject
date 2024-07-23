@@ -313,6 +313,35 @@ public class EmpDao {
 		return leaveid;
 	}
 
+	public int applyLeaveFor(Leaves leave)
+	{
+		int leaveid =0;
+		String query = "INSERT INTO Leaves (EmployeeID, LeaveType, StartDate, EndDate, LeaveStatus, reason,TotalDays,ApprovedBy,AppliedDate,ApprovedDate) VALUES (?, ?, ?, ?, ?, ?, ?,?,curdate(),curdate())";
+		String qry2="SELECT LeaveId FROM Leaves ORDER BY LeaveId DESC LIMIT 1";
+
+		try (PreparedStatement pst = con.prepareStatement(query)) {
+			pst.setInt(1, leave.getEmployeeID());
+			pst.setString(2, leave.getLeaveType());
+			pst.setString(3, leave.getFromDate());
+			pst.setString(4, leave.getToDate());
+			pst.setString(5, leave.getLeaveStatus());
+			pst.setString(6, leave.getAppliedReason());
+			pst.setInt(7, leave.getTotalDays());
+			pst.setInt(8, leave.getApprovedBy());
+
+			int rowCount = pst.executeUpdate();
+			if (rowCount > 0) {
+				ResultSet rs= con.prepareStatement(qry2).executeQuery();
+				rs.next();
+				leaveid=rs.getInt("LeaveId");
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return leaveid;
+	}
+	
 
 	// after inserting leaves updating the available leaves
 	public boolean updateLeavestock(int leaveid) throws SQLException
@@ -623,12 +652,12 @@ public class EmpDao {
 	//Method to check user name 
 	public boolean validateEmail(String uname,String email) throws SQLException
 	{
-		String qry="select email from employees where employeeid =(select employeeid from user_credentials where username=?)";
+		String qry="select PersonalEmail from employees where employeeid =(select employeeid from user_credentials where username=?)";
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setString(1, uname);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		if(email.equals(rs.getString("email")))
+		if(email.equals(rs.getString("PersonalEmail")))
 		{
 			return true;
 
