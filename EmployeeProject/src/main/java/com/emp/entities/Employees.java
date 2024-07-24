@@ -2,6 +2,10 @@ package com.emp.entities;
 
 public class Employees {
 	
+	@Override
+	public String toString() {
+		return "Employees [empId=" + empId + ", fname=" + fname + ", lname=" + lname + ", roleId=" + roleId + "]";
+	}
 	private int empId;
 	private String fname;
 	private String lname;

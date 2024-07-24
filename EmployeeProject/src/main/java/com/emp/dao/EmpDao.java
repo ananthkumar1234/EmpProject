@@ -1395,6 +1395,7 @@ public class EmpDao {
 	
 	
 	
+	// method to get full details of a employee
 	public EmployeeFullDetails getEmpFullDetails(int empid) throws SQLException
 	{
 		EmployeeFullDetails e1 = new EmployeeFullDetails();
@@ -1449,6 +1450,7 @@ public class EmpDao {
 	
 	
 	
+	// Method to update employee details
 	public boolean updateEmployeeAndAddress(Employees emp, Address adr,int empid) throws SQLException {
         String updateEmployeeQuery = "UPDATE employees SET firstname = ?, lastname = ?, dateofbirth = ?, personalemail = ?, " +
                 "personalmobile = ?, hiredate = ?, roleid = ?, maritalstatus = ?, gender = ?, emergencymobile = ?, " +
@@ -1519,7 +1521,7 @@ public class EmpDao {
     }
 	
 	
-	
+	// Method to delete employee record
 	public boolean deleteEmployee(int eid) throws SQLException
 	{
 		String qry="delete from employees where employeeid=?";
@@ -1531,6 +1533,28 @@ public class EmpDao {
 			return true;
 		}
 		return false;
+	}
+	
+	
+	// Method to get all managers
+	public List<Employees> getAllManagers() throws SQLException
+	{
+		String qry="select employeeid,firstname,lastname from employees where roleid=3;";
+		Statement st = con.createStatement();
+		ResultSet rs = st.executeQuery(qry);
+		
+		List<Employees> list = new ArrayList<>();
+		while(rs.next())
+		{
+			Employees emp = new Employees();
+			emp.setEmpId(rs.getInt("employeeid"));
+			emp.setFname(rs.getString("firstname"));
+			emp.setLname(rs.getString("lastname"));
+			list.add(emp);
+		}
+		System.out.println(list);
+		return list;
+		
 	}
 	
 }

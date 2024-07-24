@@ -246,6 +246,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			<a href="attendance.jsp">Attendance Records List</a>
 			<%if("HR".equals(role) || "Manager".equals(role)){ %>
 			<a href="attendanceRequest.jsp">Attendance Update Requests</a>
+			<a href="employeesAttendance.jsp">Employees Attendance</a>
 			<%} %>
 		</div>
 
