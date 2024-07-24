@@ -348,7 +348,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		    document.querySelector(".activePeople").classList.add("active");
 		} else if (profilePage.includes(currentPage)) {
 		    document.querySelector(".activeProfile").classList.add("active");
-		}else if (currentPage === "filterAttendance" || currentPage === "requestUpdate") {
+		}else if (currentPage === "filterAttendanceBy" || currentPage === "requestUpdate") {
 		    targetPage = "attendance.jsp";
 		    document.querySelector(".activeAttendance").classList.add("active");
 		}
@@ -475,7 +475,7 @@ function closePopup(popupId) {
 			<hr>
 
 			<div class="filter">
-				<form action="filterAttendance" method="post" class="filter-form">
+				<form action="filterAttendanceBy" method="post" class="filter-form">
 					<input type="hidden" name="id" value="<%=emp.getEmpId()%>">
 					<input type="hidden" name="origin" value="attendance"> 
 					
