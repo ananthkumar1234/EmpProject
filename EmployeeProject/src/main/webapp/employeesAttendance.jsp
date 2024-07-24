@@ -464,9 +464,12 @@ function closePopup(popupId) {
 		<div class="attendLinks">
 
 			<a href="attendance.jsp">Attendance Records List</a>
-			<%if("HR".equals(role) || "Manager".equals(role)){ %>
+			<%if("HR".equals(role)){ %>
 			<a href="attendanceRequest.jsp">Attendance Update Requests</a>
 			<a href="employeesAttendance.jsp">Employees Attendance</a>
+			<%}else if("Manager".equals(role)){ %>
+			<a href="attendanceRequest.jsp">Attendance Update Requests</a>
+			<a href="employeesAttendance.jsp">Reportees Attendance</a>
 			<%} %>
 		</div>
 
@@ -552,7 +555,7 @@ function closePopup(popupId) {
 				</form>
 			</div>
 			<table class="leave-table">
-
+				<%if(attendanceList!=null) {%>
 				<thead>
 					<tr>
 						<th>Date</th>
@@ -565,9 +568,6 @@ function closePopup(popupId) {
 				</thead>
 				<tbody>
 					<%
-							if (attendanceList == null) {
-								attendanceList = empDao.getAttRecordById(emp.getEmpId());
-							}
 							for (Attendance attendance : attendanceList) {
 								boolean highlightRow = (attendance.getCheckin() != null && attendance.getCheckout() == null)
 								&& (LocalDate.now().isAfter(LocalDate.parse(attendance.getDate(), formatter)));
@@ -626,6 +626,20 @@ function closePopup(popupId) {
 							}
 							%>
 				</tbody>
+				<%} else { %>
+				<thead>
+					<tr>
+						<th>Table Actions</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<tr>
+						<td><%="Select employee from dropdown to view Data !!!"%></td>
+					</tr>
+					
+				</tbody>
+				<%} %>
 			</table>
 		</div>
 

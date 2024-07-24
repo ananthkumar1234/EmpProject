@@ -302,6 +302,7 @@ function fetchAvailableLeaves(empId) {
         
         List<Employees> employees=new ArrayList<>();
         
+        
         List<Holidays> holidays = empDao.getHolidays();
         HttpSession sess = request.getSession();
         Employees emp = (Employees)sess.getAttribute("employee");
@@ -459,19 +460,50 @@ function fetchAvailableLeaves(empId) {
 
 	<script>
 	
-	
+	// function to restrict the weekends and holidays 
+	document.addEventListener("DOMContentLoaded", function() {
+// Ensure holidays are converted to a proper JavaScript array
+const holidays = <%= holidays.stream()
+                           .map(Holidays::getDate)
+                           .map(date -> "\"" + date.toString() + "\"")
+                           .collect(java.util.stream.Collectors.toList()) %>;
 
+console.log("Holidays: ", holidays); // Debugging line
 
+// Convert the holiday strings to Date objects
+const disableDates = holidays.map(dateStr => new Date(dateStr));
 
-    flatpickr("#fromDate", {
-        disable: [disableWeekendsAndHolidays],
-        onDayCreate: highlightHolidays
-    });
+console.log("Disable Dates: ", disableDates); // Debugging line
 
-    flatpickr("#toDate", {
-        disable: [disableWeekendsAndHolidays],
-        onDayCreate: highlightHolidays
-    });
+const disableWeekendsAndHolidays = function(date) {
+// Disable weekends
+if (date.getDay() === 0 || date.getDay() === 6) {
+    return true;
+}
+// Disable holidays
+return disableDates.some(disabledDate => {
+    return date.toDateString() === disabledDate.toDateString();
+});
+};
+
+const highlightHolidays = function(selectedDates, dateStr, instance) {
+instance.calendarContainer.querySelectorAll(".flatpickr-day").forEach(dayElem => {
+    const date = new Date(dayElem.dateObj);
+    if (disableDates.some(disabledDate => date.toDateString() === disabledDate.toDateString())) {
+        dayElem.classList.add("holiday");
+    }
+});
+};
+
+flatpickr("#fromDate", {
+disable: [disableWeekendsAndHolidays],
+onDayCreate: highlightHolidays
+});
+
+flatpickr("#toDate", {
+disable: [disableWeekendsAndHolidays],
+onDayCreate: highlightHolidays
+});
 });
 	
 	
@@ -495,6 +527,9 @@ function fetchAvailableLeaves(empId) {
 	// Usage examples:
 	// showMessage('success', 'Leave Applied Successfully...');
 	// showMessage('error', 'Something Went Wrong!');
+	
+	
+	
 
 </script>
 <div id="message-container" class="message-container">

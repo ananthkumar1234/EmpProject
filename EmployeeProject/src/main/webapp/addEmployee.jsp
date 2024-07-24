@@ -260,6 +260,17 @@ body.sidebar-collapsed .peopleLinks {
 
 </style>
 
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+    flatpickr("#DateOfBirth", {
+    });
+    flatpickr("#JoinedDate", {
+    });
+});
+
+</script>
+
 <body>
 
 	<%

@@ -180,7 +180,7 @@ a {
 
     <div class="sidebar" id="sidebar">
         <div class="logo">
-            <img src="logo.png" alt="Logo">
+            
         </div>
         <ul class="sidebar-menu">
         <li class="activeDashboard"><a href="dashboard.jsp" id="dashboard-link"><i class="fas fa-tachometer-alt"></i><span class="menu-text"> Dashboard</span></a></li>

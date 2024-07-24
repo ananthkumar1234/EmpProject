@@ -307,6 +307,7 @@ body.sidebar-collapsed .peopleLinks {
 			<a href="employees.jsp">Reportees</a>
 			<%}else{%>
 			<a href="employees.jsp">Employees</a>
+			<a href="addEmployee.jsp">Add Employee</a>
 			<%} %>
 		</div>
 		

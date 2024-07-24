@@ -448,9 +448,12 @@ function closePopup(popupId) {
 		<div class="attendLinks">
 
 			<a href="attendance.jsp">Attendance Records List</a>
-			<%if("HR".equals(role) || "Manager".equals(role)){ %>
+			<%if("HR".equals(role)){ %>
 			<a href="attendanceRequest.jsp">Attendance Update Requests</a>
 			<a href="employeesAttendance.jsp">Employees Attendance</a>
+			<%}else if("Manager".equals(role)){ %>
+			<a href="attendanceRequest.jsp">Attendance Update Requests</a>
+			<a href="employeesAttendance.jsp">Reportees Attendance</a>
 			<%} %>
 		</div>
 

@@ -267,7 +267,7 @@ button:hover {
 }
 
 .app {
-	background-color: #28a745;
+	background-color: #8bc34a;
 	color: white;
 	border: none;
 	padding: 10px 20px;
