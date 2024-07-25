@@ -23,6 +23,7 @@ import com.emp.entities.Holidays;
 import com.emp.entities.Leaves;
 import com.emp.entities.Roles;
 import com.emp.entities.UserCredentials;
+import com.emp.entities.Manager;
 
 public class EmpDao {
 
@@ -1555,6 +1556,68 @@ public class EmpDao {
 		System.out.println(list);
 		return list;
 		
+	}
+	
+	public List<Employees> getReportingEmployees() throws Exception {
+	    List<Employees> list = new ArrayList<>();
+	    String qry = "SELECT e.EmployeeID, e.FirstName, e.LastName " +
+	                 "FROM Employees e " +
+	                 "JOIN Roles r ON r.RoleId = e.RoleId " +
+	                 "WHERE r.RoleName NOT IN ('HR', 'Manager') " +
+	                 "AND e.EmployeeID NOT IN (SELECT employee FROM Manager)";
+	    PreparedStatement ps = con.prepareStatement(qry);
+	    ResultSet rs = ps.executeQuery();
+	    while (rs.next()) {
+	        Employees r = new Employees();
+	        r.setEmpId(rs.getInt("EmployeeId"));
+	        r.setFname(rs.getString("FirstName"));
+	        r.setLname(rs.getString("LastName"));
+	        list.add(r);
+	    }
+	    return list;
+	}
+	
+	public boolean addReportee(Manager m) throws SQLException {
+		
+		String qry="Insert into Manager (manager,employee) values (?,?)";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1, Integer.parseInt(m.getManager()));
+		ps.setInt(2, Integer.parseInt(m.getEmployee()));
+		
+	    int i=ps.executeUpdate();
+	    if(i>0) return true;
+		
+		return false;
+	}
+	
+	public List<Manager> getReportingEmployee(int mid) throws SQLException {
+		List<Manager> list=new ArrayList<>();
+		String qry="select m.mgrId,concat(e.firstname,' ',e.lastname) as fullName from manager m join employees e on m.employee=e.EmployeeID where m.manager=?";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1, mid);
+		ResultSet rs=ps.executeQuery();
+		
+		while(rs.next())
+		{
+			Manager m=new Manager();
+			m.setMgrID(rs.getInt("mgrId"));
+			m.setFullName(rs.getString("fullName"));
+			
+			list.add(m);
+		}
+		
+		return list;
+	}
+	
+	public boolean removeReportee(int id) throws SQLException {
+		
+		String qry="delete from Manager where mgrId=?";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1, id);
+		int i=ps.executeUpdate();
+		if(i>0) return true;
+			
+		return false;
 	}
 	
 }

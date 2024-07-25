@@ -5,6 +5,7 @@
 <%@ page import="com.emp.entities.Holidays"%>
 <%@ page import="com.emp.entities.Employees"%>
 <%@ page import="com.emp.entities.Roles"%>
+<%@ page import="com.emp.entities.Manager"%>
 <%@ page import="com.emp.jdbc.DBConnect"%>
 <%@ page import="java.sql.Connection"%>
 <%@ page import="com.emp.dao.EmpDao"%>
@@ -75,19 +76,7 @@ body.sidebar-collapsed .peopleLinks {
 
 /*  table css =======================================*/
 
-.table-container {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  max-width: 100%;
-  margin-top:2%;
-  margin-left:20px;
-  
-  transition: width 0.3s ease, margin-left 0.3s ease;
-}
-
-.filter-container {
+.ReportTo-container {
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -97,50 +86,58 @@ body.sidebar-collapsed .peopleLinks {
   margin-top: 12%;
 
   margin-left:20px;
-  
+  margin-bottom:10px;
   transition: width 0.3s ease, margin-left 0.3s ease;
 }
 
-.leave-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 15px;
+.table-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 100%;
   
+
+  margin-left:20px;
+  margin-bottom:10px;
+  transition: width 0.3s ease, margin-left 0.3s ease;
 }
 
-
-.leave-table th {
-  text-align: left;
-  padding: 10px 15px;
-  color: black;
-  font-weight: normal;
-  border-bottom: 1px solid #e0e0e0;
-  background-color:#c0c0c0;
-  font-weight:bold;
-
-  
+.Reporting-table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0 15px;
 }
 
-.leave-table td {
-  padding: 15px;
-  background-color: #f5f5f5;
+.Reporting-table th {
+	text-align: left;
+	padding: 10px 15px;
+	color: black;
+	font-weight: normal;
+	border-bottom: 1px solid #e0e0e0;
+	background-color: #c0c0c0;
+	font-weight: bold;
 }
 
-.leave-table tbody tr {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  border-radius: 20px;
+.Reporting-table td {
+	padding: 15px;
+	background-color: #f5f5f5;
 }
 
-.leave-table tbody tr td:first-child {
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
+.Reporting-table tbody tr {
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+	border-radius: 20px;
 }
 
-.leave-table tbody tr td:last-child {
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
+.Reporting-table tbody tr td:first-child {
+	border-top-left-radius: 20px;
+	border-bottom-left-radius: 20px;
 }
 
+.Reporting-table tbody tr td:last-child {
+	border-top-right-radius: 20px;
+	border-bottom-right-radius: 20px;
+}
 form {
 	display: flex;
 	width: 100%;
@@ -287,6 +284,58 @@ background-color:white;
     margin-left: 10px; /* Adjust spacing between icons */
 }
 
+.form-row {
+            display: flex;
+            margin-bottom: 3%;
+        }
+        .form-group {
+            flex: 1;
+            margin-right: 5%;
+        }
+        .form-group:last-child {
+            margin-right: 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 2%;
+            color: #666;
+        }
+        input[type="text"], input[type="email"],input[type="Date"],input[type="password"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1.5px solid #ddd;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+.button-container {
+    margin-top: 20px;
+}
+
+.apply-btn {
+    width: 100%;
+    background-color: #8bc34a;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.actions-column {
+    text-align: right;
+}
+
+.actions-cell {
+    text-align: right;
+}
+
+.actions-cell button {
+    display: inline-block;
+    margin-left: 10px; /* Adjust spacing between icons */
+}
 
 </style>
 
@@ -300,8 +349,10 @@ background-color:white;
         Employees emp = (Employees)sess.getAttribute("employee");
         String role = (String)sess.getAttribute("role");
         
-        List<Employees> employees =(List<Employees>)request.getAttribute("empList");
-        List<Roles> JobTitle=empDao.getRoles();
+        List<Employees> managers=empDao.getAllManagers();
+        List<Employees> employees=empDao.getReportingEmployees();
+        List<Manager> reportee = (List<Manager>) request.getAttribute("filteredreportee");
+        
     %>
 
 	<div class="sidebar" id="sidebar">
@@ -327,7 +378,7 @@ background-color:white;
 
 	<div class="main-content">
 		<header class="header">
-			<h1>People / Employees</h1>
+			<h1>People / Report-To</h1>
 			<div class="user-profile">
 				<div class="user-dropdown">
 					<button class="dropbtn" id="userDropdown">
@@ -352,70 +403,91 @@ background-color:white;
 			<%} %>
 		</div>
 		
-		<div class="filter-container">
-		<form action="EmployeeFilter" method="post">
-					<div class="form-container">
-						<label for="JobTitle">Role</label> 
-						 <select id="JobTitle" name="JobTitle">
-                            <option value="">Select Job Title</option>
-        <% 
-        String selectedRoleId = request.getParameter("JobTitle");
-        for (Roles r : JobTitle) { 
-            String roleId = String.valueOf(r.getRoleId());
-            String selected = roleId.equals(selectedRoleId) ? "selected" : "";
-        %>
-        <option value="<%= roleId %>" <%= selected %>><%= r.getRoleName() %></option>
-        <% } %>
+		
+		
+		<div class="ReportTo-container">
+		
+		<h2>Report-To</h2>
+		<hr>
+		
+		
+		<form class="form-row" action="addReportee" method="post">
+                <div class="form-group">     
+                    <label for="employees">Employee Name*</label> 
+                    <select id="employees" name="employees">
+                            <option value="">Select Employee</option>
+                            <% for (Employees e : employees) { %>
+                            <option value="<%= e.getEmpId() %>"><%= e.getFname() +" "+ e.getLname() %></option>
+                            <% } %>
                         </select>
-                        <input type="text" id="name" name="name" placeholder="Search by name" value="<%= request.getParameter("name") != null ? request.getParameter("name") : "" %>">
-					</div>
-
-
-					<div class="formButton">
-						<button type="submit" class="apply-btn">Filter</button>
-					</div>
-				</form>
-		</div>
+                        
+                </div>
+                <div class="form-group">     
+                    <label for="Manager">Report-To (Managers)*</label> 
+                    <select id="Manager" name="Manager">
+                            <option value="">Select Manager</option>
+                            <% for (Employees e : managers) { %>
+                            <option value="<%= e.getEmpId() %>"><%= e.getFname() +" "+ e.getLname() %></option>
+                            <% } %>
+                        </select>
+                        
+                </div>
+                <div class="button-container">
+        			<button type="submit" class="apply-btn" id="saveButton">Save</button>
+        		</div>
+        		</form>
+            </div>
+		
 		
 		<div class="table-container">
 		
-		 <table class="leave-table">
-    <thead>
-        <tr>
-            <th>Full Name</th>
-            <th class="actions-column"></th>
-
-        </tr>
-    </thead>
-    <tbody>
-        <%if(employees==null){ 
-        
-        if(role.equals("Manager")){
-        employees = empDao.getReportees(emp.getEmpId());
-        }else
-        {
-        	employees = empDao.getAllEmployees();
-        }
-        }
-        for (Employees emp2 : employees) { %>
-            <tr>
-                <td><%= emp2.getFname() %> <%= emp2.getLname() %></td>
-                
-                <%if(role.equals("HR")) {%>
-                <td class="actions-cell">
-				<a href="editEmployee?id=<%= emp2.getEmpId() %>" class="edit-btn"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <a href="deleteEmployee?id=<%= emp2.getEmpId() %>" class="delete-btn"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                </td>
-                <%}else { %>
-                 <td class="actions-cell"><a href="viewEmployee?id=<%= emp2.getEmpId() %>" class="view-btn"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
-                <%} %>
-
-            </tr>
-        <% } %>
-    </tbody>
-</table>
+		<h2>Reporting Employees</h2>
+		<hr>
 		
-		</div>
+		<form class="form-row" action="filterReportee" method="post">
+		<div class="form-group">     
+                    <label for="filterManager">Managers*</label> 
+                    <select id="filterManager" name="filterManager">
+                            <option value="">Select Manager</option>
+                            <% for (Employees e : managers) { %>
+                            <option value="<%= e.getEmpId() %>"><%= e.getFname() +" "+ e.getLname() %></option>
+                            <% } %>
+                        </select>
+                        
+                </div>
+         <div class="form-group">
+         
+         </div>
+         <div class="button-container">
+        			<button type="submit" class="apply-btn" id="filterButton">Filter</button>
+        		</div>
+         </form>
+         
+		<table class="Reporting-table">
+		<thead>
+		<tr>
+		<th> Reportee Name</th>
+		<th class="actions-column"> Action</th>
+		</tr>
+		</thead>
+		<% if(reportee!=null){ %>
+		<tbody>
+		<% for (Manager m : reportee) { %>
+		<tr>
+		<td> <%= m.getFullName() %></td>
+		<td class="actions-cell">
+		<form action="removeReportee" method="post">
+		<input type="hidden" id="removeId" name="removeId" value= <%=m.getMgrID() %>>
+		<div class="">
+        	<button type="submit" class="apply-btn" id="removeButton">Remove</button>
+        </div>
+		</form>
+		</td>
+		</tr>
+		<% } }%>
+		</tbody>
+		
+		</table>
 		
 
 	</div>
