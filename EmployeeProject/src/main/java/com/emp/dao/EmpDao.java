@@ -198,7 +198,7 @@ public class EmpDao {
 				+ "FROM leaves "
 				+ "WHERE MONTH(StartDate) = MONTH(CURRENT_DATE()) "
 				+ "AND YEAR(StartDate) = YEAR(CURRENT_DATE()) "
-				+ "AND EmployeeID = ?";
+				+ "AND EmployeeID = ? order by leaveid desc";
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setInt(1, empid);
 		ResultSet rs = ps.executeQuery();
@@ -405,7 +405,7 @@ public class EmpDao {
 	{
 		List<Leaves> list = new ArrayList<>();
 
-		String qry="Select l.*,e.firstname,e.lastname from leaves l left join employees e on l.approvedby=e.employeeid where l.employeeid=? order by applieddate desc";
+		String qry="Select l.*,e.firstname,e.lastname from leaves l left join employees e on l.approvedby=e.employeeid where l.employeeid=? order by leaveid desc";
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setInt(1, empid);
 		ResultSet rs = ps.executeQuery();
@@ -1637,11 +1637,13 @@ public class EmpDao {
 	
 	
 	// Method to check leaves on current date
-	public boolean getLeave(int empid) throws SQLException
+	public boolean getLeave(int empId,String fDate,String tDate) throws SQLException
 	{
-		String qry="SELECT COUNT(*) FROM leaves WHERE employeeid = ? AND applieddate = CURDATE() AND leavestatus = 'Pending'";
+		String qry="SELECT COUNT(*) FROM leaves WHERE employeeid = ? AND (startdate >= ? AND enddate <= ?)";
 		PreparedStatement ps = con.prepareStatement(qry);
-		ps.setInt(1, empid);
+		ps.setInt(1, empId);
+		ps.setString(2, fDate);
+		ps.setString(3, tDate);
 		ResultSet rs = ps.executeQuery();
 		if(rs.next())
 		{
