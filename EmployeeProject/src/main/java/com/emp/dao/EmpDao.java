@@ -405,7 +405,7 @@ public class EmpDao {
 	{
 		List<Leaves> list = new ArrayList<>();
 
-		String qry="Select l.*,e.firstname,e.lastname from leaves l left join employees e on l.approvedby=e.employeeid where l.employeeid=?";
+		String qry="Select l.*,e.firstname,e.lastname from leaves l left join employees e on l.approvedby=e.employeeid where l.employeeid=? order by applieddate desc";
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setInt(1, empid);
 		ResultSet rs = ps.executeQuery();
