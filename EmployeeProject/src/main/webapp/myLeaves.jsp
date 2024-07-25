@@ -374,6 +374,7 @@ showMessage('success', 'Applied Leave has been cancelled !!!');
     <tbody>
         <% 
         if (leaves == null) {
+        	
             leaves = empDao.getEmployeeLeaves(emp.getEmpId());
         }
         
