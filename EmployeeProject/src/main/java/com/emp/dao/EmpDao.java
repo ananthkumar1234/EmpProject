@@ -1620,4 +1620,17 @@ public class EmpDao {
 		return false;
 	}
 	
+	// Method to add new role
+	public boolean insertRole(String role) throws SQLException
+	{
+		String qry="insert into roles(rolename) values(?)";
+		PreparedStatement ps=con.prepareStatement(qry);
+		ps.setString(1, role);
+		int i = ps.executeUpdate();
+		if(i>0)
+		{
+			return true;
+		}
+		return false;
+	}
 }

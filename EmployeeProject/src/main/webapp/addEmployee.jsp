@@ -26,6 +26,7 @@
 <link rel="stylesheet"
 	href="https://npmcdn.com/flatpickr/dist/flatpickr.min.css">
 <script src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <style>
@@ -258,16 +259,115 @@ body.sidebar-collapsed .peopleLinks {
 }
 
 
+.popup2 {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	border:1px solid red;
+}
+.popup-content {
+	background-color: white;
+	margin: 15% auto;
+	padding: 30px;
+	border: 1px solid #888;
+	width: 300px;
+	position: relative;
+	border-radius: 10px;
+}
+
+.close-btn {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	color: #aaa;
+	font-size: 30px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.popup-form-group {
+	margin-bottom: 15px;
+}
+
+.popup-form-group label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.popup-form-group input {
+	width: 100%;
+	padding: 8px;
+	box-sizing: border-box;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+.popup-content button {
+	background-color: #007bff;
+	color: white;
+	border: none;
+	padding: 10px 15px;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+.popup-content button:hover {
+	background-color: #0056b3;
+}
+
+.add-role-icon {
+	margin-left: 10px;
+	color: #007bff;
+	cursor: pointer;
+	font-weight: bold; /* Bold font */
+	font-size: 1.2em; /* Increase size */
+}
+.popup-content .add-btn{
+background-color:#8bc34a;
+padding:5px;
+margin-left:25%;
+width:50%;
+border:1px solid #f0f0f0;
+border-radius:10px;
+font-weight:500;
+
+}
+.popup-content .add-btn:hover{
+background-color: #7cb342;
+}
+
+
+
 </style>
 
 <script>
 
 document.addEventListener("DOMContentLoaded", function() {
-    flatpickr("#DateOfBirth", {
+	flatpickr("#DateOfBirth", {
+        dateFormat: "Y-m-d",
+        maxDate: "today", // Restricts future dates
     });
+
     flatpickr("#JoinedDate", {
+        dateFormat: "Y-m-d",
+        maxDate: "today", // Restricts future dates
     });
 });
+
+
+
+function openPopup() {
+    document.getElementById("rolePopup").style.display = "block";
+}
+
+function closePopup() {
+    document.getElementById("rolePopup").style.display = "none";
+}
 
 </script>
 
@@ -332,7 +432,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		</div>
 		
 		
-		<form class="formContainer" action="AddEmployee" method="post">
+		<form class="formContainer" action="AddEmployee" method="post" onsubmit="return validatePasswords() && validateForm()">
 		
     <div class="formMenu">
     <h2>Add Employee</h2>
@@ -537,11 +637,11 @@ document.addEventListener("DOMContentLoaded", function() {
             <div class="form-row">
                 <div class="form-group">
                     <label for="PersonalEmail">Personal Email*</label>
-                    <input type="email" id="PersonalEmail" name="PersonalEmail" required>
+                    <input type="text" id="PersonalEmail" name="PersonalEmail" required >
                 </div>
                 <div class="form-group">
                     <label for="WorkEmail">Work Email*</label>
-                    <input type="email" id="WorkEmail" name="WorkEmail" required>
+                    <input type="text" id="WorkEmail" name="WorkEmail" required >
                 </div>
             </div>
             
@@ -556,14 +656,17 @@ document.addEventListener("DOMContentLoaded", function() {
                     <input type="Date" id="JoinedDate" name="JoinedDate" required>
                 </div>
                 <div class="form-group">     
-                    <label for="JobTitle">Job Title</label> 
-                    <select id="JobTitle" name="JobTitle">
-                            <option value="">Select Job Title</option>
-                            <% for (Roles r : JobTitle) { %>
-                            <option value="<%= r.getRoleId() %>"><%= r.getRoleName() %></option>
-                            <% } %>
-                        </select>
+                   <label for="JobTitle">Job Title</label>  
+        <select id="JobTitle" name="JobTitle">
+            <option value="">Select Job Title</option>
+            <% for (Roles r : JobTitle) { %>
+                <option value="<%= r.getRoleId() %>"><%= r.getRoleName() %></option>
+            <% } %>
+        </select>
                         
+                </div>
+                <div class="form-group">
+                <label for="role">Add Role <i class="fas fa-plus add-role-icon" onclick="openPopup()"></i></label>
                 </div>
             </div>
             <div class=form-row>
@@ -607,6 +710,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
     </div>
     </form>
+    
+    
+    <div id="rolePopup" class="popup2">
+			<div class="popup-content">
+				<form action="AddRoleServlet" method="post">
+					<span class="close-btn" onclick="closePopup()">&times;</span>
+					
+					<div class="popup-form-group">
+						<label for="newRole">Role Name*</label> <input type="text"
+							id="newRole" name="newRole">
+					</div>
+				<input type="submit" value="Add" class="add-btn">
+				</form>
+			</div>
+		</div>
+		
+
 </div>
 
 	
@@ -733,6 +853,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("empUpdated")){%> 
 		showMessage('success', 'Employee Updated !!!');
 		<%}
+		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("roleAdded")){%> 
+		showMessage('success', 'Role Added !!!');
+		<%}
 		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("empDeleted")){%> 
 		showMessage('error', 'Employee Deleted !!!');
 		<%}%>}
@@ -759,6 +882,93 @@ document.addEventListener("DOMContentLoaded", function() {
 		// showMessage('error', 'Something Went Wrong!');
 
 
+		// function to restrict numbers and special chars
+		
+		$(document).ready(function() {
+            function restrictToAlphabets(event) {
+                var key = event.which || event.keyCode;
+                if (!((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || key === 8 || key === 32)) {
+                    event.preventDefault();
+                    alert("Only alphabets are allowed..!");
+                }
+            }
+            
+            function restrictToIntegers(event) {
+                var key = event.which || event.keyCode;
+                if (!(key >= 48 && key <= 57) && key !== 8) { // 48-57 are the ASCII codes for digits 0-9, 8 is for backspace
+                    event.preventDefault();
+                    alert("Only integer values are allowed.");
+                }
+            }
+            
+            function validateMobileLength() {  // to check the length of the mobile number
+                var mobile = $("#Mobile").val();
+                var mobile1 = $("#EmergencyMobile").val();
+                if (mobile.length == 10 || mobile1.length == 10) {
+                    alert("Mobile number must be exactly 10 digits.");
+                    return false;
+                }
+                return true;
+            }
+
+            $("#FirstName").on('keypress', restrictToAlphabets);
+            $("#LastName").on('keypress', restrictToAlphabets);
+            $("#Nationality").on('keypress', restrictToAlphabets);
+            $("#PermanentCity").on('keypress', restrictToAlphabets);
+            $("#PermanentState").on('keypress', restrictToAlphabets);
+            $("#PermanentCountry").on('keypress', restrictToAlphabets);
+            $("#Relation").on('keypress', restrictToAlphabets);
+            $("#Location").on('keypress', restrictToAlphabets);
+            $("#EmergencyName").on('keypress', restrictToAlphabets);
+            $("#Username").on('keypress', restrictToAlphabets);
+            
+            $("#PermanentPostalCode").on('keypress', restrictToIntegers);
+            $("#Mobile").on('keypress', restrictToIntegers);
+            $("#Mobile").on('keypress', validateMobileLength);
+            $("#EmergencyMobile").on('keypress', restrictToIntegers);
+            $("#EmergencyMobile").on('keypress', validateMobileLength);
+        });
+		
+		// function to validate password and confirm password
+		
+		function validatePasswords() {
+            var password = document.getElementById("Password").value;
+            var confirmPassword = document.getElementById("ConfirmPassword").value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return false;
+            }
+            return true;
+        }
+		
+		
+		// function to validate email pattern
+		
+		function validateEmail(email) {
+            // Regular expression pattern for email validation
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailPattern.test(email);
+        }
+
+        function validateForm() {
+            var personalEmail = document.getElementById("PersonalEmail").value;
+            var workEmail = document.getElementById("WorkEmail").value;
+
+            if (!validateEmail(personalEmail)) {
+                alert("Please enter a valid Personal Email.");
+                return false;
+            }
+
+            if (!validateEmail(workEmail)) {
+                alert("Please enter a valid Work Email.");
+                return false;
+            }
+
+            return true;
+        }
+			
+			
 		</script>
 		<div id="message-container" class="message-container">
 		    <span id="message-icon"></span>
