@@ -271,7 +271,7 @@ public class EmpDao {
 
 	public boolean checkHoliday(String date) throws SQLException
 	{	
-		System.out.println("Checking Holiday");
+//		System.out.println("Checking Holiday");
 		String qry="select holidayDate from holidays where holidayDate = ?";
 		PreparedStatement ps = con.prepareStatement(qry);
 		ps.setString(1, date);
@@ -1631,6 +1631,23 @@ public class EmpDao {
 		{
 			return true;
 		}
+		return false;
+	}
+	
+	
+	
+	// Method to check leaves on current date
+	public boolean getLeave(int empid) throws SQLException
+	{
+		String qry="SELECT COUNT(*) FROM leaves WHERE employeeid = ? AND applieddate = CURDATE() AND leavestatus = 'Pending'";
+		PreparedStatement ps = con.prepareStatement(qry);
+		ps.setInt(1, empid);
+		ResultSet rs = ps.executeQuery();
+		if(rs.next())
+		{
+			return rs.getInt(1) > 0;
+		}
+		
 		return false;
 	}
 }

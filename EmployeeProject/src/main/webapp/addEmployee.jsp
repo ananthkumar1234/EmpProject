@@ -903,8 +903,15 @@ function closePopup() {
             
             function validateMobileLength() {  // to check the length of the mobile number
                 var mobile = $("#Mobile").val();
+                if (mobile.length == 10) {
+                    alert("Mobile number must be exactly 10 digits.");
+                    return false;
+                }
+                return true;
+            }
+            function validateMobileLength1() {  // to check the length of the mobile number
                 var mobile1 = $("#EmergencyMobile").val();
-                if (mobile.length == 10 || mobile1.length == 10) {
+                if (mobile1.length == 10) {
                     alert("Mobile number must be exactly 10 digits.");
                     return false;
                 }
@@ -925,8 +932,9 @@ function closePopup() {
             $("#PermanentPostalCode").on('keypress', restrictToIntegers);
             $("#Mobile").on('keypress', restrictToIntegers);
             $("#Mobile").on('keypress', validateMobileLength);
+            
             $("#EmergencyMobile").on('keypress', restrictToIntegers);
-            $("#EmergencyMobile").on('keypress', validateMobileLength);
+            $("#EmergencyMobile").on('keypress', validateMobileLength1);
         });
 		
 		// function to validate password and confirm password

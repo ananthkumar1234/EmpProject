@@ -40,25 +40,34 @@ public class ApplyLeaveServlet extends HttpServlet{
 			if(empDao.getAvailableLeaves(emp.getEmpId()) >= totalDays)
 			{
 				lev.setTotalDays(totalDays);
-				int leaveid = empDao.insertLeave(lev);
-				if(leaveid > 0)
-				{
-					if(empDao.updateLeavestock(leaveid))
+				boolean f = empDao.getLeave(emp.getEmpId());
+//				System.out.println("boolean value : "+f);
+				if(f)
 					{
-						req.setAttribute("msg","Success");
+						req.setAttribute("msg","AlreadyLeaveApplied");
 						req.getRequestDispatcher("applyLeave.jsp").forward(req, resp);
-						//						resp.sendRedirect("applyLeave.jsp?message=Leave aaplied successfully!!!");
+					}else
+				{
+					int leaveid = empDao.insertLeave(lev);
+					if(leaveid > 0)
+					{
+						if(empDao.updateLeavestock(leaveid))
+						{
+							req.setAttribute("msg","Success");
+							req.getRequestDispatcher("applyLeave.jsp").forward(req, resp);
+							//						resp.sendRedirect("applyLeave.jsp?message=Leave aaplied successfully!!!");
+						}else
+						{
+							req.setAttribute("msg","Error");
+							req.getRequestDispatcher("applyLeave.jsp").forward(req, resp);
+							//							resp.sendRedirect("applyLeave.jsp?message=Something went wrong!!!");
+						}
 					}else
 					{
-						req.setAttribute("msg","Error");
+						req.setAttribute("msg","LeaveStockError");
 						req.getRequestDispatcher("applyLeave.jsp").forward(req, resp);
-						//							resp.sendRedirect("applyLeave.jsp?message=Something went wrong!!!");
+						//				resp.sendRedirect("applyLeave.jsp?message=Leave not applied !!!");
 					}
-				}else
-				{
-					req.setAttribute("msg","LeaveStockError");
-					req.getRequestDispatcher("applyLeave.jsp").forward(req, resp);
-					//				resp.sendRedirect("applyLeave.jsp?message=Leave not applied !!!");
 				}
 			}else
 			{

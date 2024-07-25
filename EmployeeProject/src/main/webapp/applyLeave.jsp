@@ -228,6 +228,9 @@ document.addEventListener("DOMContentLoaded", function() {
 	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("LeaveStockError")){%> 
 	showMessage('error', 'leaves stock error !!!');
 	<%}
+	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("AlreadyLeaveApplied")){%> 
+	showMessage('error', 'You have already applied for leave today.!!!');
+	<%}
 	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("OutOfLeaves")){%> 
 	showMessage('error', 'check leave balance !!!');
 	<%}%>}
