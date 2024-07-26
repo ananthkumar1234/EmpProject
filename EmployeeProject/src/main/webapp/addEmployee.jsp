@@ -479,8 +479,8 @@ function closePopup() {
                     <label for="Gender">Gender*</label>
                     <select id="Gender" name="Gender" required>
                     <option value="">Select Gender</option>
-                    <option value="Married">Male</option>
-                    <option value="Single">Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
                     <option value="Other">Other</option>
                     </select>
                 </div>

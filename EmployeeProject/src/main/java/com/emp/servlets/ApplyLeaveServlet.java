@@ -23,6 +23,9 @@ public class ApplyLeaveServlet extends HttpServlet{
 
 		HttpSession ses = req.getSession();
 		Employees emp = (Employees)ses.getAttribute("employee");
+		
+		String from_date = req.getParameter("fromDate");
+		String to_date = req.getParameter("toDate");
 
 		try {
 			Connection con = DBConnect.getConnection();
@@ -30,8 +33,8 @@ public class ApplyLeaveServlet extends HttpServlet{
 
 			Leaves lev = new Leaves();
 			lev.setEmployeeID(emp.getEmpId());
-			lev.setFromDate(req.getParameter("fromDate"));
-			lev.setToDate(req.getParameter("toDate"));
+			lev.setFromDate(from_date);
+			lev.setToDate(to_date);
 			lev.setLeaveType(req.getParameter("leaveType"));
 			lev.setAppliedReason(req.getParameter("reason"));
 			lev.setLeaveStatus("Pending");
@@ -40,7 +43,7 @@ public class ApplyLeaveServlet extends HttpServlet{
 			if(empDao.getAvailableLeaves(emp.getEmpId()) >= totalDays)
 			{
 				lev.setTotalDays(totalDays);
-				boolean f = empDao.getLeave(emp.getEmpId());
+				boolean f = empDao.getLeave(emp.getEmpId(),from_date,to_date);
 //				System.out.println("boolean value : "+f);
 				if(f)
 					{
