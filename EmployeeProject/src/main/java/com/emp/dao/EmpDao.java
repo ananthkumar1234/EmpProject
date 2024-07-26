@@ -800,7 +800,7 @@ public class EmpDao {
 	public List<Attendance> getAttendanceByDateRange(int eid, String fromDate, String toDate) {
 		List<Attendance> list = new ArrayList<>();
 		try {
-			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
+			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, a.IsButtonClicked, "
 					+ "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
 					+ "FROM attendance a "
 					+ "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
@@ -818,6 +818,7 @@ public class EmpDao {
 				att.setCheckin(rs.getString("checkintime"));
 				att.setCheckout(rs.getString("checkouttime"));
 				att.setRemarks(rs.getString("Remarks"));
+				att.setButtonClicked(rs.getInt("IsButtonClicked"));
 				list.add(att);
 			}
 		} catch (Exception e) {
@@ -831,7 +832,7 @@ public class EmpDao {
 	public List<Attendance> getAttendanceByYearMonth(int eid, String year, String month) {
 		List<Attendance> list = new ArrayList<>();
 		try {
-			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
+			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, a.IsButtonClicked, "
 					+ "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
 					+ "FROM attendance a "
 					+ "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
@@ -849,6 +850,7 @@ public class EmpDao {
 				att.setCheckin(rs.getString("checkintime"));
 				att.setCheckout(rs.getString("checkouttime"));
 				att.setRemarks(rs.getString("Remarks"));
+				att.setButtonClicked(rs.getInt("IsButtonClicked"));
 				list.add(att);
 			}
 		} catch (Exception e) {
@@ -862,7 +864,7 @@ public class EmpDao {
 	public List<Attendance> getAttendanceByYear(int eid, String year) {
 		List<Attendance> list = new ArrayList<>();
 		try {
-			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, "
+			String query = "SELECT a.AttendanceId, a.Date, a.CheckInTime, a.CheckOutTime, a.Remarks, a.IsButtonClicked, "
 					+ "CASE WHEN au.AttendanceId IS NULL THEN 0 ELSE 1 END AS UpdateRequested "
 					+ "FROM attendance a "
 					+ "LEFT JOIN AttendanceUpdate au ON a.AttendanceId = au.AttendanceId "
@@ -879,6 +881,7 @@ public class EmpDao {
 				att.setCheckin(rs.getString("checkintime"));
 				att.setCheckout(rs.getString("checkouttime"));
 				att.setRemarks(rs.getString("Remarks"));
+				att.setButtonClicked(rs.getInt("IsButtonClicked"));
 				list.add(att);
 			}
 		} catch (Exception e) {
