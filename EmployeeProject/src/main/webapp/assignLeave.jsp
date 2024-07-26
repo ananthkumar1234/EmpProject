@@ -202,21 +202,33 @@ textarea {
 
 <script>
 
+//to highlight the active tabs(anchor tag links) 
+
 document.addEventListener("DOMContentLoaded", function() {
-    var currentPage = window.location.pathname.split("/").pop();
-    
-    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
-    var timePages = ["attendancelist.jsp", "empattendance.jsp", "time.jsp"];
-    
-    if (leavePages.includes(currentPage)) {
-        document.querySelector(".activeLeave").classList.add("active");
-    } else if (timePages.includes(currentPage)) {
-        document.querySelector(".time-group").classList.add("active");
-    }
-    else{
-            document.querySelector(".activeDashboard").classList.add("active");
-    }
-});
+	    var currentPage = window.location.pathname.split("/").pop();
+	    var targetPage = "applyLeave.jsp";
+	    
+	    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
+	    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
+		var peoplePages = ["employees.jsp","addEmployee.jsp"];
+		var profilePage = ["profile.jsp"];
+	    
+	    if (leavePages.includes(currentPage)) {
+	        document.querySelector(".activeLeave").classList.add("active");
+	    } else if (timePages.includes(currentPage)) {
+	        document.querySelector(".activeAttendance").classList.add("active");
+	    } else if (peoplePages.includes(currentPage)) {
+		    document.querySelector(".activePeople").classList.add("active");
+		} else if (profilePage.includes(currentPage)) {
+		    document.querySelector(".activeProfile").classList.add("active");
+		}else if (currentPage === "assignLeave") {
+		    targetPage = "applyLeave.jsp";
+		    document.querySelector(".activeLeave").classList.add("active");
+		}
+	    else{
+			document.querySelector(".activeDashboard").classList.add("active");
+	    }
+	});
 
 
 document.addEventListener("DOMContentLoaded", function() {

@@ -42,7 +42,7 @@ public class ApplyLeaveForServlet extends HttpServlet{
 		if(empDao.getAvailableLeaves(empid) >= totalDays)
 		{
 			lev.setTotalDays(totalDays);
-			int leaveid = empDao.insertLeave(lev);
+			int leaveid = empDao.applyLeaveFor(lev);
 			if(leaveid > 0)
 			{
 				if(empDao.updateLeavestock(leaveid))
