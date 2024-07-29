@@ -324,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		</div>
 
 		<div class="leave-form-container">
-			<h2>Apply Leave For</h2>
+			<h2>Apply Leave</h2>
 			<hr>
 			<form class="leave-form" action="applyLeave" method="post">
 				<div class="form-left">
