@@ -284,6 +284,26 @@ textarea {
     margin-right: 10px;
     vertical-align: middle;
 }
+
+.cancel-btn {
+    color: #fff;
+    background-color: #d9534f;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.cancel-btn:hover {
+    background-color: #c9302c;
+}
+
+.cancel-btn.disabled {
+    background-color: #d9534f;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
  
 
 </style>
@@ -355,9 +375,9 @@ showMessage('error', 'Holiday Deleted Successfully ...');
         
         <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
         <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
-        <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-user"></i><span class="menu-text"> My Info</span></a></li>
         <%if(role.equals("HR")) { %>
-        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> Contacts</span></a></li>
+        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-address-book"></i><span class="menu-text"> Contacts</span></a></li>
         <%}%>
     </ul>
 	</div>
@@ -452,13 +472,20 @@ showMessage('error', 'Holiday Deleted Successfully ...');
             boolean isPast = holidayDate.isBefore(today);
         %>
         <tr class="<%= isPast ? "strikethrough" : "" %>">
-            <td><%= a.getDate() %></td>
-            <td><%= a.getName() %></td>
-            <td><%= holidayDate.getDayOfWeek() %></td>
-            <%if("HR".equals(role)) { %>
-			<td><a class="cancel-btn" href="deleteHoliday?id=<%=a.getId()%>">Cancel</a></td>
-			<%} %>
-        </tr>
+    <td><%= a.getDate() %></td>
+    <td><%= a.getName() %></td>
+    <td><%= holidayDate.getDayOfWeek() %></td>
+    <% if ("HR".equals(role)) { %>
+        <td>
+            <% if (isPast) { %>
+                <span class="cancel-btn disabled">Delete</span>
+            <% } else { %>
+                <a class="cancel-btn" href="deleteHoliday?id=<%= a.getId() %>">Delete</a>
+            <% } %>
+        </td>
+    <% } %>
+</tr>
+
         <%
         }
         %>
@@ -494,7 +521,7 @@ showMessage('error', 'Holiday Deleted Successfully ...');
             <td><%= a.getName() %></td>
             <td><%= holidayDate.getDayOfWeek() %></td>
             <%if("HR".equals(role)) { %>
-			<td><a class="cancel-btn" href="deleteHoliday?id=<%=a.getId()%>">Cancel</a></td>
+			<td><a class="cancel-btn" href="deleteHoliday?id=<%=a.getId()%>">Delete</a></td>
 			<%} %>
         </tr>
         <%

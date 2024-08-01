@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -21,9 +22,9 @@ import com.emp.entities.EmployeeFullDetails;
 import com.emp.entities.Employees;
 import com.emp.entities.Holidays;
 import com.emp.entities.Leaves;
+import com.emp.entities.Manager;
 import com.emp.entities.Roles;
 import com.emp.entities.UserCredentials;
-import com.emp.entities.Manager;
 
 public class EmpDao {
 
@@ -1314,35 +1315,41 @@ public class EmpDao {
 		
 		String qry2="SELECT employeeID FROM employees ORDER BY employeeID DESC LIMIT 1";
 		
-		PreparedStatement ps= con.prepareStatement(qry);
-		ps.setString(1, e.getFname());
-		ps.setString(2, e.getLname());
-		ps.setString(3, e.getDateofBirth());
-		ps.setString(4, e.getPersonalEmail());
-		ps.setString(5, e.getPersonalMobile());
-		ps.setString(6, e.getHireDate());
-		ps.setInt(7,e.getRoleId());
-		ps.setString(8, e.getMaritalStatus());
-		ps.setString(9, e.getGender());
-		ps.setString(10, e.getEmergencyMobile());
-		ps.setString(11, e.getEmergencyName());
-		ps.setString(12, e.getBloodGroup());
-		ps.setString(13, e.getNationality());
-		ps.setString(14, e.getPersonalHome());
-		ps.setString(15, e.getEmergencyRelatoin());
-		ps.setString(16, e.getWorkEmail());
-		ps.setString(17, e.getJobLocation());
-		ps.setString(18, e.getEmpNo());
-		int i=ps.executeUpdate();
-		if(i>0) {
-		
-		ResultSet rs= con.prepareStatement(qry2).executeQuery();			
-		rs.next();
-		int id=rs.getInt("employeeID");
-		b=addAddress(id,uc,a);
-		
-		}
-		return b;	
+		try (PreparedStatement ps = con.prepareStatement(qry)) {
+	        ps.setString(1, e.getFname());
+	        ps.setString(2, e.getLname());
+	        ps.setString(3, e.getDateofBirth());
+	        ps.setString(4, e.getPersonalEmail());
+	        ps.setString(5, e.getPersonalMobile());
+	        ps.setString(6, e.getHireDate());
+	        ps.setInt(7, e.getRoleId());
+	        ps.setString(8, e.getMaritalStatus());
+	        ps.setString(9, e.getGender());
+	        ps.setString(10, e.getEmergencyMobile());
+	        ps.setString(11, e.getEmergencyName());
+	        ps.setString(12, e.getBloodGroup());
+	        ps.setString(13, e.getNationality());
+	        ps.setString(14, e.getPersonalHome());
+	        ps.setString(15, e.getEmergencyRelatoin());
+	        ps.setString(16, e.getWorkEmail());
+	        ps.setString(17, e.getJobLocation());
+	        ps.setString(18, e.getEmpNo());
+	        
+	        int i = ps.executeUpdate();
+	        if (i > 0) {
+	            try (ResultSet rs = con.prepareStatement(qry2).executeQuery()) {
+	                if (rs.next()) {
+	                    int id = rs.getInt("employeeID");
+	                    b = addAddress(id, uc, a);
+	                }
+	            }
+	        }
+	    } catch (SQLIntegrityConstraintViolationException err) {
+	        // Handle duplicate empno case
+	        System.err.println("Error: Duplicate empno value. " + err.getMessage());
+	    }
+//	    System.out.println("flag : "+b);
+	    return b;	
 	}
 	public boolean addAddress(int id,UserCredentials uc, Address a) throws SQLException
 	{
@@ -1629,18 +1636,36 @@ public class EmpDao {
 	}
 	
 	// Method to add new role
-	public boolean insertRole(String role) throws SQLException
-	{
-		String qry="insert into roles(rolename) values(?)";
-		PreparedStatement ps=con.prepareStatement(qry);
-		ps.setString(1, role);
-		int i = ps.executeUpdate();
-		if(i>0)
-		{
-			return true;
-		}
-		return false;
+	public boolean insertRole(String role) throws SQLException {
+	    String insertQuery = "INSERT INTO roles (rolename) VALUES (?)";
+	    String checkQuery = "SELECT COUNT(*) FROM roles WHERE rolename = ?";
+
+	    // Check if the role already exists
+	    try (PreparedStatement checkStmt = con.prepareStatement(checkQuery)) {
+	        checkStmt.setString(1, role);
+	        try (ResultSet rs = checkStmt.executeQuery()) {
+	            if (rs.next() && rs.getInt(1) > 0) {
+	                // Role already exists
+//	                System.out.println("Role already exists.");
+	                return false;
+	            }
+	        }
+	    }
+
+	    // Insert the new role
+	    try (PreparedStatement insertStmt = con.prepareStatement(insertQuery)) {
+	        insertStmt.setString(1, role);
+	        int i = insertStmt.executeUpdate();
+	        if (i > 0) {
+//	            System.out.println("Role inserted successfully.");
+	            return true;
+	        }
+	    }
+
+//	    System.out.println("Failed to insert role.");
+	    return false;
 	}
+
 	
 	
 	

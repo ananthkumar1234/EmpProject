@@ -434,9 +434,9 @@ function closePopup(popupId) {
 				id="time-link"><i class="fas fa-clock"></i><span
 					class="menu-text"> Time Logs</span></a></li>
 			<li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i
-					class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+					class="fas fa-user"></i><span class="menu-text"> My Info</span></a></li>
 					<%if(role.equals("HR")) { %>
-        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> Contacts</span></a></li>
+        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-address-book"></i><span class="menu-text"> Contacts</span></a></li>
         <%}%>
 		</ul>
 	</div>
@@ -486,7 +486,7 @@ function closePopup(popupId) {
 					<input type="hidden" name="origin" value="attendance"> 
 					
 					<div class="filter-group">
-						<label for="employeeid">Employee Name*</label> <select id="empid"
+						<label for="employeeid">Employee Name *</label> <select id="empid"
 							name="empid" required>
 							<option value="">Select Employee</option>
 							<%
@@ -504,12 +504,12 @@ function closePopup(popupId) {
 					
 					
 					<div class="filter-group">
-					<label for="year">Year:</label> 
-					<input type="text" id="year" name="year" onkeyup="toggleMonthDropdown()" value="<%=request.getParameter("year") != null ? request.getParameter("year") : ""%>">
+					<label for="year">Year *</label> 
+					<input type="text" id="year" name="year" onkeyup="toggleMonthDropdown()" value="<%=request.getParameter("year") != null ? request.getParameter("year") : ""%>" required>
 					</div>
 					
 					<div class="filter-group">
-					<label for="month">Month:</label> <select id="month" name="month">
+					<label for="month">Month </label> <select id="month" name="month">
 						<option value=""
 							<%= "".equals(request.getParameter("month")) ? "selected" : "" %>>Select
 							Month</option>
@@ -541,12 +541,12 @@ function closePopup(popupId) {
 					</div>
 					
 					<div class="filter-group">
-					<label for="fromDate">FromDate:</label>
+					<label for="fromDate">FromDate </label>
             		<input type="text" id="fromDate" name="fromDate" value="<%= request.getParameter("fromDate") != null ? request.getParameter("fromDate") : "" %>">
 					</div>
 					
 					<div class="filter-group">
-					<label for="toDate">ToDate:</label>
+					<label for="toDate">ToDate </label>
           		    <input type="text" id="toDate" name="toDate" value="<%= request.getParameter("toDate") != null ? request.getParameter("toDate") : "" %>">
 					</div>
 					

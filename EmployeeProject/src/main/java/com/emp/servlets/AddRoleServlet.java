@@ -25,21 +25,11 @@ public class AddRoleServlet extends HttpServlet{
 			EmpDao eDao = new EmpDao(con);
 			boolean f = eDao.insertRole(roleName);
 			if(f)
-			{
-				
-//				resp.setContentType("application/json");
-//		        PrintWriter out = resp.getWriter();
-//		        if (f) {
-//		            out.print("{\"status\":\"success\", \", \"roleName\":\"" + roleName + "\"}");
-//		        } else {
-//		            out.print("{\"status\":\"failure\"}");
-//		        }
-//		        out.flush();
-				
+			{	
 				req.setAttribute("msg", "roleAdded");
 				req.getRequestDispatcher("addEmployee.jsp").forward(req, resp);
 			}else {
-				req.setAttribute("msg", "Error");
+				req.setAttribute("msg", "DuplicateName");
 			req.getRequestDispatcher("addEmployee.jsp").forward(req, resp);
 			}
 		}catch(Exception e)

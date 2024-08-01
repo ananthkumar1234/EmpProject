@@ -397,9 +397,9 @@ function closePopup() {
         
         <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
         <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
-        <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-user"></i><span class="menu-text"> My Info</span></a></li>
         <%if(role.equals("HR")) { %>
-        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> Contacts</span></a></li>
+        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-address-book"></i><span class="menu-text"> Contacts</span></a></li>
         <%}%>
     </ul>
 	</div>
@@ -850,7 +850,7 @@ function closePopup() {
 		showMessage('success', 'New Employee Inserted !!!');
 		<%}
 		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error2")){%> 
-		showMessage('error', 'Employee not added - Ensure the details entered are correct !!!');
+		showMessage('error', 'Employee not added - enter unique empno !!!');
 		<%}
 		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error3")){%> 
 		showMessage('error', 'Username Already exists !!!');
@@ -860,6 +860,9 @@ function closePopup() {
 		<%}
 		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("roleAdded")){%> 
 		showMessage('success', 'Role Added !!!');
+		<%}
+		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("DuplicateName")){%> 
+		showMessage('error', 'Duplicate role name !!!');
 		<%}
 		else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("empDeleted")){%> 
 		showMessage('error', 'Employee Deleted !!!');

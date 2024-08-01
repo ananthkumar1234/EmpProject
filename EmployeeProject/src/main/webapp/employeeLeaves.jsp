@@ -311,9 +311,9 @@ form .form-button {
 				id="time-link"><i class="fas fa-clock"></i><span
 					class="menu-text"> Time Logs</span></a></li>
 			<li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i
-					class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+					class="fas fa-user"></i><span class="menu-text"> My Info</span></a></li>
 					<%if(role.equals("HR")) { %>
-        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> Contacts</span></a></li>
+        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-address-book"></i><span class="menu-text"> Contacts</span></a></li>
         <%}%>
 		</ul>
 	</div>
@@ -366,14 +366,14 @@ form .form-button {
 		</div>
 
 		<div class="table-container">
-			<h2>My Leaves</h2>
+			<h2>Employees Leaves</h2>
 
 			<hr>
 
 			<div class="filter">
 				<form action="filterLeaveBy" method="post">
 					<div class="form-container">
-						<label for="employeeid">Employee Name*</label> <select id="empid"
+						<label for="employeeid">Employee Name *</label> <select id="empid"
 							name="empid" required>
 							<option value="">Select Employee</option>
 							<%
@@ -391,13 +391,13 @@ form .form-button {
 
 
 					<div class="form-container">
-						<label for="year">Year:</label> <input type="text" id="year"
+						<label for="year">Year *</label> <input type="text" id="year"
 							name="year" onkeyup="toggleMonthDropdown()"
-							value="<%=request.getParameter("year") != null ? request.getParameter("year") : ""%>">
+							value="<%=request.getParameter("year") != null ? request.getParameter("year") : ""%>" required>
 					</div>
 
 					<div class="form-container">
-						<label for="month">Month:</label> <select id="month" name="month">
+						<label for="month">Month </label> <select id="month" name="month">
 							<option value=""
 								<%="".equals(request.getParameter("month")) ? "selected" : ""%>>Select
 								Month</option>
