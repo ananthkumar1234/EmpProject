@@ -32,41 +32,6 @@
 body.sidebar-collapsed .peopleLinks {
     left: 3%;
 }
-.peopleLinks {
-	display: flex;
-	background-color: white;
-	padding: 1% 2%;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-	margin-top:4.2%;
-	position: fixed;
-    top: 10px;
-    right: 0;
-    left: 15%;
-    transition: left 0.3s ease;
-    z-index: 999;
-    flex-direction:row;
-    justify-content:start;
-}
-
-.peopleLinks a {
-	color: #6c757d;
-	text-decoration: none;
-	padding: 1% 1%;
-	font-size:85%;
-	transition: all 0.3s ease;
-	
-	margin-left:3%;
-	border-radius: 10px;
-	background-color: #f5f5f5;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.peopleLinks a:hover, .peopleLinks a:focus {
-	color: #ff8c00;
-	background-color: #fff9f0;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	transform: translateY(-2px);
-}
 .sidebar-menu li.active {
     background: linear-gradient(to left,#FF9671 ,#FFC75F );
     border-radius:0 50px 50px 0;
@@ -94,7 +59,7 @@ body.sidebar-collapsed .peopleLinks {
   padding: 20px;
   max-width: 100%;
   
-  margin-top: 12%;
+  margin-top: 5%;
 
   margin-left:20px;
   
@@ -344,33 +309,16 @@ background-color:white;
 				</div>
 			</div>
 		</header>
-		<div class="peopleLinks">
-			 
-			<% if(role.equals("Manager")) { %>
-			<a href="employees.jsp">Reportees</a>
-			<%}else{%>
-			<a href="employees.jsp">Employees</a>
-			<a href="addEmployee.jsp">Add Employee</a>
-			<a href="reportTo.jsp">Report-To</a>
-			<%} %>
-		</div>
 		
 		<div class="filter-container">
-		<form action="EmployeeFilter" method="post">
+		<form action="employeeContactFilter" method="post">
 					<div class="form-container">
-						<label for="JobTitle">Role</label> 
-						 <select id="JobTitle" name="JobTitle">
-                            <option value="">Select Job Title</option>
-        <% 
-        String selectedRoleId = request.getParameter("JobTitle");
-        for (Roles r : JobTitle) { 
-            String roleId = String.valueOf(r.getRoleId());
-            String selected = roleId.equals(selectedRoleId) ? "selected" : "";
-        %>
-        <option value="<%= roleId %>" <%= selected %>><%= r.getRoleName() %></option>
-        <% } %>
-                        </select>
-                        <input type="text" id="name" name="name" placeholder="Search by name" value="<%= request.getParameter("name") != null ? request.getParameter("name") : "" %>">
+					
+						 
+                        <input type="text" id="name" name="name" placeholder="Search by Name" value="<%= request.getParameter("name") != null ? request.getParameter("name") : "" %>">
+					
+						
+                        <input type="text" id="empno" name="empno" placeholder="Search by Employee ID" value="<%= request.getParameter("empno") != null ? request.getParameter("empno") : "" %>">
 					</div>
 
 
@@ -386,32 +334,24 @@ background-color:white;
     <thead>
         <tr>
             <th>Full Name</th>
-            <th class="actions-column"></th>
+            <th>Employee ID</th>
+            <th>Mobile</th>
+            <th>Email</th>
 
         </tr>
     </thead>
     <tbody>
         <%if(employees==null){ 
-        
-        if(role.equals("Manager")){
-        employees = empDao.getReportees(emp.getEmpId());
-        }else
-        {
+
         	employees = empDao.getAllEmployees();
-        }
+        
         }
         for (Employees emp2 : employees) { %>
             <tr>
                 <td><%= emp2.getFname() %> <%= emp2.getLname() %></td>
-                
-                <%if(role.equals("HR")) {%>
-                <td class="actions-cell">
-				<a href="editEmployee?id=<%= emp2.getEmpId() %>" class="edit-btn"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <a href="deleteEmployee?id=<%= emp2.getEmpId() %>" class="delete-btn"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                </td>
-                <%}else { %>
-                 <td class="actions-cell"><a href="viewEmployee?id=<%= emp2.getEmpId() %>" class="view-btn"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
-                <%} %>
+                <td><%= emp2.getEmpNo() %></td>
+                <td><%= emp2.getPersonalMobile() %></td>
+                <td><%= emp2.getWorkEmail() %></td>
 
             </tr>
         <% } %>
@@ -435,6 +375,7 @@ background-color:white;
 		    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
 			var peoplePages = ["employees.jsp","addEmployee.jsp"];
 			var profilePage = ["profile.jsp"];
+			var contactPage = ["contacts.jsp"];
 		    
 		    if (leavePages.includes(currentPage)) {
 		        document.querySelector(".activeLeave").classList.add("active");
@@ -447,62 +388,16 @@ background-color:white;
 			}else if (currentPage === "EmployeeFilter" || currentPage === "deleteEmployee" || currentPage === "updateEmployee" || currentPage === "AddEmployee") {
 			    targetPage = "employees.jsp";
 			    document.querySelector(".activePeople").classList.add("active");
+			} else if (contactPage.includes(currentPage)) {
+			    document.querySelector(".activeContact").classList.add("active");
 			}
 		    else{
 				document.querySelector(".activeDashboard").classList.add("active");
 		    }
 		});
 	
-	
-	//Displaying messages for different scenarios
-
-	window.onload = function() {
-	<% if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error")) { %> 
-	showMessage('error', 'Something Went Wrong!');
-	<% }
-	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("empInserted")){%> 
-	showMessage('success', 'New Employee Inserted !!!');
-	<%}
-	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error2")){%> 
-	showMessage('error', 'Employee not added - Ensure the details entered are correct !!!');
-	<%}
-	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("Error3")){%> 
-	showMessage('error', 'Username Already exists !!!');
-	<%}
-	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("empUpdated")){%> 
-	showMessage('success', 'Employee Updated !!!');
-	<%}
-	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("empDeleted")){%> 
-	showMessage('error', 'Employee Deleted !!!');
-	<%}%>}
-	
-	/*new js function to display messages*/
-	function showMessage(type, message) {
-	    const messageContainer = document.getElementById('message-container');
-	    const messageText = document.getElementById('message-text');
-	    const messageIcon = document.getElementById('message-icon');
-
-	    messageContainer.classList.remove('success', 'error', 'show');
-	    messageContainer.classList.add(type);
-	    messageText.textContent = message;
-	    messageIcon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
-
-	    messageContainer.classList.add('show');
-	    setTimeout(() => {
-	        messageContainer.classList.remove('show');
-	    }, 4000);
-	}
-
-	// Usage examples:
-	// showMessage('success', 'Leave Applied Successfully...');
-	// showMessage('error', 'Something Went Wrong!');
-
-
 	</script>
-	<div id="message-container" class="message-container">
-	    <span id="message-icon"></span>
-	    <p id="message-text"></p>
-	</div>
+	
 
 </body>
 </html>

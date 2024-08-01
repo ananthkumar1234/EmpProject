@@ -244,7 +244,10 @@ body.sidebar-collapsed .peopleLinks {
     margin-right: 10px;
     vertical-align: middle;
 }
-
+h5
+{
+margin-top:-5%;
+}
 
 </style>
 
@@ -281,6 +284,9 @@ body.sidebar-collapsed .peopleLinks {
         <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
         <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
         <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <%if(role.equals("HR")) { %>
+        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> Contacts</span></a></li>
+        <%}%>
     </ul>
 	</div>
 
@@ -295,7 +301,7 @@ body.sidebar-collapsed .peopleLinks {
 			<div class="user-profile">
 				<div class="user-dropdown">
 					<button class="dropbtn" id="userDropdown">
-						<%= emp.getFname() + " " + emp.getLname() %>
+						<%= emp.getFname() + " " + emp.getLname()%>
 						<i class="fas fa-caret-down"></i>
 					</button>
 					<div class="dropdown-content" id="userDropdownContent">
@@ -311,6 +317,7 @@ body.sidebar-collapsed .peopleLinks {
 		
     <div class="formMenu">
     <h2><%= ea.getEmployee().getFname() + " " + ea.getEmployee().getLname() %></h2>
+    <h5><%= " ( "+ea.getEmployee().getEmpNo()+" ) "  %></h5>
         <ul>
             <li onclick="showDiv('PD')">Personal Details</li>
             <li onclick="showDiv('CD')">Contact Details</li>

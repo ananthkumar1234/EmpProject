@@ -30,9 +30,6 @@ public class AddEmployeeServlet extends HttpServlet{
 	
 		Employees e=new Employees();
 		e.setFname(req.getParameter("FirstName"));
-		
-//		System.out.println(req.getParameter("FirstName"));
-		
 		e.setLname(req.getParameter("LastName"));
 		e.setDateofBirth(req.getParameter("DateOfBirth"));
 		e.setGender(req.getParameter("Gender"));
@@ -47,10 +44,9 @@ public class AddEmployeeServlet extends HttpServlet{
 		e.setPersonalEmail(req.getParameter("PersonalEmail"));
 		e.setWorkEmail(req.getParameter("WorkEmail"));
 		e.setHireDate(req.getParameter("JoinedDate"));
-		
-			e.setRoleId(Integer.parseInt(req.getParameter("JobTitle")));
-		
+		e.setRoleId(Integer.parseInt(req.getParameter("JobTitle")));
 		e.setJobLocation(req.getParameter("Location"));
+		e.setEmpNo(req.getParameter("empno"));
 		
 		
 		UserCredentials uc=new UserCredentials();

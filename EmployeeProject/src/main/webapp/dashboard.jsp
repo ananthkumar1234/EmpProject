@@ -344,11 +344,13 @@ input[type="submit"]:hover
         
 		<%if(role.equals("HR") || role.equals("Manager")) { %>
         <li class="activePeople"><a href="employees.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> People</span></a></li>
-        <%}%>        
-        
+        <%}%>          
         <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
         <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
         <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <%if(role.equals("HR")) { %>
+        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> Contacts</span></a></li>
+        <%}%> 
     </ul>
 
 </div>
@@ -456,6 +458,7 @@ input[type="submit"]:hover
 				<hr>
 				<%
 				List<Leaves> list = empDao.getCurrMonthLeaves(emp.getEmpId());
+				//out.print("leaves : "+list);
 				for(Leaves leave:list){
 				
 				%>

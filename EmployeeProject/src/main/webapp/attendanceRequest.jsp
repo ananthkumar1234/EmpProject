@@ -216,6 +216,9 @@ document.addEventListener("DOMContentLoaded", function() {
 					class="menu-text"> Time Logs</span></a></li>
 			<li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i
 					class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+					<%if(role.equals("HR")) { %>
+        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> Contacts</span></a></li>
+        <%}%>
 		</ul>
 	</div>
 

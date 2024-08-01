@@ -368,6 +368,9 @@ background-color:white;
         <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
         <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
         <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <%if(role.equals("HR")) { %>
+        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> Contacts</span></a></li>
+        <%}%>
     </ul>
 	</div>
 
@@ -502,7 +505,7 @@ background-color:white;
 		    
 		    var leavePages = ["applyLeave.jsp","applyLeaveFor.jsp","assignLeave.jsp","employeeLeaves.jsp","holidays.jsp","leaveRequests.jsp","myLeaves.jsp"];
 		    var timePages = ["attendance.jsp", "attendanceRequest.jsp"];
-			var peoplePages = ["employees.jsp","addEmployee.jsp"];
+			var peoplePages = ["employees.jsp","addEmployee.jsp","reportTo.jsp"];
 			var profilePage = ["profile.jsp"];
 		    
 		    if (leavePages.includes(currentPage)) {

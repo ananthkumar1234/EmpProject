@@ -24,8 +24,8 @@ public class FilterEmployeeServlet extends HttpServlet {
         String roleidstr = request.getParameter("JobTitle");
         String name = request.getParameter("name");
         
-        System.out.println(roleidstr);
-        System.out.println(name);
+//        System.out.println(roleidstr);
+//        System.out.println(name);
 
         HttpSession sess=request.getSession();
         String role=(String)sess.getAttribute("role");

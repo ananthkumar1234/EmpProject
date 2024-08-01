@@ -210,6 +210,7 @@ public class EmpDao {
 			leave.setLeaveStatus(rs.getString("leavestatus"));
 			list.add(leave);
 		}
+//		System.out.println("current month leaves : "+list);
 		return list;
 	}
 
@@ -999,6 +1000,9 @@ public class EmpDao {
 			emp.setEmpId(rs.getInt("employeeid"));
 			emp.setFname(rs.getString("firstname"));
 			emp.setLname(rs.getString("lastname"));
+			emp.setPersonalMobile(rs.getString("personalmobile"));
+			emp.setWorkEmail(rs.getString("workemail"));
+			emp.setEmpNo(rs.getString("empno"));
 
 			list.add(emp);
 		}
@@ -1305,8 +1309,8 @@ public class EmpDao {
 	{
 		boolean b=false;
 		
-		String qry="Insert into employees (FirstName,LastName,DateOfBirth,PersonalEmail,PersonalMobile,HireDate,RoleId,MaritalStatus,Gender,EmergencyMobile,EmergencyName,BloodGroup,Nationality,PersonalHome,EmergencyRelation,WorkEmail,JobLocation) "
-				+"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String qry="Insert into employees (FirstName,LastName,DateOfBirth,PersonalEmail,PersonalMobile,HireDate,RoleId,MaritalStatus,Gender,EmergencyMobile,EmergencyName,BloodGroup,Nationality,PersonalHome,EmergencyRelation,WorkEmail,JobLocation,empno) "
+				+"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		
 		String qry2="SELECT employeeID FROM employees ORDER BY employeeID DESC LIMIT 1";
 		
@@ -1328,7 +1332,7 @@ public class EmpDao {
 		ps.setString(15, e.getEmergencyRelatoin());
 		ps.setString(16, e.getWorkEmail());
 		ps.setString(17, e.getJobLocation());
-		
+		ps.setString(18, e.getEmpNo());
 		int i=ps.executeUpdate();
 		if(i>0) {
 		
@@ -1433,6 +1437,7 @@ public class EmpDao {
 			emp.setEmergencyRelatoin(rs.getString("emergencyrelation"));
 			emp.setWorkEmail(rs.getString("workemail"));
 			emp.setJobLocation(rs.getString("joblocation"));
+			emp.setEmpNo(rs.getString("empno"));
 			
 			adr.setLine1(rs.getString("line1"));
 			adr.setLine2(rs.getString("line2"));
@@ -1655,4 +1660,47 @@ public class EmpDao {
 		
 		return false;
 	}
+	
+	
+	// Method to filter employees based on empno
+	public List<Employees> getEmployeesByEmpNo(String empno) throws SQLException {
+		List<Employees> list = new ArrayList<>();
+			String query = "SELECT * FROM employees WHERE empno LIKE ?";
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setString(1, "%" + empno + "%");
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Employees emp = new Employees();
+				emp.setEmpId(rs.getInt("employeeid"));
+				emp.setFname(rs.getString("firstName"));
+				emp.setLname(rs.getString("lastName"));
+				emp.setEmpNo(rs.getString("empno"));
+				emp.setPersonalMobile(rs.getString("personalmobile"));
+				emp.setWorkEmail(rs.getString("workemail"));
+				list.add(emp);
+			}
+		return list;
+	}
+	
+	// Method to filter employees based on empno
+		public List<Employees> getEmployeesByEmpName(String empName) throws SQLException {
+			
+			List<Employees> list = new ArrayList<>();
+				String query = "SELECT * FROM employees WHERE firstName LIKE ? OR lastName LIKE ?";
+				PreparedStatement pstmt = con.prepareStatement(query);
+				pstmt.setString(1, "%" + empName + "%");
+				pstmt.setString(2, "%" + empName + "%");
+				ResultSet rs = pstmt.executeQuery();
+				while (rs.next()) {
+					Employees emp = new Employees();
+					emp.setEmpId(rs.getInt("employeeid"));
+					emp.setFname(rs.getString("firstName"));
+					emp.setLname(rs.getString("lastName"));
+					emp.setEmpNo(rs.getString("empno"));
+					emp.setPersonalMobile(rs.getString("personalmobile"));
+					emp.setWorkEmail(rs.getString("workemail"));
+					list.add(emp);
+				}
+			return list;
+		}
 }

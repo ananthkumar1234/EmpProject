@@ -278,6 +278,9 @@ showMessage('success', 'Applied Leave has been cancelled !!!');
         <li class="activeLeave"><a href="applyLeave.jsp" id="leave-link"><i class="fas fa-calendar-alt"></i><span class="menu-text"> Leave</span></a></li>
         <li class="activeAttendance"><a href="attendance.jsp" id="time-link"><i class="fas fa-clock"></i><span class="menu-text"> Time Logs</span></a></li>
         <li class="activeProfile"><a href="profile.jsp" id="myinfo-link"><i class="fas fa-id-badge"></i><span class="menu-text"> My Info</span></a></li>
+        <%if(role.equals("HR")) { %>
+        <li class="activeContact"><a href="contacts.jsp" id="pim-link"><i class="fas fa-users"></i><span class="menu-text"> Contacts</span></a></li>
+        <%}%>
     </ul>
     </div>
     
@@ -313,7 +316,7 @@ showMessage('success', 'Applied Leave has been cancelled !!!');
 			<a href="assignLeave.jsp">Assign Leaves</a>
 			<a href="employeeLeaves.jsp">Employees Leaves</a>
 			<%}  if("Manager".equals(role)) {%>
-			<a href="employeeLeaves.jsp">Reportee Leave List</a>
+			<a href="employeeLeaves.jsp">Reportees Leaves</a>
 			<%}%>
 			 
 

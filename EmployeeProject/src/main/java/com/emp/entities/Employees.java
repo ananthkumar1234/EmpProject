@@ -25,10 +25,16 @@ public class Employees {
 	private String EmergencyRelatoin;
 	private String WorkEmail;
 	private String JobLocation;
-
+	private String empNo;
 	
 	
 	
+	public String getEmpNo() {
+		return empNo;
+	}
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
+	}
 	public String getDateofBirth() {
 		return DateofBirth;
 	}
