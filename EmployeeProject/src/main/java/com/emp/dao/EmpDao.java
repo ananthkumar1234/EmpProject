@@ -1646,7 +1646,6 @@ public class EmpDao {
 	        try (ResultSet rs = checkStmt.executeQuery()) {
 	            if (rs.next() && rs.getInt(1) > 0) {
 	                // Role already exists
-//	                System.out.println("Role already exists.");
 	                return false;
 	            }
 	        }
@@ -1657,12 +1656,9 @@ public class EmpDao {
 	        insertStmt.setString(1, role);
 	        int i = insertStmt.executeUpdate();
 	        if (i > 0) {
-//	            System.out.println("Role inserted successfully.");
 	            return true;
 	        }
 	    }
-
-//	    System.out.println("Failed to insert role.");
 	    return false;
 	}
 
