@@ -386,13 +386,13 @@ input[type="submit"]:hover
 				
 					<div class="btn">
 						<form action="insertLogin" method="post">
-						<input type="submit" value="Log In" name="login">
+						<input type="submit" value="Check In" name="login">
 						</form>
 					</div>
 				
 					<div class="btn">
 						<form action="updateLogout" method="post">
-						<input type="submit" value="Log Out" name="logout">
+						<input type="submit" value="Check Out" name="logout">
 						</form>
 					</div>
 				
