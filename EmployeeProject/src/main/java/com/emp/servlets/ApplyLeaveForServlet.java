@@ -50,7 +50,7 @@ public class ApplyLeaveForServlet extends HttpServlet{
 				if(f)
 				{
 					req.setAttribute("msg","AlreadyLeaveApplied");
-					req.getRequestDispatcher("applyLeave.jsp").forward(req, resp);
+					req.getRequestDispatcher("applyLeaveFor.jsp").forward(req, resp);
 				}else {
 					int leaveid = empDao.applyLeaveFor(lev);
 					if(leaveid > 0)
