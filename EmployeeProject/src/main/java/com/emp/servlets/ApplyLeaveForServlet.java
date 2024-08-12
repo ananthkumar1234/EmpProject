@@ -47,6 +47,8 @@ public class ApplyLeaveForServlet extends HttpServlet{
 				lev.setTotalDays(totalDays);
 				boolean f = empDao.getLeave(empid,from_date,to_date);
 				//			System.out.println("boolean value : "+f);
+				
+				// condition to check weather leave applied for the same date or not!!!
 				if(f)
 				{
 					req.setAttribute("msg","AlreadyLeaveApplied");
