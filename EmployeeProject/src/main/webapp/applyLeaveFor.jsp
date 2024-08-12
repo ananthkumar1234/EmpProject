@@ -261,6 +261,9 @@ function fetchAvailableLeaves(empId) {
         	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("LeaveStockError")){%> 
         	showMessage('error', 'leaves stock error !!!');
         	<%}
+        	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("AlreadyLeaveApplied")){%> 
+        	showMessage('error', 'You have already applied for leave to the same date.!!!');
+        	<%}
         	else if (request.getAttribute("msg")!=null && request.getAttribute("msg").equals("OutOfLeaves")){%> 
         	showMessage('error', 'check leave balance !!!');
         	<%}%>}
@@ -465,49 +468,60 @@ function fetchAvailableLeaves(empId) {
 	
 	// function to restrict the weekends and holidays 
 	document.addEventListener("DOMContentLoaded", function() {
-// Ensure holidays are converted to a proper JavaScript array
-const holidays = <%= holidays.stream()
-                           .map(Holidays::getDate)
-                           .map(date -> "\"" + date.toString() + "\"")
-                           .collect(java.util.stream.Collectors.toList()) %>;
+	    // Ensure holidays are converted to a proper JavaScript array
+	    const holidays = <%= holidays.stream()
+	                                   .map(Holidays::getDate)
+	                                   .map(date -> "\"" + date.toString() + "\"")
+	                                   .collect(java.util.stream.Collectors.toList()) %>;
 
-console.log("Holidays: ", holidays); // Debugging line
+	    console.log("Holidays: ", holidays); // Debugging line
 
-// Convert the holiday strings to Date objects
-const disableDates = holidays.map(dateStr => new Date(dateStr));
+	    // Convert the holiday strings to Date objects
+	    const disableDates = holidays.map(dateStr => new Date(dateStr));
 
-console.log("Disable Dates: ", disableDates); // Debugging line
+	    console.log("Disable Dates: ", disableDates); // Debugging line
 
-const disableWeekendsAndHolidays = function(date) {
-// Disable weekends
-if (date.getDay() === 0 || date.getDay() === 6) {
-    return true;
-}
-// Disable holidays
-return disableDates.some(disabledDate => {
-    return date.toDateString() === disabledDate.toDateString();
-});
-};
+	    // Function to check if the date should be disabled
+	    const disableDatesFunction = function(date) {
+	        // Get the current date
+	        const today = new Date();
+	        today.setHours(0, 0, 0, 0); // Normalize the current date to midnight
 
-const highlightHolidays = function(selectedDates, dateStr, instance) {
-instance.calendarContainer.querySelectorAll(".flatpickr-day").forEach(dayElem => {
-    const date = new Date(dayElem.dateObj);
-    if (disableDates.some(disabledDate => date.toDateString() === disabledDate.toDateString())) {
-        dayElem.classList.add("holiday");
-    }
-});
-};
+	        // Disable past dates
+	        if (date < today) {
+	            return true;
+	        }
 
-flatpickr("#fromDate", {
-disable: [disableWeekendsAndHolidays],
-onDayCreate: highlightHolidays
-});
+	        // Disable weekends
+	        if (date.getDay() === 0 || date.getDay() === 6) {
+	            return true;
+	        }
 
-flatpickr("#toDate", {
-disable: [disableWeekendsAndHolidays],
-onDayCreate: highlightHolidays
-});
-});
+	        // Disable holidays
+	        return disableDates.some(disabledDate => {
+	            return date.toDateString() === disabledDate.toDateString();
+	        });
+	    };
+
+	    const highlightHolidays = function(selectedDates, dateStr, instance) {
+	        instance.calendarContainer.querySelectorAll(".flatpickr-day").forEach(dayElem => {
+	            const date = new Date(dayElem.dateObj);
+	            if (disableDates.some(disabledDate => date.toDateString() === disabledDate.toDateString())) {
+	                dayElem.classList.add("holiday");
+	            }
+	        });
+	    };
+
+	    flatpickr("#fromDate", {
+	        disable: [disableDatesFunction],
+	        onDayCreate: highlightHolidays
+	    });
+
+	    flatpickr("#toDate", {
+	        disable: [disableDatesFunction],
+	        onDayCreate: highlightHolidays
+	    });
+	});
 	
 	
 	// new js function to display messages

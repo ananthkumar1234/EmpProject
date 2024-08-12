@@ -1724,4 +1724,27 @@ public class EmpDao {
 				}
 			return list;
 		}
+		
+		
+		
+		public List<Employees> getEmployeesByEmpNameAndNo(String empno,String empname) throws SQLException {
+			List<Employees> list = new ArrayList<>();
+				String query = "SELECT * FROM employees WHERE empno LIKE ? and firstname like ? and lastname like ?";
+				PreparedStatement pstmt = con.prepareStatement(query);
+				pstmt.setString(1, "%" + empno + "%");
+				pstmt.setString(2, "%" + empname + "%");
+				pstmt.setString(3, "%" + empname + "%");
+				ResultSet rs = pstmt.executeQuery();
+				while (rs.next()) {
+					Employees emp = new Employees();
+					emp.setEmpId(rs.getInt("employeeid"));
+					emp.setFname(rs.getString("firstName"));
+					emp.setLname(rs.getString("lastName"));
+					emp.setEmpNo(rs.getString("empno"));
+					emp.setPersonalMobile(rs.getString("personalmobile"));
+					emp.setWorkEmail(rs.getString("workemail"));
+					list.add(emp);
+				}
+			return list;
+		}
 }
