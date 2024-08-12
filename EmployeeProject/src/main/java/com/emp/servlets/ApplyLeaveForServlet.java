@@ -108,7 +108,7 @@ public class ApplyLeaveForServlet extends HttpServlet{
 						break;
 					case "option2":
 						// Handle Option 2
-						lev.setTotalDays(empDao.getAvailableLeaves(empid));
+						lev.setTotalDays(totalDays);
 						
 						leaveid = empDao.applyLeaveFor(lev);
 						if(leaveid > 0)
