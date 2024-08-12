@@ -76,40 +76,66 @@ public class ApplyLeaveForServlet extends HttpServlet{
 			}else
 			{
 				String selectedOption = req.getParameter("Options");
+				int leaveid=0;
 				if (selectedOption != null)
 				{
 					switch (selectedOption) {
 					case "option1":
 						// Handle Option 1
 						lev.setTotalDays(totalDays);
+						
+						leaveid = empDao.applyLeaveFor(lev);
+						if(leaveid > 0)
+						{
+							if(empDao.updateLeavestock2(leaveid,totalDays))
+							{
+								req.setAttribute("msg","Success");
+								req.getRequestDispatcher("applyLeaveFor.jsp").forward(req, resp);
+								//						resp.sendRedirect("applyLeave.jsp?message=Leave aaplied successfully!!!");
+							}else
+							{
+								req.setAttribute("msg","Error");
+								req.getRequestDispatcher("applyLeaveFor.jsp").forward(req, resp);
+								//							resp.sendRedirect("applyLeave.jsp?message=Something went wrong!!!");
+							}
+						}else
+						{
+							req.setAttribute("msg","LeaveStockError");
+							req.getRequestDispatcher("applyLeaveFor.jsp").forward(req, resp);
+							//				resp.sendRedirect("applyLeave.jsp?message=Leave not applied !!!");
+						}
+						
 						break;
 					case "option2":
 						// Handle Option 2
 						lev.setTotalDays(empDao.getAvailableLeaves(empid));
+						
+						leaveid = empDao.applyLeaveFor(lev);
+						if(leaveid > 0)
+						{
+							if(empDao.updateLeavestock2(leaveid,empDao.getAvailableLeaves(empid)))
+							{
+								req.setAttribute("msg","Success");
+								req.getRequestDispatcher("applyLeaveFor.jsp").forward(req, resp);
+								//						resp.sendRedirect("applyLeave.jsp?message=Leave aaplied successfully!!!");
+							}else
+							{
+								req.setAttribute("msg","Error");
+								req.getRequestDispatcher("applyLeaveFor.jsp").forward(req, resp);
+								//							resp.sendRedirect("applyLeave.jsp?message=Something went wrong!!!");
+							}
+						}else
+						{
+							req.setAttribute("msg","LeaveStockError");
+							req.getRequestDispatcher("applyLeaveFor.jsp").forward(req, resp);
+							//				resp.sendRedirect("applyLeave.jsp?message=Leave not applied !!!");
+						}
+						
 						break;
 					default: break;
 					}
 
-					int leaveid = empDao.applyLeaveFor(lev);
-					if(leaveid > 0)
-					{
-						if(empDao.updateLeavestock(leaveid))
-						{
-							req.setAttribute("msg","Success");
-							req.getRequestDispatcher("applyLeaveFor.jsp").forward(req, resp);
-							//						resp.sendRedirect("applyLeave.jsp?message=Leave aaplied successfully!!!");
-						}else
-						{
-							req.setAttribute("msg","Error");
-							req.getRequestDispatcher("applyLeaveFor.jsp").forward(req, resp);
-							//							resp.sendRedirect("applyLeave.jsp?message=Something went wrong!!!");
-						}
-					}else
-					{
-						req.setAttribute("msg","LeaveStockError");
-						req.getRequestDispatcher("applyLeaveFor.jsp").forward(req, resp);
-						//				resp.sendRedirect("applyLeave.jsp?message=Leave not applied !!!");
-					}
+					
 				}
 				else {
 					req.setAttribute("msg","OutOfLeaves");

@@ -383,6 +383,34 @@ public class EmpDao {
 
 		return flag;
 	}	
+	
+	public boolean updateLeavestock2(int leaveid, int levbal) throws SQLException
+	{
+		boolean flag=false;
+		String qry="select employeeid,leavestatus,totaldays from leaves where leaveid=?";
+		String qry1="update leavesStock set availableleaves = availableleaves - ?,consumedleaves = consumedleaves + ? where employeeid=?";
+
+		PreparedStatement ps=con.prepareStatement(qry);
+		ps.setInt(1, leaveid);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		int empid = rs.getInt("employeeid");
+		String status = rs.getString("leavestatus");
+		int totaldays = rs.getInt("totaldays");
+
+		if(status.equals("Pending")||status.equals("Approved"))
+		{
+			PreparedStatement ps1=con.prepareStatement(qry1);
+			ps1.setInt(1, levbal);
+			ps1.setInt(2, totaldays);
+			ps1.setInt(3, empid);
+			ps1.executeUpdate();
+			flag = true;
+		}
+
+
+		return flag;
+	}
 
 
 	/// Getting all employees records 
